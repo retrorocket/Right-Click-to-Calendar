@@ -1,0 +1,28 @@
+* {
+	margin:0, padding:0
+}
+
+body {
+	background-color:#f5f5f5;
+	margin:20px;
+	line-height :2.2em;
+
+}
+h1 {
+	color:#DD4B39;
+	font-size:110%;
+	padding: 7px;
+	border-left: solid 10px #DD4B39;
+}
+h2 {
+	color:#DD4B39;
+	font-size:90%;
+	padding: 5px;
+	border-left: solid 10px #DD4B39;
+}
+#comp {
+	color:#DD4B39;
+}
+.tips{
+	font-size:80%;
+}

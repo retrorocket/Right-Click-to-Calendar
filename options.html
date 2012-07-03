@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>カレンダー設定</title>
+		<script src ="./jQuery.js"></script>
+		<script src="./options.js"></script>
+		<link rel="stylesheet" href="options.css" type="text/css"/>
+	</head>
+	<body>
+		<h1>登録したいカレンダーの設定</h1>
+		<form>
+			カレンダーID：<input type ="text" id ="txt" size="60"></input>
+			<input type="button" value ="OK" id ="sub"></input>
+		</form>
+		<p id ="comp"></p>
+		<h1>OAuth認証設定</h1>
+		<form>
+			<p id="check"></p>
+			<input type="button" value ="認証を削除する" id ="Odel"></input>
+		</form>
+		<h2>カレンダーIDの調べ方</h2>
+		<p class="tips">
+		カレンダー設定→（カレンダー名）の詳細→カレンダーのアドレス<br />
+		<img src="./images/screen.png" alt="" /><br />
+		画像の黒塗り部分
+		</p>
+	</body>
+</html>
+
