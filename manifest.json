@@ -1,5 +1,7 @@
 {
-   "background_page": "background.html",
+   "background": {
+	   "page":"background.html"
+   },
    "icons": {
       "128": "./images/large.png",
       "16": "./images/small.png",
@@ -12,6 +14,10 @@
         "http://www.google.com/*",
         "https://www.google.com/*"
     ],
-    "version":"1.3.4.1"
+	 "web_accessible_resources": [
+    	"chrome_ex_oauth.html","setEvent.html","images/screen.png"
+  ],
+    "version":"1.3.4.2",
+	"manifest_version": 2
 }
 

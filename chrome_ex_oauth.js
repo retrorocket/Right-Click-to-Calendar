@@ -583,8 +583,6 @@ ChromeExOAuth.prototype.onAccessToken = function(callback, xhr) {
       var secret = params["oauth_token_secret"];
       this.setToken(token);
       this.setTokenSecret(secret);
-      var screen_name = params["screen_name"]
-
       bg.chromeExOAuthRequestingAccess = false;
       callback(token, secret);
     } else {
