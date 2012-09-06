@@ -5,23 +5,23 @@
 		<script src="chrome_ex_oauthsimple.js"></script>
 		<script src="chrome_ex_oauth.js"></script>
 		<script src="jQuery.js"></script>
-		<script src="setEvent.js"></script>
 		<script src="./js/languages/jquery.validationEngine-ja.js"></script>
 		<script src="./js/jquery.validationEngine.js"></script>
+		<script src="jquery-ui.min.js"></script>
+		<script src="jquery.ui.datepicker-ja.min.js"></script>
+		<script src="exdate.js"></script>
 		<link rel="stylesheet" href="./css/validationEngine.jquery.css" type="text/css"/>
 		<link rel="stylesheet" href="setEvent.css" type="text/css"/>
+		<link rel="stylesheet" href="jquery-ui.css"  type="text/css"/>
+		<script src="setEvent.js"></script>
 		<title>イベント設定</title>
 	</head>
 	<body>
 		<h1>イベント設定</h1>
 		<form id="formID">
 			<p>タイトル：<input type="text" value ="" id = "tit" size="40"></p>
-			<p><input type="text" value ="" id ="f_year" size="3" class ="validate[custom[onlyNumberSp]]">年<br />
 
-			開始：<input type="text" value ="" id ="f_mon" size="2" class ="validate[custom[onlyNumberSp]]">月
-			<input type="text" value ="" id ="f_day" size = "2" class ="validate[custom[onlyNumberSp]]">日 ～
-			終了：<input type="text" value ="" id ="e_mon" size="2" class ="validate[custom[onlyNumberSp]]">月
-			<input type="text" value ="" id ="e_day" size = "2" class ="validate[custom[onlyNumberSp]]">日</p>
+			開始<input type="text" id="from" readonly="readonly"> ～ 終了<input type="text" id="to" readonly="readonly">
 
 			<p>開始：<input type="text" value ="" id ="f_hour" size="2" class ="validate[custom[onlyNumberSp]] time">時
 			<input type="text" value ="" id ="f_min" size = "2" class ="validate[custom[onlyNumberSp]] time">分 ～
@@ -32,7 +32,10 @@
 			<br />
 			終日設定：<input type="checkbox" id ="check"></p>
 
+			<p>予定の詳細：<br /><textarea id="detail" rows="2" cols="30"></textarea></p>
+
 			<p><input type="button" value = "OK" id="sub"></p>
+			<hr />
 			<p>選択したテキスト：<br /><textarea id="main_text" rows="3" cols="30"></textarea></p>
 		</form>
 	</body>

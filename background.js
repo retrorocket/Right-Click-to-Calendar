@@ -78,7 +78,7 @@ function getClickHandler() {
 		var args = new Array(title, mon, day, shour, smin, stext, syear);
 
 		//イベント設定ウィンドウを呼び出す
-		var returnValue = window.showModalDialog("setEvent.html", args, "dialogHeight:480;dialogWidth:500;status:no;");
+		var returnValue = window.showModalDialog("setEvent.html", args, "dialogHeight:550;dialogWidth:500;status:no;");
 
 		//設定終了後にイベント登録
 		if(returnValue != false){
@@ -91,12 +91,12 @@ function getClickHandler() {
 				var en ="";//終了日時
 
 				if(returnValue["check"]){//終日設定
-					st = returnValue["f_year"] + "-" + returnValue["f_mon"] + "-" + returnValue["f_day"];
-					en = returnValue["f_year"] + "-" + returnValue["e_mon"] + "-" + returnValue["e_day"];
+					st = returnValue["f_mon"];
+					en = returnValue["e_mon"];
 				}
 				else {
-					st = returnValue["f_year"] + "-" + returnValue["f_mon"] + "-" + returnValue["f_day"]+ "T" + returnValue["f_hour"] + ":" + returnValue["f_min"] + ":00.000+09:00";
-					en = returnValue["f_year"] + "-" + returnValue["e_mon"] + "-" + returnValue["e_day"]+ "T" + returnValue["e_hour"] + ":" + returnValue["e_min"] + ":00.000+09:00";
+					st = returnValue["f_mon"] + "T" + returnValue["f_hour"] + ":" + returnValue["f_min"] + ":00.000+09:00";
+					en = returnValue["e_mon"] + "T" + returnValue["e_hour"] + ":" + returnValue["e_min"] + ":00.000+09:00";
 				}
 			/**設定終わり**/
 
@@ -104,7 +104,7 @@ function getClickHandler() {
 
 				"data": {
 					"title": returnValue["title"],
-				//	"details": "詳細",
+					"details": returnValue["detail"],
 				"transparency": "opaque",
 				"status": "confirmed",
 				//"location": "場所",

@@ -1,4 +1,7 @@
 function isValidDate(y,m,d){
+	y = parseInt(y, 10);
+	m = parseInt(m, 10);
+	d = parseInt(d, 10);
 	var di = new Date(y,m-1,d);
 	if(di.getFullYear() == y && di.getMonth() == m-1 && di.getDate() == d){
 		return true;
@@ -6,14 +9,27 @@ function isValidDate(y,m,d){
 	return false;
 }
 
-function checkDateRange(yf, mf, df, yt, mt, dt){
-	var dayf = new Date(yf, mf-1, df);
-	var dayt = new Date(yt, mt-1, dt);
+function checkRange(start, shour, smin, end, ehour, emin){
+	try{
 
-	if( (dayt.getTime() - dayf.getTime() ) < 0 ){
+		if(!time_checker(shour,smin) || !time_checker(ehour,emin)){
+			return false;
+		}
+		var s_d  = start + " " + checker(shour) + " " + checker(smin);
+		var e_d  = end + " " + checker(ehour) + " " + checker(emin);
+
+		var sDate = $.exDate(s_d, "yyyy-mm-dd hh mi");
+		var eDate = $.exDate(e_d, "yyyy-mm-dd hh mi");
+
+		if( (eDate.getTime() - sDate.getTime() )  <  0 ){
+			return false;
+		}
+
+		return true;
+	}
+	catch( e ){
 		return false;
 	}
-	return true;
 }
 
 function time_checker(h, m){
@@ -25,7 +41,8 @@ function time_checker(h, m){
 }
 
 function checker(ch){
-	if(parseInt(ch,10) < 10){
+	//console.log(ch + "→" +parseInt(ch,10));
+	if(parseInt(ch,10) < 10 ){
 		ch= "0"+ parseInt(ch,10);
 	}
 	return ch;
@@ -33,76 +50,103 @@ function checker(ch){
 
 $(document).ready(function(){
 
+	$( "#from" ).datepicker({
+		dateFormat: "yy-mm-dd",
+	onSelect: function( selectedDate ) {
+		$( "#to" ).datepicker( "option", "minDate", selectedDate );
+	}
+	});
+	$( "#to" ).datepicker({
+		dateFormat: "yy-mm-dd",
+		onSelect: function( selectedDate ) {
+			$( "#from" ).datepicker( "option", "maxDate", selectedDate );
+		}
+	});
+
 	jQuery("#formID").validationEngine('attach');
 	window.returnValue = false;
 
+	var year  = window.dialogArguments[6];
+
+	var start_month = window.dialogArguments[1];
+	var start_day = window.dialogArguments[2];
+
+	var end_month = window.dialogArguments[1];
+	var end_day = window.dialogArguments[2];
+
+	var start_hour = window.dialogArguments[3];
+	var start_min = window.dialogArguments[4];
+
+	var end_hour = window.dialogArguments[3];
+	var end_min = window.dialogArguments[4];
+
+	if(isValidDate(year,start_month,start_day)){
+		$("#from").val(year + "-" + checker(start_month) + "-" + checker(start_day));
+	}
+
+	if(isValidDate(year,end_month,end_day)){
+		$("#to").val(year + "-" + checker(end_month) + "-" + checker(end_day));
+	}
+
+	if(time_checker(start_hour,start_min)){
+		$("#f_hour").val(checker(start_hour));
+		$("#f_min").val(checker(start_min));
+	}
+
+	if(time_checker(end_hour,end_min)){
+		$("#e_hour").val(checker(end_hour));
+		$("#e_min").val(checker(end_min));
+	}
+
 	$("#tit").val(window.dialogArguments[0]);
-
-	$("#f_year").val(window.dialogArguments[6]);
-
-	$("#f_mon").val(window.dialogArguments[1]);
-	$("#f_day").val(window.dialogArguments[2]);
-
-	$("#e_mon").val(window.dialogArguments[1]);
-	$("#e_day").val(window.dialogArguments[2]);
-
-	$("#f_hour").val(window.dialogArguments[3]);
-	$("#f_min").val(window.dialogArguments[4]);
-
-	$("#e_hour").val(window.dialogArguments[3]);
-	$("#e_min").val(window.dialogArguments[4]);
 
 	$("#main_text").val(window.dialogArguments[5]);
 
 	$("#sub").click(function(){
 
-		var days = new Array($("#f_year").val(), $("#f_mon").val(), $("#f_day").val(), $("#e_mon").val(), $("#e_day").val());
-		var times = new Array($("#f_hour").val(), $("#f_min").val(), $("#e_hour").val(), $("#e_min").val());
+		var range_bool = false;
 
-		var f_day_bool =  isValidDate(parseInt(days[0]),parseInt(days[1]),parseInt(days[2]));
-		var e_day_bool =  isValidDate(parseInt(days[0]),parseInt(days[3]),parseInt(days[4]));
-
-		var range_bool = checkDateRange(parseInt(days[0]),parseInt(days[1]),parseInt(days[2]),parseInt(days[0]),parseInt(days[3]),parseInt(days[4]));
-		var f_time_bool;
-		var e_time_bool;
-
+		var from = $("#from").val();
+		var to = $("#to").val();
 
 		if ($('#check').attr('checked')){
-			days[4]= parseInt(days[4])+1;
-			f_time_bool = true;
-			e_time_bool = true;
+			var myDate = $.exDate(to, "yyyy-mm-dd");
+			console.log(myDate);
+			myDate.setDate(myDate.getDate() + 1);
+			to = myDate.toChar('yyyy-mm-dd');
+
+			range_bool = checkRange(from,"0","0",to,"0","0");
+
 		}
-		else{	
-			f_time_bool = time_checker(times[0],times[1]);
-			e_time_bool = time_checker(times[2],times[3]);
+		else{
+			range_bool = checkRange(from, $("#f_hour").val(), $("#f_min").val(), to, $("#e_hour").val(), $("#e_min").val());
 		}
-		//console.log(f_time_bool);
-		if(f_time_bool && e_time_bool && f_day_bool && e_day_bool && range_bool){
-			var obj = {
-				title :checker($("#tit").val()),
 
-				f_mon : checker($("#f_mon").val()),
-				f_day : checker($("#f_day").val()),
+	if(range_bool){
+		console.log(range_bool);
+		var obj = {
+			title :$("#tit").val(),
+			detail :$("#detail").val(),
+			f_mon : from,
 
-				f_hour : checker($("#f_hour").val()),
-				f_min : checker($("#f_min").val()),
+			f_hour : checker($("#f_hour").val()),
+			f_min : checker($("#f_min").val()),
 
-				check : $('#check').attr('checked'),
+			check : $('#check').attr('checked'),
 
-				e_hour : checker($("#e_hour").val()),
-				e_min: checker($("#e_min").val()),
+			e_hour : checker($("#e_hour").val()),
+			e_min: checker($("#e_min").val()),
 
-				e_mon : checker($("#e_mon").val()),
-				e_day : checker(days[4]),
+			e_mon : to
+		};
 
-				f_year : checker($("#f_year").val()),
-
-			};
-
-			window.returnValue = obj;//backgroundに入力した内容を渡す
-			window.close();
-		}
-		else{alert ("日時が正しくありません");}
+		window.returnValue = obj;//backgroundに入力した内容を渡す
+		//console.log(obj);
+		window.close();
+	}
+	else{
+		alert ("日時が正しくありません");
+	}
 	});
 
 	$("#check").click(
