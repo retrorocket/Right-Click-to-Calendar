@@ -6,24 +6,27 @@ var parentId = chrome.contextMenus.create({
 	"onclick" : getClickHandler()
 });
 
-var oauth = ChromeExOAuth.initBackgroundPage({//OAuth設定
-	"request_url": "https://www.google.com/accounts/OAuthGetRequestToken",
-	"authorize_url": "https://www.google.com/accounts/OAuthAuthorizeToken",
-	"access_url": "https://www.google.com/accounts/OAuthGetAccessToken",
-	"consumer_key": "anonymous",
-	"consumer_secret": "anonymous",
-	"scope": "https://www.google.com/calendar/feeds/"
+var google = new OAuth2('google', {
+	client_id: '*',
+	client_secret: '*',
+	api_scope: 'https://www.googleapis.com/auth/calendar'
 });
-
+var args;
 //↓できればよかったけどめんどくさい
 //CalendarIDをすべて取得→ユーザーに選択させる
+//できた
 
 function getClickHandler() {
 	return function(info, tab) {
 
 		//ID登録させる
-		if (localStorage["calenId"] == "" || localStorage["calenId"] == null ||localStorage["calenId"] == undefined){
-			alert ("オプションでカレンダーIDを設定してください");
+		//if (localStorage["calenId"] == "" || localStorage["calenId"] == null ||localStorage["calenId"] == undefined)
+		if(!google.hasAccessToken())
+		{
+			alert ("オプションページで認証を行ってください");
+			chrome.tabs.create({
+  			  "url": chrome.extension.getURL("options.html"),
+			});
 			return false;
 		}
 		var stext=info.selectionText; //現在選択しているテキスト
@@ -67,86 +70,14 @@ function getClickHandler() {
 			title = t[2];
 		}
 
-		/*var tt = stext.match(/^(.+)(\d+| |\n)/);//タイトル
-		  if(tt){
-		  title = tt[1];console.log("bbb");
-
-		  }*/
-
-		/*****************************************************/
-
-		var args = new Array(title, mon, day, shour, smin, stext, syear);
-
+		args = new Array(title, mon, day, shour, smin, stext, syear);
+		chrome.windows.create({"url":"setEvent.html", "width":580, "height":810, "type": "panel"});
+	}
 		//イベント設定ウィンドウを呼び出す
-		var returnValue = window.showModalDialog("setEvent.html", args, "dialogHeight:550;dialogWidth:500;status:no;");
+
+		//chrome.windows.create({"url":"setEvent.html", "width":500, "height":550, "type": "panel"});
 
 		//設定終了後にイベント登録
-		if(returnValue != false){
 			//console.log(returnValue);
-			oauth.authorize(function(){
-
-				/**開始～終了日時設定**/
-
-				var st ="";//開始日時
-				var en ="";//終了日時
-
-				if(returnValue["check"]){//終日設定
-					st = returnValue["f_mon"];
-					en = returnValue["e_mon"];
-				}
-				else {
-					st = returnValue["f_mon"] + "T" + returnValue["f_hour"] + ":" + returnValue["f_min"] + ":00.000+09:00";
-					en = returnValue["e_mon"] + "T" + returnValue["e_hour"] + ":" + returnValue["e_min"] + ":00.000+09:00";
-				}
-			/**設定終わり**/
-
-			var body = JSON.stringify({
-
-				"data": {
-					"title": returnValue["title"],
-					"details": returnValue["detail"],
-				"transparency": "opaque",
-				"status": "confirmed",
-				//"location": "場所",
-				"when": [
-			{
-				"start": st,
-				"end": en
-			}
-			]
-				}
-			});
-
-			oauth.sendSignedRequest(
-
-					//オプションで登録したID
-					"https://www.google.com/calendar/feeds/" +  localStorage.getItem( "calenId" ) + "/private/full",
-
-					function(response){
-						try{
-							var p_res = JSON.parse(response);
-							if(p_res.error){//エラー処理
-								var err = p_res.error;
-								alert("Error:" + err.message);
-							}else{
-								alert("【" + returnValue["title"] + "】" + "を登録しました");
-							}
-						} catch(e) {
-							alert("Error:" + response);
-						}
-					},
-
-					{
-						"method": "POST",
-						"headers": {"Content-Type": "application/json"},
-						"body" : body
-
-					});
-			});
-
-		}
-
-	}
-
 }
 

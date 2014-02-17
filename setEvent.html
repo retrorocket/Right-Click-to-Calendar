@@ -1,43 +1,129 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="ja">
 	<head>
-		<meta charset="utf-8" />
-		<script src="chrome_ex_oauthsimple.js"></script>
-		<script src="chrome_ex_oauth.js"></script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<title>イベント設定</title>
+
+		<!-- Bootstrap core CSS -->
+		<link href="./css/bootstrap.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="./css/font-awesome.min.css">
+
 		<script src="jQuery.js"></script>
+		<style type="text/css">
+			<!-- 
+			.container { max-width: 540px;  min-width: 540px;}
+			.col-lg-1 { max-width: 80px; float:left; }
+			.col-lg-2 { max-width: 100px; float:left; }
+			.col-lg-6 { max-width: 190px; float:left; }
+			-->
+		</style>
+
+	</head>
+
+	<body>
+		<div class="container">
+			<div class="well">
+				<form class="form-horizontal" id="formID">
+					<fieldset>
+						<legend>イベント設定</legend>
+
+						<div class="form-group">
+							<label for="from" class="col-lg-2 control-label">タイトル</label>
+							<div class="col-lg-10">
+								<input type="text" class="form-control" id="tit" placeholder="イベントのタイトル">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="from" class="col-lg-2 control-label">開始</label>
+							<div class="col-lg-6">
+								<input type="text" class="form-control" id="from" placeholder="開始日" >
+							</div>
+							<div class="col-lg-1">
+								<input type="text" class="form-control validate[custom[onlyNumberSp]] time min" id="f_hour" placeholder="時">
+							</div>
+							<label for="f_hour" class="col-lg-1 control-label">時</label>
+							<div class="col-lg-1">
+								<input type="text" class="form-control validate[custom[onlyNumberSp]] time" id="f_min" placeholder="分">
+							</div>
+							<label for="f_min" class="col-lg-1 control-label">分</label>
+						</div>
+
+
+						<div class="form-group">
+							<label for="to" class="col-lg-2 control-label">終了</label>
+							<div class="col-lg-6">
+								<input type="text" class="form-control" id="to" placeholder="終了日" >
+							</div>
+							<div class="col-lg-1">
+								<input type="text" class="form-control validate[custom[onlyNumberSp]] time" id="e_hour" placeholder="時">
+							</div>	
+							<label for="e_hour" class="col-lg-1 control-label pull-left">時</label>
+							<div class="col-lg-1">
+								<input type="text" class="form-control validate[custom[onlyNumberSp]] time" id="e_min" placeholder="分">
+							</div>
+							<label for="e_min" class="col-lg-1 control-label">分</label>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-12">
+								<div class="checkbox">
+									<label>
+										<input type="checkbox" id ="check"> 終日設定
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label for="detail" class="col-lg-3 control-label">予定の詳細</label>
+							<div class="col-lg-9">
+								<textarea class="form-control" rows="3" id="detail"></textarea>
+								<!--<span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>-->
+							</div>
+						</div>
+
+						<div class="form-group">
+
+							<label for="example" class="col-lg-4 control-label">投稿するカレンダー</label>
+							<div class="col-lg-8">
+								<select class="form-control" id="example">
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-lg-10 col-lg-offset-2">
+								<input type="button" class="btn btn-primary" id="sub" value="Submit"> 
+							</div>
+						</div>
+						<hr>
+						<div class="form-group">
+							<label for="main_text" class="col-lg-3 control-label">選択したテキスト</label>
+							<div class="col-lg-9">
+								<textarea class="form-control" rows="3" id="main_text"></textarea>
+								<!--<span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>-->
+							</div>
+						</div>
+
+					</fieldset>
+				</form>
+
+			</div><!--well-->
+		</div><!--container-->
+
 		<script src="./js/languages/jquery.validationEngine-ja.js"></script>
 		<script src="./js/jquery.validationEngine.js"></script>
 		<script src="jquery-ui.min.js"></script>
 		<script src="jquery.ui.datepicker-ja.min.js"></script>
 		<script src="exdate.js"></script>
 		<link rel="stylesheet" href="./css/validationEngine.jquery.css" type="text/css"/>
-		<link rel="stylesheet" href="setEvent.css" type="text/css"/>
 		<link rel="stylesheet" href="jquery-ui.css"  type="text/css"/>
+
 		<script src="setEvent.js"></script>
-		<title>イベント設定</title>
-	</head>
-	<body>
-		<h1>イベント設定</h1>
-		<form id="formID">
-			<p>タイトル：<input type="text" value ="" id = "tit" size="40"></p>
 
-			開始<input type="text" id="from" readonly="readonly"> ～ 終了<input type="text" id="to" readonly="readonly">
-
-			<p>開始：<input type="text" value ="" id ="f_hour" size="2" class ="validate[custom[onlyNumberSp]] time">時
-			<input type="text" value ="" id ="f_min" size = "2" class ="validate[custom[onlyNumberSp]] time">分 ～
-
-			終了：<input type="text" value ="" id ="e_hour" size="2" class ="validate[custom[onlyNumberSp]] time">時
-			<input type="text" value ="" id ="e_min" size = "2" class ="validate[require,onlyNumberSp] time">分
-
-			<br />
-			終日設定：<input type="checkbox" id ="check"></p>
-
-			<p>予定の詳細：<br /><textarea id="detail" rows="2" cols="30"></textarea></p>
-
-			<p><input type="button" value = "OK" id="sub"></p>
-			<hr />
-			<p>選択したテキスト：<br /><textarea id="main_text" rows="3" cols="30"></textarea></p>
-		</form>
 	</body>
 </html>
 

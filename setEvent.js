@@ -1,3 +1,5 @@
+var bg = chrome.extension.getBackgroundPage();
+
 function isValidDate(y,m,d){
 	y = parseInt(y, 10);
 	m = parseInt(m, 10);
@@ -50,6 +52,37 @@ function checker(ch){
 
 $(document).ready(function(){
 
+	bg.google.authorize(function(){
+	var xhr = new XMLHttpRequest();
+	
+	xhr.onreadystatechange =  function() {
+		if(xhr.readyState == 4) {
+			if(xhr.status == 200) {
+				var data = JSON.parse(xhr.responseText);
+				//console.log(data);
+				var list = data.items;
+				for (var i = 0; i < list.length; i++){
+					$("#example").append($('<option>').html(list[i].summary).val(list[i].id));
+				}
+
+				$("#example").val(localStorage["calenId"]);
+			}
+			else {
+				var data  =  JSON.parse(xhr.responseText);
+				//console.log(data);
+				alert("リストの取得に失敗しました。");
+			}
+		}
+	}
+	//var calenid = encodeURIComponent(localStorage.getItem( "calenId" ));
+	xhr.open('GET',
+		"https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=owner",
+	true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.setRequestHeader('Authorization', 'Bearer ' + bg.google.getAccessToken());
+	xhr.send(null);
+	});
+
 	$( "#from" ).datepicker({
 		dateFormat: "yy-mm-dd",
 	onSelect: function( selectedDate ) {
@@ -64,21 +97,21 @@ $(document).ready(function(){
 	});
 
 	jQuery("#formID").validationEngine('attach');
-	window.returnValue = false;
+	//window.returnValue = false;
 
-	var year  = window.dialogArguments[6];
+	var year  = bg.args[6];
 
-	var start_month = window.dialogArguments[1];
-	var start_day = window.dialogArguments[2];
+	var start_month = bg.args[1];
+	var start_day = bg.args[2];
 
-	var end_month = window.dialogArguments[1];
-	var end_day = window.dialogArguments[2];
+	var end_month = bg.args[1];
+	var end_day = bg.args[2];
 
-	var start_hour = window.dialogArguments[3];
-	var start_min = window.dialogArguments[4];
+	var start_hour = bg.args[3];
+	var start_min = bg.args[4];
 
-	var end_hour = window.dialogArguments[3];
-	var end_min = window.dialogArguments[4];
+	var end_hour = bg.args[3];
+	var end_min = bg.args[4];
 
 	if(isValidDate(year,start_month,start_day)){
 		$("#from").val(year + "-" + checker(start_month) + "-" + checker(start_day));
@@ -98,9 +131,9 @@ $(document).ready(function(){
 		$("#e_min").val(checker(end_min));
 	}
 
-	$("#tit").val(window.dialogArguments[0]);
+	$("#tit").val(bg.args[0]);
 
-	$("#main_text").val(window.dialogArguments[5]);
+	$("#main_text").val(bg.args[5]);
 
 	$("#sub").click(function(){
 
@@ -111,7 +144,7 @@ $(document).ready(function(){
 
 		if ($('#check').attr('checked')){
 			var myDate = $.exDate(to, "yyyy-mm-dd");
-			console.log(myDate);
+			//console.log(myDate);
 			myDate.setDate(myDate.getDate() + 1);
 			to = myDate.toChar('yyyy-mm-dd');
 
@@ -137,12 +170,13 @@ $(document).ready(function(){
 			e_hour : checker($("#e_hour").val()),
 			e_min: checker($("#e_min").val()),
 
-			e_mon : to
+			e_mon : to,
+
+			calen : $("#example").val()
 		};
 
-		window.returnValue = obj;//backgroundに入力した内容を渡す
-		//console.log(obj);
-		window.close();
+		//イベント投稿
+		add_event(obj);
 	}
 	else{
 		alert ("日時が正しくありません");
@@ -159,4 +193,65 @@ $(document).ready(function(){
 				}
 			});
 });
+
+function add_event(returnValue){
+	bg.google.authorize(function() {
+		/**開始～終了日時設定**/
+
+		var st ="";//開始日時
+		var en ="";//終了日時
+
+		var start_array;
+		var end_array;
+
+		if(returnValue["check"]){//終日設定
+			st = returnValue["f_mon"];
+			en = returnValue["e_mon"];
+			start_array = {"date":st};
+			end_array = {"date":en};
+		}
+		else {
+			st = returnValue["f_mon"] + "T" + returnValue["f_hour"] + ":" + returnValue["f_min"] + ":00.000+09:00";
+			en = returnValue["e_mon"] + "T" + returnValue["e_hour"] + ":" + returnValue["e_min"] + ":00.000+09:00";
+			start_array = {"dateTime":st};
+			end_array = {"dateTime":en};
+		}
+
+		/**設定終わり**/
+
+		var body = JSON.stringify({
+			"description": returnValue["detail"],
+			"summary": returnValue["title"],
+			"transparency": "opaque",
+			"status": "confirmed",
+			"start" : start_array,
+			"end": end_array
+		});
+
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange =  function() {
+        if(xhr.readyState == 4) {
+            if(xhr.status == 200) {
+				alert("【"+ returnValue["title"] + "】" +"を登録しました");
+				//chrome.windows.remove(chrome.windows.WINDOW_ID_CURRENT);
+				window.close();
+            }
+			else{
+				var data  =  JSON.parse(xhr.responseText);
+				//console.log(data);
+				alert("(Error)" + data.error.code + " : " + data.error.message);
+			}
+		}}
+		var calenid = returnValue["calen"];
+		xhr.open('POST',
+			"https://www.googleapis.com/calendar/v3/calendars/"+ calenid +"/events",
+			true);
+
+		xhr.setRequestHeader('Content-Type', 'application/json');
+		xhr.setRequestHeader('Authorization', 'Bearer ' + bg.google.getAccessToken());
+		//xhr.setRequestHeader('X-JavaScript-User-Agent' , "Google APIs Explorer");
+		xhr.send(body);
+	});
+}
+
 

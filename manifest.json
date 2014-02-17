@@ -8,17 +8,24 @@
       "48": "./images/mid.png"
    },
    "name": "Right-Click to Calendar",
-   "description": "選択したテキストをGoogleカレンダーに投稿できる拡張です．（※オプションからカレンダーIDを設定してください）",
+   "description": "選択したテキストをGoogleカレンダーに投稿できる拡張です。",
    "options_page": "options.html",
    "permissions": [ "tabs", "contextMenus",
-        "http://www.google.com/*",
-        "https://www.google.com/*",
-		"http://ajax.googleapis.com/*"
+	"http://www.google.com/*",
+	"https://www.google.com/*",
+	"http://ajax.googleapis.com/*",
+	"https://www.googleapis.com/*",
+	"https://accounts.google.com/o/oauth2/token"
     ],
 	 "web_accessible_resources": [
-    	"chrome_ex_oauth.html","setEvent.html","images/screen.png"
+    "setEvent.html","images/screen.png","oauth2/oauth2.html"
   ],
-    "version":"1.4",
+      "content_scripts":[{
+        "matches":["http://www.google.com/robots.txt*"],
+        "js":["oauth2/oauth2_inject.js"],
+        "run_at":"document_start"
+    }],
+    "version":"2.9",
 	"manifest_version": 2
 }
 
