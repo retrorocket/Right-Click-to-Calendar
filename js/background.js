@@ -1,27 +1,18 @@
 //コンテキストメニューに登録
 var parentId = chrome.contextMenus.create({
-	"title" : "カレンダーに投稿",
+	"title" : "選択したテキストをカレンダーに投稿",
 	"type" : "normal",
 	"contexts" : ["selection"],//テキストを選択した時のみ
 	"onclick" : getClickHandler()
 });
 
-var google = new OAuth2('google', {
-	client_id: '*',
-	client_secret: '*',
-	api_scope: 'https://www.googleapis.com/auth/calendar'
-});
+//イベントウィンドウに引き渡す値
 var args;
-//↓できればよかったけどめんどくさい
-//CalendarIDをすべて取得→ユーザーに選択させる
-//できた
 
 function getClickHandler() {
 	return function(info, tab) {
 
-		//ID登録させる
-		//if (localStorage["calenId"] == "" || localStorage["calenId"] == null ||localStorage["calenId"] == undefined)
-		if(!google.hasAccessToken())
+		if(!localStorage["calenId"])
 		{
 			alert ("オプションページで認証を行ってください");
 			chrome.tabs.create({
@@ -29,6 +20,7 @@ function getClickHandler() {
 			});
 			return false;
 		}
+
 		var stext=info.selectionText; //現在選択しているテキスト
 		stext = stext.replace(/[Ａ-Ｚａ-ｚ０-９]/g, function(s) {//全角英数を半角に変換
 			return String.fromCharCode(s.charCodeAt(0) - 65248);
@@ -71,13 +63,8 @@ function getClickHandler() {
 		}
 
 		args = new Array(title, mon, day, shour, smin, stext, syear);
+		//イベント設定ウィンドウを呼び出す
 		chrome.windows.create({"url":"setEvent.html", "width":580, "height":810, "type": "panel"});
 	}
-		//イベント設定ウィンドウを呼び出す
-
-		//chrome.windows.create({"url":"setEvent.html", "width":500, "height":550, "type": "panel"});
-
-		//設定終了後にイベント登録
-			//console.log(returnValue);
 }
 

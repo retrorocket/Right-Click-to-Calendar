@@ -8,13 +8,12 @@
 		<link href="./css/bootstrap.min.css" rel="stylesheet">
 		<link rel="stylesheet" href="./css/font-awesome.min.css">
 
-		<script src ="./jQuery.js"></script>
-		<script src="./options.js"></script>
+		<script src ="./js/jQuery.js"></script>
 	</head>
 	<body>
 		<div class="container">
 			<h1>Right Click to Calendar設定</h1>
-			<div id = "setter" style="padding-top:20px">
+			<div id="setter" style="padding-top:20px">
 				<h3>デフォルトで登録したいカレンダーの設定</h3>
 				<form role="form" class="form-inline">
 					<div class="form-group">
@@ -30,15 +29,12 @@
 			</div>
 
 			<div style="padding-top:20px">
-				<h2>OAuth認証設定</h2>
-				<p>カレンダーへのイベント登録時に認証関係と思われるエラーが発生した場合は、一度認証を削除した後、再度認証を行ってください。</p>
-				<form>
-					<p id="check"></p>
-					<input type="button"class="btn"  value ="認証を削除する" id ="Odel"></input>
-					<input type="button" class="btn btn-primary" value ="認証を実行する" id ="Oget"></input>
-				</form>
+				<h2>OAuth認証状況</h2>
+				<p id="check"></p>
+				<p style="font-size:80%">認証済みアプリケーションのアクセス権を取り消したい場合は、Googleのアカウント設定ページから設定してください。</p>
 			</div>
 		</div>
+		<script src="./js/options.js"></script>
 	</body>
 </html>
 
