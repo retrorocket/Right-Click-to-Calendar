@@ -33,6 +33,74 @@
 				<p id="check"></p>
 				<p style="font-size:80%">認証済みアプリケーションのアクセス権を取り消したい場合は、Googleのアカウント設定ページから設定してください。</p>
 			</div>
+
+			<div style="padding-top:20px">
+				<h2>正規表現編集（ベータ）</h2>
+				<p style="font-size:80%">正規表現が使用できる方以外はチェックを入れないでください。</p>
+				<p id="exp_check">
+					<label>
+						<input type="checkbox" id="expSwitch"> 正規表現を自分で設定する
+					</label>
+				</p>
+				<div id ="exp_field">
+					<p style="font-size:80%">後方参照を使用した正規表現を記述し、対応する配列番号を各開始要素に設定してください。空文字の設定も可能です。<br>
+					選択されたテキストの全角英数字は全て半角に変換された状態でカレンダー投稿画面に引き渡されます。<br>
+					誤った正規表現等を入力した場合の動作は保証しません。<br>
+					現在対応しているのは開始日時とタイトルのみです。</p>
+					<form class="form-horizontal">
+						<div class="form-group">
+							<label for="reg" class="col-sm-2 control-label">正規表現</label>
+							<div class="col-sm-10">
+								<input type="text" class="form-control" id="reg" placeholder="(\d+):(\d+)">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="start_year" class="col-sm-2 control-label">開始年</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="start_year" placeholder="1" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="start_mon" class="col-sm-2 control-label">開始月</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="start_mon" placeholder="2" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="start_day" class="col-sm-2 control-label">開始日</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="start_day" placeholder="3" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="start_hour" class="col-sm-2 control-label">開始時間（時）</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="start_hour" placeholder="4" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="start_min" class="col-sm-2 control-label">開始時間（分）</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="start_min" placeholder="5" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="reg_title" class="col-sm-2 control-label">タイトル</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="reg_title" placeholder="6" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-sm-offset-2 col-sm-10">
+								<input type="button" id="reg_set" class="btn btn-default" value="設定"></input>
+							</div>
+						</div>
+					</form>
+					<p id ="edited" style="padding-bottom:20px"></p>
+				</div>
+
+			</div>
+
 		</div>
 		<script src="./js/options.js"></script>
 	</body>

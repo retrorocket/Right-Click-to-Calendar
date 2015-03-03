@@ -17,7 +17,8 @@
    "web_accessible_resources": [
         "setEvent.html"
    ],
-    "version":"2.10",
+
+    "version":"3.0",
 	"minimum_chrome_version": "29",
 	"manifest_version": 2,
 	"oauth2": {

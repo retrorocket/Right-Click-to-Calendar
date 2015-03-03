@@ -10,7 +10,47 @@ $(document).ready(function(){
 		$("#comp").text("設定を保存しました");
 	});
 
+	$("#exp_field").hide();
+	if(localStorage["expSwitch"]){
+		$("#expSwitch").attr("checked", true );
+		$("#exp_field").show();
+		setRegExps();
+	}
+
+	$("#expSwitch").click(function(){
+		if ($(this).is(":checked")) {
+			localStorage["expSwitch"] = true;
+			$("#exp_field").show();
+			setRegExps();
+		}
+		else {
+			localStorage.removeItem("expSwitch");
+			$("#exp_field").hide();
+		}
+	});
+
+	$("#reg_set").click(function(){
+		localStorage["exp_str"] = $("#reg").val();
+		localStorage["start_year"] = $("#start_year").val();
+		localStorage["start_mon"] = $("#start_mon").val();
+		localStorage["start_day"] = $("#start_day").val();
+		localStorage["start_hour"] = $("#start_hour").val();
+		localStorage["start_min"] = $("#start_min").val();
+		localStorage["title"] = $("#reg_title").val();
+		$("#edited").text("設定しました。");
+	});
+
 });
+
+function setRegExps(){
+	$("#reg").val(localStorage["exp_str"] );
+	$("#start_year").val(localStorage["start_year"] );
+	$("#start_mon").val(localStorage["start_mon"] );
+	$("#start_day").val(localStorage["start_day"] );
+	$("#start_hour").val(localStorage["start_hour"] );
+	$("#start_min").val(localStorage["start_min"]);
+	$("#reg_title").val(localStorage["title"]);
+}
 
 function addList(){
 	chrome.identity.getAuthToken({ 'interactive': true }, function(access_token) {

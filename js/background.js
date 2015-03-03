@@ -26,6 +26,14 @@ function getClickHandler() {
 			return String.fromCharCode(s.charCodeAt(0) - 65248);
 		});
 
+		if(localStorage["expSwitch"]) {
+			args = expDate(stext);
+			if(args) { // 正規表現に合致した場合のみ
+				chrome.windows.create({"url":"setEvent.html", "width":580, "height":810, "type": "panel"});
+				return;
+			}
+		}
+
 		// 年月日・曜日・時分秒の取得
 		var d = new Date();	
 
