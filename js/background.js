@@ -7,7 +7,7 @@ var parentId = chrome.contextMenus.create({
 });
 
 //イベントウィンドウに引き渡す値
-var args;
+var args = new Object();
 
 function getClickHandler() {
 	return function(info, tab) {
@@ -70,7 +70,16 @@ function getClickHandler() {
 			title = t[2];
 		}
 
-		args = new Array(title, mon, day, shour, smin, stext, syear);
+		args = {
+			"start":{"year":syear, "month":mon, "day":day,
+				 "hour":shour, "min":smin},
+			"end":{"year":syear, "month":mon, "day":day,
+				"hour":shour, "min":smin},
+			"title":title,
+			"detail":"",
+			"selected_text":stext
+		};
+
 		//イベント設定ウィンドウを呼び出す
 		chrome.windows.create({"url":"setEvent.html", "width":580, "height":810, "type": "panel"});
 	}

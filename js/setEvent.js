@@ -111,26 +111,24 @@ $(document).ready(function(){
 	jQuery("#formID").validationEngine('attach');
 	//window.returnValue = false;
 
-	var year  = bg.args[6];
+	var start_year  = bg.args.start.year;
+	var start_month = bg.args.start.month;
+	var start_day = bg.args.start.day;
+	var start_hour = bg.args.start.hour;
+	var start_min = bg.args.start.min;
 
-	var start_month = bg.args[1];
-	var start_day = bg.args[2];
+	var end_year = bg.args.end.year;
+	var end_month = bg.args.end.month;
+	var end_day = bg.args.end.day;
+	var end_hour = bg.args.end.hour;
+	var end_min = bg.args.end.min;
 
-	var end_month = bg.args[1];
-	var end_day = bg.args[2];
-
-	var start_hour = bg.args[3];
-	var start_min = bg.args[4];
-
-	var end_hour = bg.args[3];
-	var end_min = bg.args[4];
-
-	if(isValidDate(year,start_month,start_day)){
-		$("#from").val(year + "-" + checker(start_month) + "-" + checker(start_day));
+	if(isValidDate(start_year,start_month,start_day)){
+		$("#from").val(start_year + "-" + checker(start_month) + "-" + checker(start_day));
 	}
 
-	if(isValidDate(year,end_month,end_day)){
-		$("#to").val(year + "-" + checker(end_month) + "-" + checker(end_day));
+	if(isValidDate(end_year,end_month,end_day)){
+		$("#to").val(end_year + "-" + checker(end_month) + "-" + checker(end_day));
 	}
 
 	if(time_checker(start_hour,start_min)){
@@ -143,9 +141,11 @@ $(document).ready(function(){
 		$("#e_min").val(checker(end_min));
 	}
 
-	$("#tit").val(bg.args[0]);
+	$("#tit").val(bg.args.title);
 
-	$("#main_text").val(bg.args[5]);
+	$("#main_text").val(bg.args.selected_text);
+
+	$("#detail").val(bg.args.detail);
 
 	$("#sub").click(function(){
 

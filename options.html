@@ -31,22 +31,29 @@
 			<div style="padding-top:20px">
 				<h2>OAuth認証状況</h2>
 				<p id="check"></p>
-				<p style="font-size:80%">認証済みアプリケーションのアクセス権を取り消したい場合は、Googleのアカウント設定ページから設定してください。</p>
+				<p style="font-size:90%">認証済みアプリケーションのアクセス権を取り消したい場合は、Googleのアカウント設定ページから設定してください。</p>
 			</div>
 
 			<div style="padding-top:20px">
 				<h2>正規表現編集（ベータ）</h2>
-				<p style="font-size:80%">正規表現が使用できる方以外はチェックを入れないでください。</p>
+				<p style="font-size:90%">正規表現が使用できる方以外はチェックを入れないでください。</p>
 				<p id="exp_check">
 					<label>
-						<input type="checkbox" id="expSwitch"> 正規表現を自分で設定する
+						<input type="checkbox" id="expSwitch"> 選択したテキストに対する正規表現を自分で設定する
 					</label>
 				</p>
 				<div id ="exp_field">
-					<p style="font-size:80%">後方参照を使用した正規表現を記述し、対応する配列番号を各開始要素に設定してください。空文字の設定も可能です。<br>
-					選択されたテキストの全角英数字は全て半角に変換された状態でカレンダー投稿画面に引き渡されます。<br>
-					誤った正規表現等を入力した場合の動作は保証しません。<br>
-					現在対応しているのは開始日時とタイトルのみです。</p>
+					<p>選択したテキストに対して、開始日時やタイトル等の正規表現を設定できます。
+					<ul style="font-size:90%">
+						<li>後方参照を使用した正規表現を記述し、対応する配列番号を半角数字で各開始要素に設定してください。</li>
+						<ul>
+							<li>空文字を設定した場合、各要素のデフォルト値が使用されます。</li>
+							<li>デフォルト値：「日時」現在時刻，「タイトル」選択されたテキスト，「詳細」空文字</li>
+						</ul>
+						<li>選択されたテキストの全角英数字は全て半角英数字に変換された状態でカレンダー投稿画面に引き渡されます。</li>
+						<li>誤った正規表現、配列番号に半角数字以外を入力した場合の動作は保証しません。</li>
+						<li>正規表現はJavaScriptで動作するものを入力してください。</li>
+					</ul>
 					<form class="form-horizontal">
 						<div class="form-group">
 							<label for="reg" class="col-sm-2 control-label">正規表現</label>
@@ -85,9 +92,45 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="end_year" class="col-sm-2 control-label">終了年</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="end_year" placeholder="6" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="end_mon" class="col-sm-2 control-label">終了月</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="end_mon" placeholder="7" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="end_day" class="col-sm-2 control-label">終了日</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="end_day" placeholder="8" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="end_hour" class="col-sm-2 control-label">終了時間（時）</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="end_hour" placeholder="9" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="end_min" class="col-sm-2 control-label">終了時間（分）</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="end_min" placeholder="10" min="0">
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="reg_title" class="col-sm-2 control-label">タイトル</label>
 							<div class="col-sm-2">
-								<input type="number" class="form-control" id="reg_title" placeholder="6" min="0">
+								<input type="number" class="form-control" id="reg_title" placeholder="11" min="0">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="detail" class="col-sm-2 control-label">詳細</label>
+							<div class="col-sm-2">
+								<input type="number" class="form-control" id="detail" placeholder="12" min="0">
 							</div>
 						</div>
 						<div class="form-group">

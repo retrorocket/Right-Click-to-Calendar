@@ -7,58 +7,52 @@ function expDate(selectedText) {
 	if(!match_arr){
 		return null;
 	}
+	var max = match_arr.length;
 
 	// 年月日・曜日・時分秒の取得
 	var d = new Date();	
 
 	/**正規表現で日付処理**/
-	var mon = d.getMonth() + 1;
-	var day =  d.getDate();
-	var syear =  d.getFullYear();
+	/** setting **/
+	// start
+	var syear = checkDates("start_year", max, match_arr) || d.getFullYear();
+	var smon = checkDates("start_mon", max, match_arr) || d.getMonth() + 1;
+	var sday = checkDates("start_day", max, match_arr) || d.getDate();
+	var shour = checkDates("start_hour", max, match_arr) || d.getHours();
+	var smin = checkDates("start_min", max, match_arr) || d.getMinutes();
 
-	var shour = d.getHours();
-	var smin = d.getMinutes();
+	// end
+	var eyear = checkDates("end_year", max, match_arr) || d.getFullYear();
+	var emon = checkDates("end_mon", max, match_arr) || d.getMonth() + 1;
+	var eday = checkDates("end_day", max, match_arr) || d.getDate();
+	var ehour = checkDates("end_hour", max, match_arr) || d.getHours();
+	var emin = checkDates("end_min", max, match_arr) || d.getMinutes();
 
-	var title = base_str;
+	// title
+	var title = checkDates("title", max, match_arr) || base_str;
 
-	if(localStorage["start_year"]){
-		var int_year = parseInt(localStorage["start_year"]);
-		if(int_year <= match_arr.length) {
-			syear = match_arr[int_year];
-		}
-	}
-	if(localStorage["start_mon"]){
-		var int_mon = parseInt(localStorage["start_mon"]);
-		if(int_mon <= match_arr.length) {
-			mon = match_arr[int_mon];
-		}
-	}
-	if(localStorage["start_day"]){
-		var int_day = parseInt(localStorage["start_day"]);
-		if(int_day <= match_arr.length) {
-			day = match_arr[int_day];
-		}
-	}
-	if(localStorage["start_hour"]){
-		var int_hour = parseInt(localStorage["start_hour"]);
-		if(int_hour <= match_arr.length) {
-			shour = match_arr[int_hour];
-		}
-	}
-	if(localStorage["start_min"]){
-		var int_min = parseInt(localStorage["start_min"]);
-		if(int_min <= match_arr.length) {
-			smin = match_arr[int_min];
-		}
-	}
-	if(localStorage["title"]){
-		var int_title = parseInt(localStorage["title"]);
-		if(int_title <= match_arr.length) {
-			title = match_arr[int_title];
-		}
-	}
+	//detail
+	var detail = checkDates("detail", max, match_arr) || "";
 
-	var args = new Array(title, mon, day, shour, smin, base_str, syear);
+	var args = {
+		"start":{"year":syear, "month":smon, "day":sday,
+			 "hour":shour, "min":smin},
+		"end":{"year":eyear, "month":emon, "day":eday,
+			 "hour":ehour, "min":emin},
+		"title":title,
+		"detail":detail,
+		"selected_text":base_str
+	};
 
 	return args;
+}
+
+function checkDates(key, max, match_arr){
+	if(localStorage[key]){
+		var int_key = parseInt(localStorage[key]);
+		if(int_key >= 0 && int_key <= max) {
+			return match_arr[int_key];
+		}
+	}
+	return null;
 }

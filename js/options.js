@@ -36,7 +36,13 @@ $(document).ready(function(){
 		localStorage["start_day"] = $("#start_day").val();
 		localStorage["start_hour"] = $("#start_hour").val();
 		localStorage["start_min"] = $("#start_min").val();
+		localStorage["end_year"] = $("#end_year").val();
+		localStorage["end_mon"] = $("#end_mon").val();
+		localStorage["end_day"] = $("#end_day").val();
+		localStorage["end_hour"] = $("#end_hour").val();
+		localStorage["end_min"] = $("#end_min").val();
 		localStorage["title"] = $("#reg_title").val();
+		localStorage["detail"] = $("#detail").val();
 		$("#edited").text("設定しました。");
 	});
 
@@ -49,7 +55,13 @@ function setRegExps(){
 	$("#start_day").val(localStorage["start_day"] );
 	$("#start_hour").val(localStorage["start_hour"] );
 	$("#start_min").val(localStorage["start_min"]);
+	$("#end_year").val(localStorage["end_year"] );
+	$("#end_mon").val(localStorage["end_mon"] );
+	$("#end_day").val(localStorage["end_day"] );
+	$("#end_hour").val(localStorage["end_hour"] );
+	$("#end_min").val(localStorage["end_min"]);
 	$("#reg_title").val(localStorage["title"]);
+	$("#detail").val(localStorage["detail"]);
 }
 
 function addList(){
