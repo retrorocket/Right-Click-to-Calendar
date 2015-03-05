@@ -30,38 +30,26 @@ $(document).ready(function(){
 	});
 
 	$("#reg_set").click(function(){
-		localStorage["exp_str"] = $("#reg").val();
-		localStorage["start_year"] = $("#start_year").val();
-		localStorage["start_mon"] = $("#start_mon").val();
-		localStorage["start_day"] = $("#start_day").val();
-		localStorage["start_hour"] = $("#start_hour").val();
-		localStorage["start_min"] = $("#start_min").val();
-		localStorage["end_year"] = $("#end_year").val();
-		localStorage["end_mon"] = $("#end_mon").val();
-		localStorage["end_day"] = $("#end_day").val();
-		localStorage["end_hour"] = $("#end_hour").val();
-		localStorage["end_min"] = $("#end_min").val();
-		localStorage["title"] = $("#reg_title").val();
-		localStorage["detail"] = $("#detail").val();
+		$("#exp_field").find(":input").each(function(i, elem){
+			var id_name = $(elem).attr("id");
+			if(id_name === "reg_set") {
+				return true; // continue;
+			}
+			localStorage[id_name] = $("#" + id_name).val();
+  		});
 		$("#edited").text("設定しました。");
 	});
 
 });
 
 function setRegExps(){
-	$("#reg").val(localStorage["exp_str"] );
-	$("#start_year").val(localStorage["start_year"] );
-	$("#start_mon").val(localStorage["start_mon"] );
-	$("#start_day").val(localStorage["start_day"] );
-	$("#start_hour").val(localStorage["start_hour"] );
-	$("#start_min").val(localStorage["start_min"]);
-	$("#end_year").val(localStorage["end_year"] );
-	$("#end_mon").val(localStorage["end_mon"] );
-	$("#end_day").val(localStorage["end_day"] );
-	$("#end_hour").val(localStorage["end_hour"] );
-	$("#end_min").val(localStorage["end_min"]);
-	$("#reg_title").val(localStorage["title"]);
-	$("#detail").val(localStorage["detail"]);
+	$("#exp_field").find(":input").each(function(i, elem){
+		var id_name = $(elem).attr("id");
+		if(id_name === "reg_set") {
+			return true; // continue;
+		}
+		$("#" + id_name).val(localStorage[id_name]);
+  	});
 }
 
 function addList(){
