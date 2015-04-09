@@ -31,12 +31,15 @@ function getClickHandler() {
         if(!args) {
             args = expDefault(stext);
         }
+        
+        //デフォルトはポップアップにしておく。
+        var window_type = localStorage["window_type"] || "popup";
         //イベント設定ウィンドウを呼び出す
         chrome.windows.create({
             "url": "setEvent.html",
             "width": 580,
             "height": 810,
-            "type": "panel"
+            "type": window_type
         });
     }
 }
