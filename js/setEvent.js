@@ -221,6 +221,22 @@ $(document).ready(function () {
                 $("input.time").attr("disabled", true);
             }
         });
+
+    $("#create_cal").hide();
+    if (localStorage["window_type"] === "panel") {
+        $("#create_cal").show();
+    }
+
+    $("#create_cal").click(
+        function () {
+            chrome.windows.create({
+                "url": "https://www.google.com/calendar/",
+                "width": 800,
+                "height": 810,
+                "type": "panel"
+            });
+        });
+
 });
 
 function add_event(returnValue) {
