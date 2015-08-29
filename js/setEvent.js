@@ -162,6 +162,8 @@ $(document).ready(function () {
     $("#main_text").val(bg.args.selected_text);
 
     $("#detail").val(bg.args.detail);
+    
+    $("#location").val(bg.args.location);
 
     $("#sub").click(function () {
 
@@ -186,6 +188,7 @@ $(document).ready(function () {
             var obj = {
                 title: $("#tit").val(),
                 detail: $("#detail").val(),
+                location: $("#location").val(),
                 f_mon: from,
 
                 f_hour: checker($("#f_hour").val()),
@@ -276,6 +279,7 @@ function add_event(returnValue) {
 
             var body = JSON.stringify({
                 "description": returnValue["detail"],
+                "location": returnValue["location"],
                 "summary": returnValue["title"],
                 "transparency": "opaque",
                 "status": "confirmed",
