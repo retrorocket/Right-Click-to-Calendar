@@ -30,9 +30,15 @@ function expDefault(stext) {
         smin = r[3];
     }
 
-    var t = stext.match(/(\d+| |\n)(\S+)$/); //タイトル
+    var t = stext.match(/(\n|\s)(\D{1,2}\S+)(\n|$)/); //タイトル
     if (t) {
         title = t[2];
+    }
+    
+    var location = "";
+    var l = stext.match(/場所(\S?\n|\S?|\s?)(\S+)($|\n)/); //場所
+    if (l) {
+        location = l[2];
     }
 
     args = {
@@ -52,7 +58,7 @@ function expDefault(stext) {
         },
         "title": title,
         "detail": "",
-        "location": "",
+        "location": location,
         "selected_text": stext
     };
 
