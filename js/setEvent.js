@@ -225,18 +225,14 @@ $(document).ready(function () {
             }
         });
 
-    $("#create_cal").hide();
-    if (localStorage["window_type"] === "panel") {
-        $("#create_cal").show();
-    }
-
+    var window_type = localStorage["window_type"] || "popup";
     $("#create_cal").click(
         function () {
             chrome.windows.create({
-                "url": "https://www.google.com/calendar/",
+                "url": "https://calendar.google.com/calendar/",
                 "width": 800,
                 "height": 810,
-                "type": "panel"
+                "type": window_type
             });
         });
 
