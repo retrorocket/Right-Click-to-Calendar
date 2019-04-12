@@ -1,178 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 
 <head>
     <meta charset="utf-8" />
     <title>Right Click to Calendar設定</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap core CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/font-awesome.min.css">
-
-    <script src="./js/jQuery.js"></script>
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
     <div class="container">
-        <h1 style="padding-top:20px">Right Click to Calendar設定</h1>
-        <div class="well"><a href="http://retrorocket.biz/kampa"><span class="glyphicon glyphicon-gift" aria-hidden="true"></span> カンパのお願い。</a></div>
-        <div id="setter" style="padding-top:20px">
+        <h1 class="pt-3">Right Click to Calendar設定</h1>
+        <div class="alert alert-dismissible alert-light">
+            <a href="https://retrorocket.biz/kampa" class="alert-link">カンパのお願い。</a>
+        </div>
+        <div id="setter" class="pt-3">
             <h3>デフォルトで登録したいカレンダーの設定</h3>
             <form role="form" class="form-inline">
-                <div class="form-group">
-                    <select id="example" class="form-control">
+                <div class="form-group mr-3">
+                    <select id="selected-calendar" class="form-control">
                     </select>
                 </div>
-                <div class="form-group">
-                    <input type="button" class="btn btn-primary" value="デフォルトのカレンダーに設定" id="sub">
-                </div>
+                <button type="button" class="btn btn-primary" id="sub">デフォルトのカレンダーに設定</button>
             </form>
 
-            <p id="comp"></p>
+            <p id="comp" class="pt-1"></p>
         </div>
 
-        <div style="padding-top:20px">
-            <h2>OAuth認証状況</h2>
+        <div class="pt-3">
+            <h3>OAuth認証状況</h3>
             <p id="check"></p>
-            <p style="font-size:90%">認証済みアプリケーションのアクセス権を取り消したい場合は、Googleのアカウント設定ページから設定してください。</p>
+            <p>認証済みアプリケーションのアクセス権を取り消したい場合は、Googleのアカウント設定ページから設定してください。</p>
         </div>
 
-        <div id="window_setter" style="padding-top:20px">
-            <h3>イベント設定ウィンドウのタイプ</h3>
-            <p style="font-size:90%">イベント設定ウィンドウのタイプを変更できます。パネルを使用したい場合、<a href="#" id="panel_enabler">chrome://flags/#enable-panels</a>から「パネルの有効化」を実施してください。</p>
-            <form role="form" class="form-inline">
-                <div class="form-group">
-                    <select id="window_setter_val" class="form-control">
-                        <option value="popup">ポップアップ</option>
-                        <option value="panel">パネル</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <input type="button" class="btn btn-primary" value="設定" id="sub_window">
-                </div>
-            </form>
-
-            <p id="comp_window"></p>
-        </div>
-
-        <div style="padding-top:20px">
-            <h2>正規表現編集（ベータ）</h2>
-            <p style="font-size:90%">正規表現が使用できる方以外はチェックを入れないでください。</p>
-            <p id="exp_check">
+        <div class="pt-3">
+            <h3>正規表現編集（ベータ）</h3>
+            <p>正規表現が使用できる方のみチェックを入れてください。</p>
+            <div id="exp-check" class="form-group" style="font-weight:bold">
                 <label>
-                    <input type="checkbox" id="expSwitch"> 選択したテキストに対する正規表現を自分で設定する
+                    <input type="checkbox" id="exp-switch"> 選択したテキストに対する正規表現を自分で設定する
                 </label>
-            </p>
-            <div id="exp_field">
-                <p>選択したテキストに対して、開始日時やタイトル等の正規表現を設定できます。
-                    <ul style="font-size:90%">
-                        <li>後方参照を使用した正規表現を記述し、対応する配列番号を半角数字で各開始要素に設定してください。</li>
-                        <ul>
-                            <li>空文字を設定した場合、各要素のデフォルト値が使用されます。</li>
-                            <li>デフォルト値：「日時」現在時刻，「タイトル」選択されたテキスト，「詳細」空文字，「場所」空文字</li>
-                        </ul>
-                        <li>選択されたテキストの全角英数字は全て半角英数字に変換された状態でカレンダー投稿画面に引き渡されます。</li>
-                        <li>誤った正規表現、配列番号に半角数字以外を入力した場合の動作は保証しません。</li>
-                        <li>正規表現はJavaScriptで動作するものを入力してください。</li>
+            </div>
+            <div id="exp-field">
+                <p>選択したテキストに対して、開始日時やタイトル等の正規表現を設定できます。</p>
+                <ul>
+                    <li>後方参照を使用した正規表現を記述し、対応するグループのインデックスを半角数字で各要素に設定してください。</li>
+                    <ul>
+                        <li>設定がない場合、各要素のデフォルト値が使用されます。デフォルト値は以下のとおりです。</li>
+                        <li>デフォルト値：「日時」→現在時刻，「タイトル」→選択されたテキスト，「詳細」→空文字，「場所」→空文字</li>
                     </ul>
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="exp_str" class="col-sm-2 control-label">正規表現</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="exp_str" placeholder="(\d+):(\d+):(\d+| |\n)(\S+)">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="start_year" class="col-sm-2 control-label">開始年</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="start_year" placeholder="1" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="start_mon" class="col-sm-2 control-label">開始月</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="start_mon" placeholder="2" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="start_day" class="col-sm-2 control-label">開始日</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="start_day" placeholder="3" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="start_hour" class="col-sm-2 control-label">開始時間（時）</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="start_hour" placeholder="4" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="start_min" class="col-sm-2 control-label">開始時間（分）</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="start_min" placeholder="5" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="end_year" class="col-sm-2 control-label">終了年</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="end_year" placeholder="6" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="end_mon" class="col-sm-2 control-label">終了月</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="end_mon" placeholder="7" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="end_day" class="col-sm-2 control-label">終了日</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="end_day" placeholder="8" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="end_hour" class="col-sm-2 control-label">終了時間（時）</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="end_hour" placeholder="9" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="end_min" class="col-sm-2 control-label">終了時間（分）</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="end_min" placeholder="10" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="title" class="col-sm-2 control-label">タイトル</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="title" placeholder="11" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="detail" class="col-sm-2 control-label">詳細</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="detail" placeholder="12" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="location" class="col-sm-2 control-label">場所</label>
-                            <div class="col-sm-2">
-                                <input type="number" class="form-control" id="location" placeholder="13" min="0">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <input type="button" id="reg_set" class="btn btn-default" value="設定">
-                            </div>
-                        </div>
-                    </form>
-                    <p id="edited" style="padding-bottom:20px"></p>
+                    <li>選択されたテキストの全角英数字は、全て半角英数字に変換されます。正規表現は変換後の文字列に対し適用されます。</li>
+                    <li>誤った正規表現、インデックスに半角数字以外を指定した場合の動作は保証しません。</li>
+                    <li>正規表現はJavaScriptで動作するものを入力してください。</li>
+                </ul>
+
+                <div class="form-group">
+                    <label for="exp_str">正規表現</label>
+                    <input type="text" class="form-control" id="exp_str" placeholder="(\d+):(\d+):(\d+| |\n)(\S+)">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <label for="start_year">開始年</label>
+                        <input type="number" class="form-control" id="start_year" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="start_mon">開始月</label>
+                        <input type="number" class="form-control" id="start_mon" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="start_day">開始日</label>
+                        <input type="number" class="form-control" id="start_day" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="start_hour">開始時間（時）</label>
+                        <input type="number" class="form-control" id="start_hour" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="start_min">開始時間（分）</label>
+                        <input type="number" class="form-control" id="start_min" min="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <label for="end_year">終了年</label>
+                        <input type="number" class="form-control" id="end_year" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="end_mon">終了月</label>
+                        <input type="number" class="form-control" id="end_mon" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="end_day">終了日</label>
+                        <input type="number" class="form-control" id="end_day" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="end_hour">終了時間（時）</label>
+                        <input type="number" class="form-control" id="end_hour" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="end_min">終了時間（分）</label>
+                        <input type="number" class="form-control" id="end_min" min="0">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-2">
+                        <label for="title">タイトル</label>
+                        <input type="number" class="form-control" id="title" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="detail">詳細</label>
+                        <input type="number" class="form-control" id="detail" min="0">
+                    </div>
+                    <div class="form-group col-2">
+                        <label for="location">場所</label>
+                        <input type="number" class="form-control" id="location" min="0">
+                    </div>
+                </div>
+
+                <button type="button" id="reg-set" class="btn btn-primary">設定</button>
+                <p id="edited" class="py-1"></p>
+
+            </div> <!-- exp-field-->
+
+            <div id="exp-test-field" class="card my-3">
+                <div class="card-body">
+                    <h3 class="card-title">正規表現チェック</h3>
+                    <p class="card-text">「正規表現編集」に入力されている正規表現を使用して、検証用の文字列をチェックします。</p>
+                    <div class="form-group">
+                        <label for="check_str">検証用の文字列</label>
+                        <textarea class="form-control" id="check_str">2019年4月12日 映画公開日 場所:東宝系映画館</textarea>
+                    </div>
+                    <button type="button" id="check-regexp" class="btn btn-primary">チェック</button>
+                    <p class="pt-1"><b>チェック結果が以下に表示されます</b></p>
+                    <ul id="regexp-group"></ul>
+                </div>
             </div>
 
         </div>
+    </div> <!-- container -->
 
-    </div>
-    <script src="./js/options.js"></script>
+    <script src="./assets/js/vendor/jquery.min.js"></script>
+    <script src="./assets/js/options.js"></script>
+
 </body>
 
 </html>

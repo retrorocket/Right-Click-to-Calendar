@@ -3,149 +3,92 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>イベント設定</title>
-
-    <script src="./js/jQuery.js"></script>
     <!-- Bootstrap core CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/font-awesome.min.css">
-    <link rel="stylesheet" href="./css/validationEngine.jquery.css" type="text/css" />
-    <link rel="stylesheet" href="./css/jquery-ui.css" type="text/css" />
-    <link rel="stylesheet" href="./css/sweet-alert.css" type="text/css" />
-    <style type="text/css">
-        .container {
-            max-width: 540px;
-            min-width: 540px;
-        }
-        
-        .col-lg-1 {
-            max-width: 80px;
-            float: left;
-        }
-        
-        .col-lg-2 {
-            max-width: 100px;
-            float: left;
-        }
-        
-        .col-lg-6 {
-            max-width: 190px;
-            float: left;
-        }
-    </style>
-
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="container">
-        <div class="well">
-            <form class="form-horizontal" id="formID">
-                <fieldset>
-                    <legend>イベント設定 <a class="btn btn-default btn-xs" id="create_cal" href="#">カレンダーを表示</a></legend>
+
+    <div class="card bg-light">
+        <form>
+            <fieldset>
+
+                <div class="card-header">
+                    <legend>イベント設定 <a class="btn btn-secondary btn-sm" id="create-cal" href="#">カレンダーを表示</a></legend>
+                </div>
+
+                <div class="card-body">
 
                     <div class="form-group">
-                        <label for="from" class="col-lg-2 control-label">タイトル</label>
-                        <div class="col-lg-10">
-                            <input type="text" class="form-control" id="tit" placeholder="イベントのタイトル">
+                        <label for="tit" class="control-label">✎ タイトル</label>
+                        <input type="text" class="form-control" id="tit" placeholder="イベントのタイトル">
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="from-date" class="col-3 col-form-label">🕛 開始日時</label>
+                        <div class="col-5">
+                            <input type="date" class="form-control" id="from-date" required>
+                        </div>
+                        <div class="col-4">
+                            <input type="time" class="form-control" id="from-time">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="to-date" class="col-3 col-form-label">🕕 終了日時</label>
+                        <div class="col-5">
+                            <input type="date" class="form-control" id="to-date" required>
+                        </div>
+                        <div class="col-4">
+                            <input type="time" class="form-control" id="to-time">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="from" class="col-lg-2 control-label">開始</label>
-                        <div class="col-lg-6">
-                            <input type="text" class="form-control" id="from" placeholder="開始日">
-                        </div>
-                        <div class="col-lg-1">
-                            <input type="text" class="form-control validate[custom[onlyNumberSp]] time min" id="f_hour" placeholder="時">
-                        </div>
-                        <label for="f_hour" class="col-lg-1 control-label">時</label>
-                        <div class="col-lg-1">
-                            <input type="text" class="form-control validate[custom[onlyNumberSp]] time" id="f_min" placeholder="分">
-                        </div>
-                        <label for="f_min" class="col-lg-1 control-label">分</label>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="to" class="col-lg-2 control-label">終了</label>
-                        <div class="col-lg-6">
-                            <input type="text" class="form-control" id="to" placeholder="終了日">
-                        </div>
-                        <div class="col-lg-1">
-                            <input type="text" class="form-control validate[custom[onlyNumberSp]] time" id="e_hour" placeholder="時">
-                        </div>
-                        <label for="e_hour" class="col-lg-1 control-label pull-left">時</label>
-                        <div class="col-lg-1">
-                            <input type="text" class="form-control validate[custom[onlyNumberSp]] time" id="e_min" placeholder="分">
-                        </div>
-                        <label for="e_min" class="col-lg-1 control-label">分</label>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-lg-12">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="check"> 終日設定
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="location" class="col-lg-4 control-label">場所</label>
-                        <div class="col-lg-8">
-                            <input type="text" class="form-control" id="location" placeholder="イベントの開催場所">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="allday">
+                            <label class="form-check-label" for="allday">
+                                終日設定
+                            </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="detail" class="col-lg-3 control-label">予定の詳細</label>
-                        <div class="col-lg-9">
-                            <textarea class="form-control" rows="3" id="detail"></textarea>
-                            <!--<span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>-->
-                        </div>
+                        <label for="location" class="control-label">📍 場所</label>
+                        <input type="text" class="form-control" id="location" placeholder="イベントの開催場所">
                     </div>
 
                     <div class="form-group">
-
-                        <label for="example" class="col-lg-4 control-label">投稿するカレンダー</label>
-                        <div class="col-lg-8">
-                            <select class="form-control" id="example">
-                            </select>
-                        </div>
+                        <label for="detail" class="control-label">📝 予定の詳細</label>
+                        <textarea class="form-control" rows="3" id="detail"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <div class="col-lg-10 col-lg-offset-2">
-                            <input type="button" class="btn btn-primary" id="sub" value="Submit">
-                        </div>
+                        <label for="selected-calendar" class="control-label">📅 投稿するカレンダー</label>
+                        <select class="form-control" id="selected-calendar"></select>
                     </div>
+
+                    <button type="button" class="btn btn-primary" id="sub">Submit</button>
+
                     <hr>
+
                     <div class="form-group">
-                        <label for="main_text" class="col-lg-3 control-label">選択したテキスト</label>
-                        <div class="col-lg-9">
-                            <textarea class="form-control" rows="3" id="main_text"></textarea>
-                            <!--<span class="help-block">A longer block of help text that breaks onto a new line and may extend beyond one line.</span>-->
-                        </div>
+                        <label for="main-text" class="control-label">選択したテキスト</label>
+                        <textarea class="form-control" rows="3" id="main-text"></textarea>
                     </div>
-
-                </fieldset>
-            </form>
-
-        </div>
-        <!--well-->
+                </div>
+                <!-- card body -->
+            </fieldset>
+        </form>
     </div>
-    <!--container-->
+    <!-- card -->
 
-    <script src="./js/languages/jquery.validationEngine-ja.js"></script>
-    <script src="./js/jquery.validationEngine.js"></script>
-    <script src="./js/jquery-ui.min.js"></script>
-    <script src="./js/jquery.ui.datepicker-ja.min.js"></script>
-    <script src="./js/sweet-alert.min.js"></script>
-    <script src="./js/exdate.js"></script>
-    <script src="./js/setEvent.js"></script>
+    <script src="./assets/js/vendor/jquery.min.js"></script>
+    <script src="./assets/js/vendor/sweetalert2.all.min.js"></script>
+    <script src="./assets/js/vendor/moment.min.js"></script>
+    <script src="./assets/js/setevent.js"></script>
 
 </body>
 
