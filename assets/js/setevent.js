@@ -58,7 +58,7 @@ const addEvent = (input) => {
                             },
                             () => {
                                 Swal.fire({
-                                    title: "invalid AccessToken",
+                                    title: "Invalid AccessToken",
                                     text: "無効なアクセストークンを削除しました。オプションページで再認証してください。" + data.error.code + " : " + data.error.message,
                                     animation: false
                                 });
@@ -95,8 +95,11 @@ const createAndAddEventInput = () => {
     let toTimeVal = $("#to-time").val();
 
     if ($('#allday').prop('checked')) {
+        // 終日設定は最終日に24時間足さないと認識されない
         let toDate = moment(toDateVal);
-        toDate.add(1, "days"); // 終日設定は最終日に24時間足さないと認識されない
+        toDate.add(1, "days");
+        toDateVal = toDate.format("YYYY-MM-DD");
+
         let fromDate = moment(fromDateVal);
         isValidRange = (toDate.diff(fromDate, "days") > 0);
     } else {
@@ -122,7 +125,7 @@ const createAndAddEventInput = () => {
         addEvent(input);
     } else {
         Swal.fire({
-            title: "invalid date!",
+            title: "Invalid date",
             text: "日時が正しくありません",
             animation: false
         });
@@ -150,7 +153,7 @@ const fetchCalendarId = (accessToken) => {
                     },
                     () => {
                         Swal.fire({
-                            title: "invalid AccessToken!",
+                            title: "Invalid AccessToken",
                             text: "無効なアクセストークンを削除しました。オプションページで再認証してください。" + data.error.code + " : " + data.error.message,
                             animation: false,
                             onClose: () => {
@@ -162,7 +165,7 @@ const fetchCalendarId = (accessToken) => {
             } else {
                 let data = JSON.parse(xhr.responseText);
                 Swal.fire({
-                    title: "Acquisition failure!",
+                    title: "Acquisition failure",
                     text: "リストの取得に失敗しました。ウインドウを閉じます",
                     animation: false,
                     onClose: () => {

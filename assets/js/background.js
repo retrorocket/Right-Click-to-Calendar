@@ -25,8 +25,8 @@ const res = (response) => {
     //イベント設定ウィンドウを呼び出す
     chrome.windows.create({
         "url": "setevent.html",
-        "width": 510,
-        "height": 680,
+        "width": 530,
+        "height": 700,
         "type": "popup"
     });
 };

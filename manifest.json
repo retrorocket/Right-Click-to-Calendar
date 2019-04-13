@@ -17,7 +17,7 @@
     "minimum_chrome_version": "29",
     "manifest_version": 2,
     "oauth2": {
-        "client_id": "94384066361-qjfe9femeihavqcf4hhhpd1s4ca498sc.apps.googleusercontent.com",
+        "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
         "scopes": [
             "https://www.googleapis.com/auth/calendar"
         ]
