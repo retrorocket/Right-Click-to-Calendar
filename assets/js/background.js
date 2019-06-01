@@ -1,3 +1,5 @@
+"use strict";
+
 // イベントウィンドウに引き渡す値
 let args = null;
 
@@ -43,7 +45,7 @@ const getClickHandler = (info, tab) => {
     }
     // content scriptにメッセージを送る
     chrome.tabs.sendMessage(tab.id, {
-        message: "dummy"
+        message: "textSelected"
     }, response => {
         res(response)
     });

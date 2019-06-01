@@ -13,7 +13,7 @@
     "description": "選択したテキストをGoogleカレンダーに投稿できる拡張です。",
     "options_page": "options.html",
     "permissions": ["tabs", "contextMenus", "identity"],
-    "version": "3.8.0",
+    "version": "3.8.1",
     "minimum_chrome_version": "29",
     "manifest_version": 2,
     "oauth2": {
