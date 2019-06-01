@@ -15,26 +15,42 @@ const expDefault = (stext) => {
 
     let title = stext;
 
+    let matched = false;
+
     let m = stext.match(/(\d{1,2})(\/|月)(\d{1,2})/); //日付
     if (m) {
         mon = m[1];
         day = m[3];
+        matched = true;
+    }
+
+    let mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/); //日付
+    if (mm) {
+        syear = parseInt(mm[1]);
+        if (syear < 2000) {
+            syear += 2000;
+        }
+        mon = mm[3];
+        day = mm[5];
+        matched = true;
     }
 
     let rr = stext.match(/(\d{1,2})(:|時)/); //開始時刻
     if (rr) {
         shour = rr[1];
         smin = 0;
+        matched = true;
     }
 
     let r = stext.match(/(\d{1,2})(:|時)(\d{1,2})/); //開始時刻
     if (r) {
         shour = r[1];
         smin = r[3];
+        matched = true;
     }
 
     let t = stext.match(/(\n|\s)(\D{1,2}\S+)(\n|$)/); //タイトル
-    if (t) {
+    if (t && matched) {
         title = t[2];
     }
 
