@@ -8,8 +8,8 @@ chrome.runtime.onMessage.addListener(
             if (tagName === "IFRAME" || tagName === "FRAME") {
                 try {
                     selectedText = document.activeElement.contentWindow.getSelection().toString();
-                } catch (e) {
-                    console.log(e.message);
+                } catch (ignore) {
+                    // console.log(ignore.message);
                 }
             } else {
                 selectedText = document.getSelection().toString();
