@@ -3,21 +3,21 @@
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         if (request.message === "textSelected") {
-            let selectedText = document.getSelection().toString();
-            if (!selectedText) {
-                let frames = window.parent.frames; // 親に付随する子フレームをすべて取得する
-                for (let i = 0; i < frames.length; i++) {
-                    selectedText = frames[i].document.getSelection().toString();
-                    if (selectedText) {
-                        break;
-                    }
+            let selectedText = "";
+            let tagName = (document.activeElement.tagName).toUpperCase();
+            if (tagName === "IFRAME" || tagName === "FRAME") {
+                try {
+                    selectedText = document.activeElement.contentWindow.getSelection().toString();
+                } catch (e) {
+                    console.log(e.message);
                 }
+            } else {
+                selectedText = document.getSelection().toString();
             }
-            if (selectedText) {
-                sendResponse({
-                    stext: selectedText,
-                });
-            }
+            selectedText = selectedText || request.infoText;
+            sendResponse({
+                stext: selectedText,
+            });
         }
     }
 );

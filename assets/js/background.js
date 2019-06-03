@@ -45,7 +45,8 @@ const getClickHandler = (info, tab) => {
     }
     // content scriptにメッセージを送る
     chrome.tabs.sendMessage(tab.id, {
-        message: "textSelected"
+        message: "textSelected",
+        infoText: info.selectionText,
     }, response => {
         res(response)
     });
