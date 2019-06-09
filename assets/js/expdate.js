@@ -3,7 +3,7 @@
 /** 正規表現で値を抜き出す */
 const checkDates = (key, max, match_arr) => {
     if (localStorage[key]) {
-        var int_key = parseInt(localStorage[key]);
+        var int_key = parseInt(localStorage[key], 10);
         if (int_key >= 0 && int_key <= max) {
             return match_arr[int_key];
         }
@@ -54,14 +54,14 @@ const expDate = (selectedText) => {
     let args = {
         "start": {
             "year": syear,
-            "month": ((parseInt(smon) - 1) > -1) ? (parseInt(smon) - 1) : smon,
+            "month": ((parseInt(smon, 10) - 1) > -1) ? (parseInt(smon, 10) - 1) : smon,
             "day": sday,
             "hour": shour,
             "min": smin
         },
         "end": {
             "year": eyear,
-            "month": ((parseInt(emon) - 1) > -1) ? (parseInt(emon) - 1) : emon,
+            "month": ((parseInt(emon, 10) - 1) > -1) ? (parseInt(emon, 10) - 1) : emon,
             "day": eday,
             "hour": ehour,
             "min": emin
