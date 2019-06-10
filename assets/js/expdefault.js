@@ -50,19 +50,11 @@ const expDefault = (stext) => {
     let emm = stext.match(/(\d{1,2})(\/|月)[\s\S]*(\d{2,4}|)(\/|年|)(\d{1})(\/|月)(\d{1,2})[^\/]/); // 終了日付
     if (em) {
         eyear = em[3] || syear;
-        eyear = parseInt(eyear, 10);
-        if (eyear < 2000) {
-            eyear += 2000;
-        }
         emon = em[5];
         eday = em[7];
         matched = true;
     } else if (emm) {
         eyear = emm[3] || syear;
-        eyear = parseInt(eyear, 10);
-        if (eyear < 2000) {
-            eyear += 2000;
-        }
         emon = emm[5];
         eday = emm[7];
         matched = true;
@@ -70,6 +62,10 @@ const expDefault = (stext) => {
         eyear = syear;
         emon = smon;
         eday = sday;
+    }
+    eyear = parseInt(eyear, 10);
+    if (eyear < 2000) {
+        eyear += 2000;
     }
 
     let rr = stext.match(/(\d{1,2})(:|時)(\d{1,2}|)/); // 開始時刻

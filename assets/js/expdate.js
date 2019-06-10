@@ -1,6 +1,8 @@
 "use strict";
 
-/** 正規表現で値を抜き出す */
+/**
+ * 正規表現で値を抜き出す
+ */
 const checkDates = (key, max, match_arr) => {
     if (localStorage[key]) {
         var int_key = parseInt(localStorage[key], 10);
@@ -11,7 +13,9 @@ const checkDates = (key, max, match_arr) => {
     return null;
 };
 
-/** オプションで正規表現編集が指定されている場合に使用されるメソッド */
+/**
+ * オプションで正規表現編集が指定されている場合に使用されるメソッド
+ */
 const expDate = (selectedText) => {
     let base_str = selectedText; // 検索対象となる文字列
     let exp_str = localStorage["exp_str"];
@@ -26,7 +30,7 @@ const expDate = (selectedText) => {
     // 年月日・曜日・時分秒の取得
     let d = new Date();
 
-    /**正規表現で日付処理**/
+    /** 正規表現で日付処理 **/
     /** setting **/
     // start
     let syear = checkDates("start_year", max, match_arr) || d.getFullYear();
