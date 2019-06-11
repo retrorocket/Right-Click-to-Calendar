@@ -112,19 +112,17 @@ const expDefault = (stext) => {
         location = l[2];
     }
 
-    smon = ((parseInt(smon, 10) - 1) > -1) ? (parseInt(smon, 10) - 1) : smon;
-    emon = ((parseInt(emon, 10) - 1) > -1) ? (parseInt(emon, 10) - 1) : emon;
     let args = {
         "start": {
             "year": syear,
-            "month": smon,
+            "month": ((parseInt(smon, 10) - 1) > -1) ? (parseInt(smon, 10) - 1) : smon,
             "day": sday,
             "hour": shour,
             "min": smin,
         },
         "end": {
             "year": eyear,
-            "month": emon,
+            "month": ((parseInt(emon, 10) - 1) > -1) ? (parseInt(emon, 10) - 1) : emon,
             "day": eday,
             "hour": ehour,
             "min": emin,
