@@ -1,32 +1,42 @@
 {
-    "background": {
-        "scripts": [
-            "assets/js/background.js"
-        ],
-        "persistent": false
-    },
-    "icons": {
-        "128": "icons/128.png",
-        "16": "icons/16.png",
-        "48": "icons/48.png",
-        "19": "icons/19.png",
-        "38": "icons/38.png"
-    },
-    "name": "Right-Click to Calendar",
-    "description": "選択したテキストをGoogleカレンダーに投稿できる拡張です。",
-    "options_page": "options.html",
-    "permissions": ["tabs", "contextMenus", "identity"],
-    "version": "3.8.3",
-    "minimum_chrome_version": "29",
-    "manifest_version": 2,
-    "oauth2": {
-        "client_id": "94384066361-qjfe9femeihavqcf4hhhpd1s4ca498sc.apps.googleusercontent.com",
-        "scopes": [
-            "https://www.googleapis.com/auth/calendar"
-        ]
-    },
-    "content_scripts": [{
-        "matches": ["http://*/*", "https://*/*"],
-        "js": ["assets/js/content.js"]
-    }]
+  "background": {
+    "scripts": [
+      "assets/js/background.js"
+    ],
+    "persistent": false
+  },
+  "icons": {
+    "128": "icons/128.png",
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "19": "icons/19.png",
+    "38": "icons/38.png"
+  },
+  "name": "Right-Click to Calendar",
+  "description": "選択したテキストをGoogleカレンダーに投稿できる拡張です。",
+  "options_page": "options.html",
+  "permissions": [
+    "tabs",
+    "contextMenus",
+    "identity"
+  ],
+  "version": "3.9.0",
+  "manifest_version": 2,
+  "oauth2": {
+    "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "assets/js/content.js"
+      ]
+    }
+  ]
 }
