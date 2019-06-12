@@ -228,12 +228,18 @@ const convertSelectedTextToForm = (stext) => {
     });
 
     if (fromDate.isValid()) {
+        if (args.start.tf) {
+            fromDate.add(1, "days");
+        }
         $("#from-date").val(fromDate.format("YYYY-MM-DD"));
     }
     if (fromTime.isValid()) {
         $("#from-time").val(fromTime.format("HH:mm"));
     }
     if (toDate.isValid()) {
+        if (args.end.tf) {
+            toDate.add(1, "days");
+        }
         $("#to-date").val(toDate.format("YYYY-MM-DD"));
     }
     if (toTime.isValid()) {

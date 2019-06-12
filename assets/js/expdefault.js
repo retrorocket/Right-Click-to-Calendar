@@ -27,6 +27,8 @@ const expDefault = (stext) => {
     let title = stext;
 
     let matched = false;
+    let stf = false;
+    let etf = false;
 
     let mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/); // 開始年日付
     if (mm) {
@@ -72,27 +74,31 @@ const expDefault = (stext) => {
 
     let rr = stext.match(/(\d{1,2})(:|時)(\d{1,2}|)/); // 開始時刻
     if (rr) {
-        shour = rr[1];
+        shour = parseInt(rr[1], 10);
         let checkPm = stext.match(/(午前|AM|午後|PM)/);
         if (checkPm && (checkPm[0] === "午後" || checkPm[0] === "PM")) {
-            shour = parseInt(shour, 10);
             if (shour < 12) {
                 shour += 12;
             }
+        } else if (shour >= 24) {
+            shour -= 24;
+            stf = true;
         }
-        smin = rr[4] || 0;
+        smin = rr[3] || 0;
         matched = true;
     }
 
     let er = stext.match(/\d{1,2}(:|時)([\s\S]*)(\d{2})(:|時)(\d{1,2}|)/) ||
         stext.match(/\d{1,2}(:|時)([\s\S]*)(\d{1})(:|時)(\d{1,2}|)/); // 終了時刻
     if (er) {
-        ehour = er[3];
+        ehour = parseInt(er[3], 10);
         if (er[2].match(/(午後|PM)/)) {
-            ehour = parseInt(ehour, 10);
             if (ehour < 12) {
                 ehour += 12;
             }
+        } else if (ehour >= 24) {
+            ehour -= 24;
+            etf = true;
         }
         emin = er[5] || 0;
         matched = true;
@@ -119,6 +125,7 @@ const expDefault = (stext) => {
             "day": sday,
             "hour": shour,
             "min": smin,
+            "tf": stf,
         },
         "end": {
             "year": eyear,
@@ -126,6 +133,7 @@ const expDefault = (stext) => {
             "day": eday,
             "hour": ehour,
             "min": emin,
+            "tf": etf,
         },
         "title": title,
         "detail": "",
