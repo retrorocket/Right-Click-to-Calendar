@@ -1,86 +1,153 @@
 "use strict";
 
-/** オプションで正規表現編集が指定されていない場合、もしくは、正規表現にマッチしなかった場合に使用される、デフォルトの判定メソッド */
+/**
+ * デフォルトの判定メソッド
+ * オプションで正規表現編集が指定されていない場合
+ * もしくは、正規表現にマッチしなかった場合に使用される
+ */
 const expDefault = (stext) => {
-    // 年月日・曜日・時分秒の取得
-    let d = new Date();
 
-    /** 正規表現で日付処理（てきとうすぎて使えない．関数を作ってそこで処理すべき） **/
-    let mon = d.getMonth() + 1;
-    let day = d.getDate();
-    let syear = d.getFullYear();
+  // 年月日の初期設定
+  let d = new Date();
 
-    let shour = d.getHours();
-    let smin = d.getMinutes();
+  let smon = d.getMonth() + 1;
+  let sday = d.getDate();
+  let syear = d.getFullYear();
 
-    let title = stext;
+  let emon = d.getMonth() + 1;
+  let eday = d.getDate();
+  let eyear = d.getFullYear();
 
-    let matched = false;
+  let shour = d.getHours();
+  let smin = d.getMinutes();
 
-    let m = stext.match(/(\d{1,2})(\/|月)(\d{1,2})/); //日付
+  let ehour = d.getHours();
+  let emin = d.getMinutes();
+
+  let title = stext;
+
+  let matched = false;
+  let stf = false;
+  let etf = false;
+
+  // 開始年日付
+  let mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/);
+  if (mm) {
+    syear = parseInt(mm[1], 10);
+    if (syear < 100) {
+      syear += 2000;
+    }
+    smon = mm[3];
+    sday = mm[5];
+    matched = true;
+  } else {
+    // 開始日付
+    let m = stext.match(/(\d{1,2})(\/|月)(\d{1,2})/);
     if (m) {
-        mon = m[1];
-        day = m[3];
-        matched = true;
+      smon = m[1];
+      sday = m[3];
+      matched = true;
     }
+  }
 
-    let mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/); //日付
-    if (mm) {
-        syear = parseInt(mm[1]);
-        if (syear < 2000) {
-            syear += 2000;
-        }
-        mon = mm[3];
-        day = mm[5];
-        matched = true;
+  // 開始時刻
+  let rr = stext.match(/(\d{1,2})(:|時)(\d{1,2}|)/);
+  if (rr) {
+    shour = parseInt(rr[1], 10);
+    let checkPm = stext.match(/(午前|AM|午後|PM)/);
+    if (checkPm && (checkPm[0] === "午後" || checkPm[0] === "PM")) {
+      if (shour < 12) {
+        shour += 12;
+      }
+    } else if (shour >= 24) {
+      shour -= 24;
+      stf = true;
     }
+    smin = rr[3] || 0;
+    matched = true;
+  }
 
-    let rr = stext.match(/(\d{1,2})(:|時)/); //開始時刻
-    if (rr) {
-        shour = rr[1];
-        smin = 0;
-        matched = true;
+  // 終了年日付
+  let em = stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})(?!\/|\d)/);
+  if (em) {
+    eyear = em[2];
+    eyear = parseInt(eyear, 10);
+    if (eyear < 100) {
+      eyear += 2000;
     }
-
-    let r = stext.match(/(\d{1,2})(:|時)(\d{1,2})/); //開始時刻
-    if (r) {
-        shour = r[1];
-        smin = r[3];
-        matched = true;
+    emon = em[4];
+    eday = em[6];
+    matched = true;
+  } else {
+    let emm = stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{2})(\/|月)(\d{1,2})(?!\/|\d)/) ||
+      stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{1})(\/|月)(\d{1,2})(?!\/|\d)/);
+    if (emm) {
+      emon = emm[2];
+      eday = emm[4];
+      matched = true;
+    } else {
+      eyear = syear;
+      emon = smon;
+      eday = sday;
+      etf = stf;
     }
+  }
 
-    let t = stext.match(/(\n|\s)(\D{1,2}\S+)(\n|$)/); //タイトル
-    if (t && matched) {
-        title = t[2];
+  // 終了時刻
+  let er = stext.match(/\d{1,2}(:|時)([\s\S]*)(\d{2})(:|時)(\d{1,2}|)/) ||
+    stext.match(/\d{1,2}(:|時)([\s\S]*)(\d{1})(:|時)(\d{1,2}|)/);
+  if (er) {
+    ehour = parseInt(er[3], 10);
+    if (er[2].match(/(午後|PM)/)) {
+      if (ehour < 12) {
+        ehour += 12;
+      }
+    } else if (ehour >= 24) {
+      ehour -= 24;
+      etf = true;
     }
+    emin = er[5] || 0;
+    matched = true;
+  } else {
+    ehour = shour;
+    emin = smin;
+  }
 
-    let location = "";
-    let l = stext.match(/場所(\S?\n|\S?|\s?)(\S+)($|\n)/); //場所
-    if (l) {
-        location = l[2];
-    }
+  // タイトル
+  let t = stext.match(/(\n|\s)(\D{1,2}\S+)(\n|$)/);
+  if (t && matched) {
+    title = t[2];
+  }
 
-    mon = ((parseInt(mon) - 1) > -1) ? (parseInt(mon) - 1) : mon;
-    let args = {
-        "start": {
-            "year": syear,
-            "month": mon,
-            "day": day,
-            "hour": shour,
-            "min": smin,
-        },
-        "end": {
-            "year": syear,
-            "month": mon,
-            "day": day,
-            "hour": shour,
-            "min": smin,
-        },
-        "title": title,
-        "detail": "",
-        "location": location,
-        "selected_text": stext
-    };
+  // 場所
+  let location = "";
+  let l = stext.match(/場所(\S?\n|\S?|\s?)(\S+)($|\n)/);
+  if (l) {
+    location = l[2];
+  }
 
-    return args;
+  let args = {
+    "start": {
+      "year": syear,
+      "month": ((parseInt(smon, 10) - 1) > -1) ? (parseInt(smon, 10) - 1) : smon,
+      "day": sday,
+      "hour": shour,
+      "min": smin,
+      "tf": stf,
+    },
+    "end": {
+      "year": eyear,
+      "month": ((parseInt(emon, 10) - 1) > -1) ? (parseInt(emon, 10) - 1) : emon,
+      "day": eday,
+      "hour": ehour,
+      "min": emin,
+      "tf": etf,
+    },
+    "title": title,
+    "detail": "",
+    "location": location,
+    "selected_text": stext
+  };
+
+  return args;
 };
