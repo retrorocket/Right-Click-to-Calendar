@@ -33,7 +33,7 @@ const expDefault = (stext) => {
   let mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/); // 開始年日付
   if (mm) {
     syear = parseInt(mm[1], 10);
-    if (syear < 2000) {
+    if (syear < 100) {
       syear += 2000;
     }
     smon = mm[3];
@@ -52,7 +52,7 @@ const expDefault = (stext) => {
   if (em) {
     eyear = em[2];
     eyear = parseInt(eyear, 10);
-    if (eyear < 2000) {
+    if (eyear < 100) {
       eyear += 2000;
     }
     emon = em[4];
