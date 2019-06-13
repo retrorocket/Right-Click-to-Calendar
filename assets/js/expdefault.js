@@ -30,7 +30,8 @@ const expDefault = (stext) => {
   let stf = false;
   let etf = false;
 
-  let mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/); // 開始年日付
+  // 開始年日付
+  let mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/);
   if (mm) {
     syear = parseInt(mm[1], 10);
     if (syear < 100) {
@@ -40,7 +41,8 @@ const expDefault = (stext) => {
     sday = mm[5];
     matched = true;
   } else {
-    let m = stext.match(/(\d{1,2})(\/|月)(\d{1,2})/); // 開始日付
+    // 開始日付
+    let m = stext.match(/(\d{1,2})(\/|月)(\d{1,2})/);
     if (m) {
       smon = m[1];
       sday = m[3];
@@ -48,7 +50,25 @@ const expDefault = (stext) => {
     }
   }
 
-  let em = stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})(?!\/|\d)/); // 終了日付
+  // 開始時刻
+  let rr = stext.match(/(\d{1,2})(:|時)(\d{1,2}|)/);
+  if (rr) {
+    shour = parseInt(rr[1], 10);
+    let checkPm = stext.match(/(午前|AM|午後|PM)/);
+    if (checkPm && (checkPm[0] === "午後" || checkPm[0] === "PM")) {
+      if (shour < 12) {
+        shour += 12;
+      }
+    } else if (shour >= 24) {
+      shour -= 24;
+      stf = true;
+    }
+    smin = rr[3] || 0;
+    matched = true;
+  }
+
+  // 終了年日付
+  let em = stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})(?!\/|\d)/);
   if (em) {
     eyear = em[2];
     eyear = parseInt(eyear, 10);
@@ -69,27 +89,13 @@ const expDefault = (stext) => {
       eyear = syear;
       emon = smon;
       eday = sday;
+      etf = stf;
     }
   }
 
-  let rr = stext.match(/(\d{1,2})(:|時)(\d{1,2}|)/); // 開始時刻
-  if (rr) {
-    shour = parseInt(rr[1], 10);
-    let checkPm = stext.match(/(午前|AM|午後|PM)/);
-    if (checkPm && (checkPm[0] === "午後" || checkPm[0] === "PM")) {
-      if (shour < 12) {
-        shour += 12;
-      }
-    } else if (shour >= 24) {
-      shour -= 24;
-      stf = true;
-    }
-    smin = rr[3] || 0;
-    matched = true;
-  }
-
+  // 終了時刻
   let er = stext.match(/\d{1,2}(:|時)([\s\S]*)(\d{2})(:|時)(\d{1,2}|)/) ||
-    stext.match(/\d{1,2}(:|時)([\s\S]*)(\d{1})(:|時)(\d{1,2}|)/); // 終了時刻
+    stext.match(/\d{1,2}(:|時)([\s\S]*)(\d{1})(:|時)(\d{1,2}|)/);
   if (er) {
     ehour = parseInt(er[3], 10);
     if (er[2].match(/(午後|PM)/)) {
@@ -107,13 +113,15 @@ const expDefault = (stext) => {
     emin = smin;
   }
 
-  let t = stext.match(/(\n|\s)(\D{1,2}\S+)(\n|$)/); // タイトル
+  // タイトル
+  let t = stext.match(/(\n|\s)(\D{1,2}\S+)(\n|$)/);
   if (t && matched) {
     title = t[2];
   }
 
+  // 場所
   let location = "";
-  let l = stext.match(/場所(\S?\n|\S?|\s?)(\S+)($|\n)/); // 場所
+  let l = stext.match(/場所(\S?\n|\S?|\s?)(\S+)($|\n)/);
   if (l) {
     location = l[2];
   }
