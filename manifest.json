@@ -20,12 +20,13 @@
     "contextMenus",
     "identity"
   ],
-  "version": "3.9.0",
+  "version": "3.9.1",
   "manifest_version": 2,
   "oauth2": {
     "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
     "scopes": [
-      "https://www.googleapis.com/auth/calendar"
+      "https://www.googleapis.com/auth/calendar.readonly",
+      "https://www.googleapis.com/auth/calendar.events"
     ]
   },
   "content_scripts": [
