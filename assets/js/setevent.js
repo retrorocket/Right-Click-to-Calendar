@@ -1,3 +1,4 @@
+//@ts-check
 "use strict";
 
 /**
@@ -31,7 +32,7 @@ const addEvent = (input) => {
       }
 
       //// API投稿用のオブジェクトを作成 ////
-      let body = JSON.stringify({
+      const body = JSON.stringify({
         "description": input.detail,
         "location": input.location,
         "summary": input.title,
@@ -41,7 +42,7 @@ const addEvent = (input) => {
         "end": to
       });
 
-      let xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.onloadend = () => {
 
         if (xhr.status === 200) {
@@ -54,7 +55,7 @@ const addEvent = (input) => {
             }
           });
         } else if (xhr.status === 401) {
-          let data = JSON.parse(xhr.responseText);
+          const data = JSON.parse(xhr.responseText);
           chrome.identity.removeCachedAuthToken({
               'token': accessToken
             },
@@ -67,7 +68,7 @@ const addEvent = (input) => {
             });
           return;
         } else {
-          let data = JSON.parse(xhr.responseText);
+          const data = JSON.parse(xhr.responseText);
           Swal.fire({
             title: "error!",
             text: data.error.code + " : " + data.error.message,
@@ -101,20 +102,20 @@ const createAndAddEventInput = () => {
 
   if ($('#allday').prop('checked')) {
     // 終日設定は最終日に24時間足さないと認識されない
-    let toDate = moment(toDateVal);
+    const toDate = moment(toDateVal);
     toDate.add(1, "days");
     toDateVal = toDate.format("YYYY-MM-DD");
 
-    let fromDate = moment(fromDateVal);
+    const fromDate = moment(fromDateVal);
     isValidRange = (toDate.diff(fromDate, "days") > 0);
   } else {
-    let toDate = moment(toDateVal + " " + toTimeVal);
-    let fromDate = moment(fromDateVal + " " + fromTimeVal);
+    const toDate = moment(toDateVal + " " + toTimeVal);
+    const fromDate = moment(fromDateVal + " " + fromTimeVal);
     isValidRange = (toDate.diff(fromDate, "minutes") >= 0);
   }
 
   if (isValidRange) {
-    let input = {
+    const input = {
       title: $("#tit").val(),
       detail: $("#detail").val(),
       location: $("#location").val(),
@@ -139,19 +140,19 @@ const createAndAddEventInput = () => {
 
 const fetchCalendarId = (accessToken) => {
 
-  let xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
 
   xhr.onloadend = () => {
     if (xhr.status === 200) {
-      let data = JSON.parse(xhr.responseText);
-      let list = data.items;
+      const data = JSON.parse(xhr.responseText);
+      const list = data.items;
       for (let i = 0; i < list.length; i++) {
         $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
       }
       $("#selected-calendar").val(localStorage["calenId"]);
 
     } else if (xhr.status === 401) {
-      let data = JSON.parse(xhr.responseText);
+      const data = JSON.parse(xhr.responseText);
       chrome.identity.removeCachedAuthToken({
           'token': accessToken
         },
@@ -169,7 +170,6 @@ const fetchCalendarId = (accessToken) => {
       return;
 
     } else {
-      // let data = JSON.parse(xhr.responseText);
       Swal.fire({
         title: "Acquisition failure",
         text: "リストの取得に失敗しました。ウインドウを閉じます",
@@ -205,24 +205,24 @@ const convertSelectedTextToForm = (stext) => {
   }
 
   // argsの中身はNumberとは限らないが、融通がきくのでmomentに処理させる
-  let fromDate = moment({
+  const fromDate = moment({
     year: args.start.year,
     month: args.start.month,
     day: args.start.day,
   });
 
-  let fromTime = moment({
+  const fromTime = moment({
     hour: args.start.hour,
     minute: args.start.min,
   });
 
-  let toDate = moment({
+  const toDate = moment({
     year: args.end.year,
     month: args.end.month,
     day: args.end.day,
   });
 
-  let toTime = moment({
+  const toTime = moment({
     hour: args.end.hour,
     minute: args.end.min,
   });

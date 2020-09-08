@@ -1,3 +1,4 @@
+//@ts-check
 "use strict";
 
 /**
@@ -5,7 +6,7 @@
  */
 const setRegExps = () => {
   $("#exp-field").find(":input").each((i, elem) => {
-    let id_name = $(elem).attr("id");
+    const id_name = $(elem).attr("id");
     if (id_name === "reg_set") {
       return true; // continue;
     }
@@ -31,12 +32,12 @@ const loadCalendarId = () => {
       return;
     }
 
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
     xhr.onloadend = () => {
       if (xhr.status == 200) {
-        let data = JSON.parse(xhr.responseText);
-        let list = data.items;
+        const data = JSON.parse(xhr.responseText);
+        const list = data.items;
         if (!localStorage["calenId"]) {
           localStorage["calenId"] = list[0].id;
         }
@@ -48,7 +49,7 @@ const loadCalendarId = () => {
         $("#setter").show();
         $("#check").text("OAuth認証済みです。");
       } else if (xhr.status === 401) {
-        let data = JSON.parse(xhr.responseText);
+        const data = JSON.parse(xhr.responseText);
         chrome.identity.removeCachedAuthToken({
             'token': accessToken
           },
@@ -59,7 +60,7 @@ const loadCalendarId = () => {
           });
         return;
       } else {
-        let data = JSON.parse(xhr.responseText);
+        const data = JSON.parse(xhr.responseText);
         alert("リストの取得に失敗しました。オプションページをリロードしてください" + data.error.code + " : " + data.error.message);
         $("#check").text("リストの取得に失敗しました。このページをリロードしてください。");
         localStorage.removeItem("calenId");
@@ -80,14 +81,14 @@ const loadCalendarId = () => {
  * 正規表現のチェック
  */
 const checkRegExps = () => {
-  let regExp = new RegExp($("#exp_str").val());
-  let checkString = $("#check_str").val();
-  let matches = checkString.match(regExp);
+  const regExp = new RegExp($("#exp_str").val());
+  const checkString = $("#check_str").val();
+  const matches = checkString.match(regExp);
   if (!matches) {
     $("#regexp-group").append("<li>検証用文字列が正規表現にマッチしません。</li>");
     return false;
   }
-  let machedLength = matches.length;
+  const machedLength = matches.length;
   for (let i = 0; i < machedLength; i++) {
     $("#regexp-group").append("<li>group(" + i + "): " + matches[i] + "</li>");
   }
@@ -136,7 +137,7 @@ $("#exp-switch").on("click", event => {
 // 正規表現の設定
 $("#reg-set").on("click", () => {
   $("#exp-field").find(":input").each((i, elem) => {
-    let id_name = $(elem).attr("id");
+    const id_name = $(elem).attr("id");
     if (id_name === "reg-set") {
       return true; // continue;
     }

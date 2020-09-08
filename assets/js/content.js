@@ -1,17 +1,17 @@
+//@ts-check
 "use strict";
-
-let selectedText = "";
 
 /**
  * イベントページと登録ウインドウからのメッセージを受け取る
  */
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-
+    
+    let selectedText = "";
     //// 選択中のテキストを取得する ////
     if (request.message === "textSelected") {
       selectedText = "";
-      let tagName = (document.activeElement.tagName).toUpperCase();
+      const tagName = (document.activeElement.tagName).toUpperCase();
       if (tagName === "IFRAME" || tagName === "FRAME") {
         try {
           selectedText = document.activeElement.contentWindow.getSelection().toString();
