@@ -61,10 +61,9 @@ const addEvent = (input) => {
           const data = JSON.parse(xhr.responseText);
           let meetUrl = "";
           if (input.hangoutsMeet) {
-            meetUrl = "<br>MeetのURLはカレンダーから確認してください。"
-            if (data.conferenceData.createRequest.status.statusCode === "success") {
-              meetUrl = "<br>📞 " + data.conferenceData.entryPoints[0].uri;
-            }
+            meetUrl = (data.conferenceData.createRequest.status.statusCode === "success")
+              ? "<br>📞 " + data.conferenceData.entryPoints[0].uri
+              : "<br>MeetのURLはカレンダーから確認してください。";
           }
           Swal.fire({
             html: '<span style="font-weight: bold;">' + escapeHTML(input.title) + "</span>" + " を登録しました。" + meetUrl,
