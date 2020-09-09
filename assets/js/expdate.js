@@ -5,7 +5,7 @@
  */
 const checkDates = (key, max, match_arr) => {
   if (localStorage[key]) {
-    var int_key = parseInt(localStorage[key], 10);
+    const int_key = parseInt(localStorage[key], 10);
     if (int_key >= 0 && int_key <= max) {
       return match_arr[int_key];
     }
@@ -17,45 +17,45 @@ const checkDates = (key, max, match_arr) => {
  * オプションで正規表現編集が指定されている場合に使用されるメソッド
  */
 const expDate = (selectedText) => {
-  let base_str = selectedText; // 検索対象となる文字列
-  let exp_str = localStorage["exp_str"];
-  let regexp = new RegExp(exp_str);
-  let match_arr = base_str.match(regexp);
+  const base_str = selectedText; // 検索対象となる文字列
+  const exp_str = localStorage["exp_str"];
+  const regexp = new RegExp(exp_str);
+  const match_arr = base_str.match(regexp);
 
   if (!match_arr) {
     return null;
   }
-  let max = match_arr.length;
+  const max = match_arr.length;
 
   // 年月日・曜日・時分秒の取得
-  let d = new Date();
+  const d = new Date();
 
   /** 正規表現で日付処理 **/
   /** setting **/
   // start
-  let syear = checkDates("start_year", max, match_arr) || d.getFullYear();
-  let smon = checkDates("start_mon", max, match_arr) || d.getMonth() + 1;
-  let sday = checkDates("start_day", max, match_arr) || d.getDate();
-  let shour = checkDates("start_hour", max, match_arr) || d.getHours();
-  let smin = checkDates("start_min", max, match_arr) || d.getMinutes();
+  const syear = checkDates("start_year", max, match_arr) || d.getFullYear();
+  const smon = checkDates("start_mon", max, match_arr) || d.getMonth() + 1;
+  const sday = checkDates("start_day", max, match_arr) || d.getDate();
+  const shour = checkDates("start_hour", max, match_arr) || d.getHours();
+  const smin = checkDates("start_min", max, match_arr) || d.getMinutes();
 
   // end
-  let eyear = checkDates("end_year", max, match_arr) || d.getFullYear();
-  let emon = checkDates("end_mon", max, match_arr) || d.getMonth() + 1;
-  let eday = checkDates("end_day", max, match_arr) || d.getDate();
-  let ehour = checkDates("end_hour", max, match_arr) || d.getHours();
-  let emin = checkDates("end_min", max, match_arr) || d.getMinutes();
+  const eyear = checkDates("end_year", max, match_arr) || d.getFullYear();
+  const emon = checkDates("end_mon", max, match_arr) || d.getMonth() + 1;
+  const eday = checkDates("end_day", max, match_arr) || d.getDate();
+  const ehour = checkDates("end_hour", max, match_arr) || d.getHours();
+  const emin = checkDates("end_min", max, match_arr) || d.getMinutes();
 
   // title
-  let title = checkDates("title", max, match_arr) || base_str;
+  const title = checkDates("title", max, match_arr) || base_str;
 
   // detail
-  let detail = checkDates("detail", max, match_arr) || "";
+  const detail = checkDates("detail", max, match_arr) || "";
 
   // location
-  let location = checkDates("location", max, match_arr) || "";
+  const location = checkDates("location", max, match_arr) || "";
 
-  let args = {
+  const args = {
     "start": {
       "year": syear,
       "month": ((parseInt(smon, 10) - 1) > -1) ? (parseInt(smon, 10) - 1) : smon,

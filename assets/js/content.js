@@ -7,11 +7,10 @@ let selectedText = "";
  */
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-
     //// 選択中のテキストを取得する ////
     if (request.message === "textSelected") {
       selectedText = "";
-      let tagName = (document.activeElement.tagName).toUpperCase();
+      const tagName = (document.activeElement.tagName).toUpperCase();
       if (tagName === "IFRAME" || tagName === "FRAME") {
         try {
           selectedText = document.activeElement.contentWindow.getSelection().toString();

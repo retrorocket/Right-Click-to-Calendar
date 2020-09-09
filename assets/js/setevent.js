@@ -5,8 +5,8 @@
  */
 const addEvent = (input) => {
   chrome.identity.getAuthToken({
-      'interactive': true
-    },
+    'interactive': true
+  },
     accessToken => {
 
       //// 開始～終了日時設定 ////
@@ -31,33 +31,52 @@ const addEvent = (input) => {
       }
 
       //// API投稿用のオブジェクトを作成 ////
-      let body = JSON.stringify({
+      const body = {
         "description": input.detail,
         "location": input.location,
         "summary": input.title,
         "transparency": "opaque",
         "status": "confirmed",
         "start": from,
-        "end": to
-      });
+        "end": to,
+      };
+      let conferenceDataVersionParam = "";
+      if (input.hangoutsMeet) {
+        conferenceDataVersionParam = "?conferenceDataVersion=1";
+        const requestId = Math.random().toString(32).substring(2);
+        body.conferenceData = {
+          createRequest: {
+            requestId,
+            conferenceSolutionKey: {
+              type: "hangoutsMeet"
+            },
+          }
+        };
+      }
 
-      let xhr = new XMLHttpRequest();
+      const xhr = new XMLHttpRequest();
       xhr.onloadend = () => {
 
         if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          let meetUrl = "";
+          if (input.hangoutsMeet) {
+            meetUrl = (data.conferenceData.createRequest.status.statusCode === "success")
+              ? "<br>📞 " + data.conferenceData.entryPoints[0].uri
+              : "<br>MeetのURLはカレンダーから確認してください。";
+          }
           Swal.fire({
-            title: "succeed!",
-            text: "【" + input.title + "】" + "を登録しました",
+            html: '<span style="font-weight: bold;">' + escapeHTML(input.title) + "</span>" + " を登録しました。" + meetUrl,
             animation: false,
             onClose: () => {
               window.close();
             }
           });
         } else if (xhr.status === 401) {
-          let data = JSON.parse(xhr.responseText);
+          const data = JSON.parse(xhr.responseText);
           chrome.identity.removeCachedAuthToken({
-              'token': accessToken
-            },
+            'token': accessToken
+          },
             () => {
               Swal.fire({
                 title: "Invalid AccessToken",
@@ -67,9 +86,9 @@ const addEvent = (input) => {
             });
           return;
         } else {
-          let data = JSON.parse(xhr.responseText);
+          const data = JSON.parse(xhr.responseText);
           Swal.fire({
-            title: "error!",
+            title: "An error occurred",
             text: data.error.code + " : " + data.error.message,
             animation: false
           });
@@ -78,12 +97,12 @@ const addEvent = (input) => {
         }
       };
       xhr.open('POST',
-        "https://www.googleapis.com/calendar/v3/calendars/" + input.calendar + "/events",
+        "https://www.googleapis.com/calendar/v3/calendars/" + input.calendar + "/events" + conferenceDataVersionParam,
         true);
 
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-      xhr.send(body);
+      xhr.send(JSON.stringify(body));
     }
   );
 };
@@ -94,27 +113,27 @@ const addEvent = (input) => {
 const createAndAddEventInput = () => {
 
   let isValidRange = false;
-  let fromDateVal = $("#from-date").val();
-  let fromTimeVal = $("#from-time").val();
+  const fromDateVal = $("#from-date").val();
+  const fromTimeVal = $("#from-time").val();
   let toDateVal = $("#to-date").val();
-  let toTimeVal = $("#to-time").val();
+  const toTimeVal = $("#to-time").val();
 
   if ($('#allday').prop('checked')) {
     // 終日設定は最終日に24時間足さないと認識されない
-    let toDate = moment(toDateVal);
+    const toDate = moment(toDateVal);
     toDate.add(1, "days");
     toDateVal = toDate.format("YYYY-MM-DD");
 
-    let fromDate = moment(fromDateVal);
+    const fromDate = moment(fromDateVal);
     isValidRange = (toDate.diff(fromDate, "days") > 0);
   } else {
-    let toDate = moment(toDateVal + " " + toTimeVal);
-    let fromDate = moment(fromDateVal + " " + fromTimeVal);
+    const toDate = moment(toDateVal + " " + toTimeVal);
+    const fromDate = moment(fromDateVal + " " + fromTimeVal);
     isValidRange = (toDate.diff(fromDate, "minutes") >= 0);
   }
 
   if (isValidRange) {
-    let input = {
+    const input = {
       title: $("#tit").val(),
       detail: $("#detail").val(),
       location: $("#location").val(),
@@ -122,8 +141,9 @@ const createAndAddEventInput = () => {
       fromTime: fromTimeVal,
       toDate: toDateVal,
       toTime: toTimeVal,
-      allday: $('#allday').prop('checked'),
-      calendar: $("#selected-calendar").val()
+      allday: $("#allday").prop("checked"),
+      calendar: $("#selected-calendar").val(),
+      hangoutsMeet: $("#hangoutsMeet").prop("checked"),
     };
 
     //イベント投稿
@@ -139,22 +159,22 @@ const createAndAddEventInput = () => {
 
 const fetchCalendarId = (accessToken) => {
 
-  let xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
 
   xhr.onloadend = () => {
     if (xhr.status === 200) {
-      let data = JSON.parse(xhr.responseText);
-      let list = data.items;
+      const data = JSON.parse(xhr.responseText);
+      const list = data.items;
       for (let i = 0; i < list.length; i++) {
         $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
       }
       $("#selected-calendar").val(localStorage["calenId"]);
 
     } else if (xhr.status === 401) {
-      let data = JSON.parse(xhr.responseText);
+      const data = JSON.parse(xhr.responseText);
       chrome.identity.removeCachedAuthToken({
-          'token': accessToken
-        },
+        'token': accessToken
+      },
         () => {
           Swal.fire({
             title: "Invalid AccessToken",
@@ -169,7 +189,6 @@ const fetchCalendarId = (accessToken) => {
       return;
 
     } else {
-      // let data = JSON.parse(xhr.responseText);
       Swal.fire({
         title: "Acquisition failure",
         text: "リストの取得に失敗しました。ウインドウを閉じます",
@@ -200,29 +219,30 @@ const convertSelectedTextToForm = (stext) => {
   if (localStorage["expSwitch"]) {
     args = expDate(stext);
   }
+  // 正規表現に合致しなかった、もしくは正規表現が設定されていない場合
   if (!args) {
     args = expDefault(stext);
   }
 
   // argsの中身はNumberとは限らないが、融通がきくのでmomentに処理させる
-  let fromDate = moment({
+  const fromDate = moment({
     year: args.start.year,
     month: args.start.month,
     day: args.start.day,
   });
 
-  let fromTime = moment({
+  const fromTime = moment({
     hour: args.start.hour,
     minute: args.start.min,
   });
 
-  let toDate = moment({
+  const toDate = moment({
     year: args.end.year,
     month: args.end.month,
     day: args.end.day,
   });
 
-  let toTime = moment({
+  const toTime = moment({
     hour: args.end.hour,
     minute: args.end.min,
   });
@@ -254,8 +274,8 @@ const convertSelectedTextToForm = (stext) => {
 
 // カレンダーIDのセット
 chrome.identity.getAuthToken({
-    'interactive': true
-  },
+  'interactive': true
+},
   accessToken => {
     fetchCalendarId(accessToken)
   }
@@ -293,3 +313,12 @@ chrome.tabs.sendMessage(tabId, {
   // 取得したテキストをフォームにセットする
   convertSelectedTextToForm(response.message)
 });
+
+// SweetAlert向けに文字列をサニタイズする
+const escapeHTML = (str) => {
+  return str.replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
