@@ -1,13 +1,12 @@
-//@ts-check
 "use strict";
+
+let selectedText = "";
 
 /**
  * イベントページと登録ウインドウからのメッセージを受け取る
  */
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-    
-    let selectedText = "";
     //// 選択中のテキストを取得する ////
     if (request.message === "textSelected") {
       selectedText = "";

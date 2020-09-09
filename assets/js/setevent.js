@@ -1,4 +1,3 @@
-//@ts-check
 "use strict";
 
 /**
@@ -6,8 +5,8 @@
  */
 const addEvent = (input) => {
   chrome.identity.getAuthToken({
-      'interactive': true
-    },
+    'interactive': true
+  },
     accessToken => {
 
       //// 開始～終了日時設定 ////
@@ -32,23 +31,42 @@ const addEvent = (input) => {
       }
 
       //// API投稿用のオブジェクトを作成 ////
-      const body = JSON.stringify({
+      const body = {
         "description": input.detail,
         "location": input.location,
         "summary": input.title,
         "transparency": "opaque",
         "status": "confirmed",
         "start": from,
-        "end": to
-      });
+        "end": to,
+      };
+
+      if (input.hangoutsMeet) {
+        const requestId = Math.random().toString(32).substring(2);
+        body.conferenceData = {
+          createRequest: {
+            requestId,
+            conferenceSolutionKey: {
+              type: "hangoutsMeet"
+            },
+          }
+        };
+      }
 
       const xhr = new XMLHttpRequest();
       xhr.onloadend = () => {
 
         if (xhr.status === 200) {
+          const data = JSON.parse(xhr.responseText);
+          let meetUrl = "";
+          if (input.hangoutsMeet) {
+            meetUrl = "<br>MeetのURLはカレンダーから確認してください。"
+            if (data.conferenceData.createRequest.status.statusCode === "success") {
+              meetUrl = "<br>📞 " + data.conferenceData.entryPoints[0].uri;
+            }
+          }
           Swal.fire({
-            title: "succeed!",
-            text: "【" + input.title + "】" + "を登録しました",
+            html: '<span style="font-weight: bold;">' + escapeHTML(input.title) + "</span>" + " を登録しました。" + meetUrl,
             animation: false,
             onClose: () => {
               window.close();
@@ -57,8 +75,8 @@ const addEvent = (input) => {
         } else if (xhr.status === 401) {
           const data = JSON.parse(xhr.responseText);
           chrome.identity.removeCachedAuthToken({
-              'token': accessToken
-            },
+            'token': accessToken
+          },
             () => {
               Swal.fire({
                 title: "Invalid AccessToken",
@@ -70,7 +88,7 @@ const addEvent = (input) => {
         } else {
           const data = JSON.parse(xhr.responseText);
           Swal.fire({
-            title: "error!",
+            title: "An error occurred",
             text: data.error.code + " : " + data.error.message,
             animation: false
           });
@@ -79,12 +97,12 @@ const addEvent = (input) => {
         }
       };
       xhr.open('POST',
-        "https://www.googleapis.com/calendar/v3/calendars/" + input.calendar + "/events",
+        "https://www.googleapis.com/calendar/v3/calendars/" + input.calendar + "/events?conferenceDataVersion=1",
         true);
 
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-      xhr.send(body);
+      xhr.send(JSON.stringify(body));
     }
   );
 };
@@ -123,8 +141,9 @@ const createAndAddEventInput = () => {
       fromTime: fromTimeVal,
       toDate: toDateVal,
       toTime: toTimeVal,
-      allday: $('#allday').prop('checked'),
-      calendar: $("#selected-calendar").val()
+      allday: $("#allday").prop("checked"),
+      calendar: $("#selected-calendar").val(),
+      hangoutsMeet: $("#hangoutsMeet").prop("checked"),
     };
 
     //イベント投稿
@@ -154,8 +173,8 @@ const fetchCalendarId = (accessToken) => {
     } else if (xhr.status === 401) {
       const data = JSON.parse(xhr.responseText);
       chrome.identity.removeCachedAuthToken({
-          'token': accessToken
-        },
+        'token': accessToken
+      },
         () => {
           Swal.fire({
             title: "Invalid AccessToken",
@@ -254,8 +273,8 @@ const convertSelectedTextToForm = (stext) => {
 
 // カレンダーIDのセット
 chrome.identity.getAuthToken({
-    'interactive': true
-  },
+  'interactive': true
+},
   accessToken => {
     fetchCalendarId(accessToken)
   }
@@ -293,3 +312,12 @@ chrome.tabs.sendMessage(tabId, {
   // 取得したテキストをフォームにセットする
   convertSelectedTextToForm(response.message)
 });
+
+// SweetAlert向けに文字列をサニタイズする
+const escapeHTML = (str) => {
+  return str.replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}

@@ -1,4 +1,3 @@
-//@ts-check
 "use strict";
 
 /**
@@ -51,8 +50,8 @@ const loadCalendarId = () => {
       } else if (xhr.status === 401) {
         const data = JSON.parse(xhr.responseText);
         chrome.identity.removeCachedAuthToken({
-            'token': accessToken
-          },
+          'token': accessToken
+        },
           () => {
             alert("無効なアクセストークンを削除しました。" + data.error.code + " : " + data.error.message);
             $("#check").text("このページをリロードして再度認証を実施してください。");
