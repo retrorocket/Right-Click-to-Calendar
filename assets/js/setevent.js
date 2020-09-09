@@ -40,8 +40,9 @@ const addEvent = (input) => {
         "start": from,
         "end": to,
       };
-
+      let conferenceDataVersionParam = "";
       if (input.hangoutsMeet) {
+        conferenceDataVersionParam = "?conferenceDataVersion=1";
         const requestId = Math.random().toString(32).substring(2);
         body.conferenceData = {
           createRequest: {
@@ -97,7 +98,7 @@ const addEvent = (input) => {
         }
       };
       xhr.open('POST',
-        "https://www.googleapis.com/calendar/v3/calendars/" + input.calendar + "/events?conferenceDataVersion=1",
+        "https://www.googleapis.com/calendar/v3/calendars/" + input.calendar + "/events" + conferenceDataVersionParam,
         true);
 
       xhr.setRequestHeader('Content-Type', 'application/json');
