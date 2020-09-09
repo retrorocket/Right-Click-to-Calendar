@@ -113,10 +113,10 @@ const addEvent = (input) => {
 const createAndAddEventInput = () => {
 
   let isValidRange = false;
-  let fromDateVal = $("#from-date").val();
-  let fromTimeVal = $("#from-time").val();
+  const fromDateVal = $("#from-date").val();
+  const fromTimeVal = $("#from-time").val();
   let toDateVal = $("#to-date").val();
-  let toTimeVal = $("#to-time").val();
+  const toTimeVal = $("#to-time").val();
 
   if ($('#allday').prop('checked')) {
     // 終日設定は最終日に24時間足さないと認識されない
@@ -219,6 +219,7 @@ const convertSelectedTextToForm = (stext) => {
   if (localStorage["expSwitch"]) {
     args = expDate(stext);
   }
+  // 正規表現に合致しなかった、もしくは正規表現が設定されていない場合
   if (!args) {
     args = expDefault(stext);
   }
