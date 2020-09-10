@@ -18,4 +18,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: rsync icons
-      run: rsync -avz target:/home/${{ secrets.USER }}/public/icons ./ && ls -a
+      run: rsync -avz target:/home/${{ secrets.USER }}/public/icons ./
+    - name: zip resources
+      run: zip release.zip *.html assets icons manifest.json
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: publish zip
+        path: ./release.zip
