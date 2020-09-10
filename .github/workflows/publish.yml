@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - develop
+name: Zip resources
+jobs:
+  publish:
+    name: zip
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+        config: ${{ secrets.CONFIG }}
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: rsync icons
+      run: cd Right-Click-to-Calendar && rsync target:/home/${{ secrets.USER }}/icons ./ $$ ls -a
