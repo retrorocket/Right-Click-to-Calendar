@@ -18,4 +18,4 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: rsync icons
-      run: rsync target:/home/${{ secrets.USER }}/icons ./ $$ ls -a
+      run: rsync -avz target:/home/${{ secrets.USER }}/icons ./ $$ ls -a
