@@ -2,6 +2,7 @@ on:
   push:
     branches:
       - develop
+      - feature/publish-action
 name: Zip resources
 jobs:
   publish:
