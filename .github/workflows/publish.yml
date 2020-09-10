@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:
+      - develop
+name: Zip resources
+jobs:
+  publish:
+    name: zip
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install SSH key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.SSH_KEY }}
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+        config: ${{ secrets.CONFIG }}
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: rsync icons
+      run: rsync -avz target:/home/${{ secrets.USER }}/public/icons ./
+    - name: zip resources
+      run: zip release.zip *.html assets icons manifest.json
+    - name: Archive production artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: release
+        path: |
+          *.html
+          assets
+          icons
+          manifest.json
