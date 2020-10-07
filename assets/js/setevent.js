@@ -1,4 +1,5 @@
-"use strict";
+import expDefault from './expdefault.js';
+import expDate from './expdate.js';
 
 /**
  * イベントをカレンダーに投稿する

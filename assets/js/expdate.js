@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * 正規表現で値を抜き出す
  */
@@ -16,7 +14,7 @@ const checkDates = (key, max, match_arr) => {
 /**
  * オプションで正規表現編集が指定されている場合に使用されるメソッド
  */
-const expDate = (selectedText) => {
+export default (selectedText) => {
   const base_str = selectedText; // 検索対象となる文字列
   const exp_str = localStorage["exp_str"];
   const regexp = new RegExp(exp_str);
@@ -77,4 +75,4 @@ const expDate = (selectedText) => {
   };
 
   return args;
-};
+}
