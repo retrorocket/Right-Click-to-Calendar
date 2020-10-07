@@ -1,14 +1,12 @@
-"use strict";
-
 /**
  * デフォルトの判定メソッド
  * オプションで正規表現編集が指定されていない場合
  * もしくは、正規表現にマッチしなかった場合に使用される
  */
-const expDefault = (stext) => {
+export default (stext) => {
 
   // 年月日の初期設定
-  let d = new Date();
+  const d = new Date();
 
   let smon = d.getMonth() + 1;
   let sday = d.getDate();
@@ -147,4 +145,4 @@ const expDefault = (stext) => {
   };
 
   return args;
-};
+}

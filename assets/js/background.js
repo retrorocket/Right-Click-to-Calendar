@@ -17,7 +17,7 @@ const getClickHandler = (info, tab) => {
     message: "textSelected",
     infoText: info.selectionText,
 
-  }, response => {
+  }, () => {
     // イベント登録ページの生成
     chrome.windows.create({
       "url": "setevent.html?id=" + tab.id,
