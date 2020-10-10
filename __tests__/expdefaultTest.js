@@ -1,4 +1,4 @@
-import expDefault from '../assets/js/expdefault';
+import { expDefault } from '../assets/js/expdefault';
 
 test("デフォルト正規表現テスト", () => {
   expect(expDefault("2020年9月9日 28:45　テスト\n場所 あいうえお\n2020年9月21日 28:48")).toStrictEqual(
