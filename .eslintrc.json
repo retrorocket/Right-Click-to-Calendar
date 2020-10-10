@@ -5,8 +5,7 @@
     "es2021": true,
     "jquery": true,
     "webextensions": true,
-    "jest/globals": true,
-    "node": true
+    "jest/globals": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
