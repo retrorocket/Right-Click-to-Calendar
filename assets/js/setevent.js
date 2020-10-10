@@ -1,5 +1,5 @@
-import expDefault from './expdefault.js';
-import expDate from './expdate.js';
+import { expDefault } from './expdefault.js';
+import { expDate } from './expdate.js';
 
 /**
  * イベントをカレンダーに投稿する
@@ -213,7 +213,7 @@ const fetchCalendarId = (accessToken) => {
 /**
  * 選択されたテキストに正規表現を適用してフォームにセットする
  */
-const convertSelectedTextToForm = (stext) => {
+export const convertSelectedTextToForm = (stext) => {
 
   // テキストに正規表現を適用
   let args = null;
