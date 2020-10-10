@@ -1,4 +1,4 @@
-import { convertSelectedTextToForm } from '../assets/js/setevent';
+import { convertSelectedTextToForm } from '../app/assets/js/setevent';
 
 test("イベントをフォームにセットする", () => {
 

@@ -1,4 +1,4 @@
-import { expDate } from "../assets/js/expdate";
+import { expDate } from "../app/assets/js/expdate";
 
 test("ユーザ設定正規表現テスト", () => {
 
