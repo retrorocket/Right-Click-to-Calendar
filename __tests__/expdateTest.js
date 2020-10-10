@@ -1,4 +1,4 @@
-import expDate from "../assets/js/expdate";
+import { expDate } from "../assets/js/expdate";
 
 test("ユーザ設定正規表現テスト", () => {
 
@@ -39,5 +39,5 @@ test("ユーザ設定正規表現テスト", () => {
       "selected_text": "2019年4月12日 12:44 映画公開日 場所:東宝系映画館",
     }
   )
-  
+
 });

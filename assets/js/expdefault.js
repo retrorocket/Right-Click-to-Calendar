@@ -3,7 +3,7 @@
  * オプションで正規表現編集が指定されていない場合
  * もしくは、正規表現にマッチしなかった場合に使用される
  */
-export default (stext) => {
+export const expDefault = (stext) => {
 
   // 年月日の初期設定
   const d = new Date();
