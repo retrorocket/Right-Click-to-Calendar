@@ -6,7 +6,7 @@
 const getClickHandler = (info, tab) => {
 
   if (!localStorage["calenId"]) {
-    alert("オプションページで認証を行ってください");
+    alert("オプションページでアプリケーションの承認を行ってください");
     chrome.tabs.create({
       "url": chrome.extension.getURL("options.html"),
     });

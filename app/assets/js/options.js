@@ -27,7 +27,7 @@ const loadCalendarId = () => {
     if (chrome.runtime.lastError) {
       alert(chrome.runtime.lastError.message);
       localStorage.removeItem("calenId");
-      $("#check").text("このページをリロードして再度認証を実施して下さい。");
+      $("#check").text("このページをリロードして再度アプリケーションを承認して下さい。");
       return;
     }
 
@@ -46,7 +46,7 @@ const loadCalendarId = () => {
 
         $("#selected-calendar").val(localStorage["calenId"]);
         $("#setter").show();
-        $("#check").text("OAuth認証済みです。");
+        $("#check").text("アプリケーションを承認済みです。");
       } else if (xhr.status === 401) {
         const data = JSON.parse(xhr.responseText);
         chrome.identity.removeCachedAuthToken({
@@ -54,7 +54,7 @@ const loadCalendarId = () => {
         },
           () => {
             alert("無効なアクセストークンを削除しました。" + data.error.code + " : " + data.error.message);
-            $("#check").text("このページをリロードして再度認証を実施してください。");
+            $("#check").text("このページをリロードして再度アプリケーションを承認して下さい。");
             localStorage.removeItem("calenId");
           });
         return;
@@ -94,7 +94,7 @@ const checkRegExps = () => {
 };
 
 // ページ読み込み時の初期設定
-$("#check").text("OAuth認証されていません。自動的に認証が始まります。");
+$("#check").text("アプリケーションが承認されていません。自動的に認可用の画面が表示されます。");
 $("#selected-calendar").empty();
 $("#setter").hide();
 // カレンダーの読み込み
