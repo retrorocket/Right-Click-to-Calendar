@@ -27,7 +27,7 @@ const loadCalendarId = () => {
     if (chrome.runtime.lastError) {
       alert(chrome.runtime.lastError.message);
       localStorage.removeItem("calenId");
-      $("#check").text("このページをリロードして再度アプリケーションを承認して下さい。");
+      $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
       return;
     }
 
@@ -54,7 +54,7 @@ const loadCalendarId = () => {
         },
           () => {
             alert("無効なアクセストークンを削除しました。" + data.error.code + " : " + data.error.message);
-            $("#check").text("このページをリロードして再度アプリケーションを承認して下さい。");
+            $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
             localStorage.removeItem("calenId");
           });
         return;
