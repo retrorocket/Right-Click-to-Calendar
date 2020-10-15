@@ -81,7 +81,7 @@ const addEvent = (input) => {
             () => {
               Swal.fire({
                 title: "Invalid AccessToken",
-                text: "無効なアクセストークンを削除しました。オプションページで再認証してください。" + data.error.code + " : " + data.error.message,
+                text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。 " + data.error.code + " : " + data.error.message,
                 animation: false
               });
             });
@@ -179,7 +179,7 @@ const fetchCalendarId = (accessToken) => {
         () => {
           Swal.fire({
             title: "Invalid AccessToken",
-            text: "無効なアクセストークンを削除しました。オプションページで再認証してください。" + data.error.code + " : " + data.error.message,
+            text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。 " + data.error.code + " : " + data.error.message,
             animation: false,
             onClose: () => {
               window.close();

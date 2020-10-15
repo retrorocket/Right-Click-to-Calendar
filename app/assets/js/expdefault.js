@@ -28,6 +28,8 @@ export const expDefault = (stext) => {
   let stf = false;
   let etf = false;
 
+  const detail = localStorage.getItem("detailSwitch") ? stext : "";
+
   // 開始年日付
   const mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/);
   if (mm) {
@@ -139,7 +141,7 @@ export const expDefault = (stext) => {
       "tf": etf,
     },
     "title": title,
-    "detail": "",
+    "detail": detail,
     "location": location,
     "selected_text": stext
   };

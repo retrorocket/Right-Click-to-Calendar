@@ -10,6 +10,22 @@
 
   <script src="./assets/js/vendor/jquery.min.js" defer></script>
   <script src="./assets/js/options.js" defer></script>
+  <style>
+    h1 {
+      font-size: 2.3rem;
+      padding-bottom: 8px;
+    }
+
+    h3 {
+      font-size: 1.6rem;
+      padding-bottom: 8px;
+    }
+
+    .container {
+      padding-top: 15px;
+      padding-bottom: 20px;
+    }
+  </style>
 </head>
 
 <body>
@@ -29,21 +45,34 @@
       </form>
 
       <p id="comp" class="pt-1"></p>
+      <hr>
     </div>
 
     <div class="pt-3">
-      <h3>OAuth認証状況</h3>
-      <p id="check"></p>
-      <p>認証済みアプリケーションのアクセス権を取り消したい場合は、Googleのアカウント設定ページから設定してください。</p>
+      <h3>詳細設定</h3>
+      <div class="form-group">
+        <label>
+          <input type="checkbox" id="detail-switch"> <span style="font-weight:bold">選択したテキストを「予定の詳細」にセットする</span>
+        </label>
+        <p>正規表現編集がオンの場合は、設定した正規表現を優先します。</p>
+      </div>
+      <hr>
+    </div>
+
+    <div class="pt-3">
+      <h3>OAuthによるアプリケーションの承認状況</h3>
+      <p id="check" style="font-weight:bold"></p>
+      <p>承認済みアプリケーションのアクセス権を取り消したい場合は、<a href="https://myaccount.google.com/">Googleのアカウント設定ページ</a>から設定してください。</p>
+      <hr>
     </div>
 
     <div class="pt-3">
       <h3>正規表現編集（ベータ）</h3>
-      <p>正規表現が使用できる方のみチェックを入れてください。</p>
-      <div id="exp-check" class="form-group" style="font-weight:bold">
+      <div id="exp-check" class="form-group">
         <label>
-          <input type="checkbox" id="exp-switch"> 選択したテキストに対する正規表現を自分で設定する
+          <input type="checkbox" id="exp-switch"> <span style="font-weight:bold">選択したテキストに対する正規表現を自分で設定する</span>
         </label>
+        <p>正規表現が使用できる方のみチェックを入れてください。</p>
       </div>
       <div id="exp-field">
         <p>選択したテキストに対して、開始日時やタイトル等の正規表現を設定できます。</p>
