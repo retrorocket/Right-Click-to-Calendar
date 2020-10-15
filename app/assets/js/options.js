@@ -94,7 +94,7 @@ const checkRegExps = () => {
 };
 
 // ページ読み込み時の初期設定
-$("#check").text("アプリケーションが承認されていません。自動的に認可用の画面が表示されます。");
+$("#check").text("アプリケーションが承認されていません。自動で承認用のページが表示されます。");
 $("#selected-calendar").empty();
 $("#setter").hide();
 // カレンダーの読み込み
@@ -130,6 +130,15 @@ $("#exp-switch").on("click", event => {
     localStorage.removeItem("expSwitch");
     $("#exp-field").hide();
     $("#exp-test-field").hide();
+  }
+});
+
+// 選択したテキストを詳細に設定する
+$("#detail-switch").on("click", event => {
+  if ($(event.currentTarget).prop('checked')) {
+    localStorage["detailSwitch"] = true;
+  } else {
+    localStorage.removeItem("detailSwitch");
   }
 });
 
