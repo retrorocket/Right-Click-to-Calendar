@@ -1,4 +1,5 @@
-"use strict";
+import { expDefault } from './expdefault.js';
+import { expDate } from './expdate.js';
 
 /**
  * イベントをカレンダーに投稿する
@@ -80,7 +81,7 @@ const addEvent = (input) => {
             () => {
               Swal.fire({
                 title: "Invalid AccessToken",
-                text: "無効なアクセストークンを削除しました。オプションページで再認証してください。" + data.error.code + " : " + data.error.message,
+                text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。 " + data.error.code + " : " + data.error.message,
                 animation: false
               });
             });
@@ -178,7 +179,7 @@ const fetchCalendarId = (accessToken) => {
         () => {
           Swal.fire({
             title: "Invalid AccessToken",
-            text: "無効なアクセストークンを削除しました。オプションページで再認証してください。" + data.error.code + " : " + data.error.message,
+            text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。 " + data.error.code + " : " + data.error.message,
             animation: false,
             onClose: () => {
               window.close();
@@ -212,7 +213,7 @@ const fetchCalendarId = (accessToken) => {
 /**
  * 選択されたテキストに正規表現を適用してフォームにセットする
  */
-const convertSelectedTextToForm = (stext) => {
+export const convertSelectedTextToForm = (stext) => {
 
   // テキストに正規表現を適用
   let args = null;

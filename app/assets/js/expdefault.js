@@ -1,14 +1,12 @@
-"use strict";
-
 /**
  * デフォルトの判定メソッド
  * オプションで正規表現編集が指定されていない場合
  * もしくは、正規表現にマッチしなかった場合に使用される
  */
-const expDefault = (stext) => {
+export const expDefault = (stext) => {
 
   // 年月日の初期設定
-  let d = new Date();
+  const d = new Date();
 
   let smon = d.getMonth() + 1;
   let sday = d.getDate();
@@ -29,6 +27,8 @@ const expDefault = (stext) => {
   let matched = false;
   let stf = false;
   let etf = false;
+
+  const detail = localStorage.getItem("detailSwitch") ? stext : "";
 
   // 開始年日付
   const mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/);
@@ -141,10 +141,10 @@ const expDefault = (stext) => {
       "tf": etf,
     },
     "title": title,
-    "detail": "",
+    "detail": detail,
     "location": location,
     "selected_text": stext
   };
 
   return args;
-};
+}

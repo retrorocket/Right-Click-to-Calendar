@@ -6,7 +6,7 @@
 const getClickHandler = (info, tab) => {
 
   if (!localStorage["calenId"]) {
-    alert("オプションページで認証を行ってください");
+    alert("オプションページでアプリケーションの承認を行ってください");
     chrome.tabs.create({
       "url": chrome.extension.getURL("options.html"),
     });
@@ -17,7 +17,7 @@ const getClickHandler = (info, tab) => {
     message: "textSelected",
     infoText: info.selectionText,
 
-  }, response => {
+  }, () => {
     // イベント登録ページの生成
     chrome.windows.create({
       "url": "setevent.html?id=" + tab.id,
