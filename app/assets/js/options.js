@@ -134,6 +134,9 @@ $("#exp-switch").on("click", event => {
 });
 
 // 選択したテキストを詳細に設定する
+if (localStorage["detailSwitch"]) {
+  $("#detail-switch").prop("checked", true);
+}
 $("#detail-switch").on("click", event => {
   if ($(event.currentTarget).prop('checked')) {
     localStorage["detailSwitch"] = true;
