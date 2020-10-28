@@ -23,7 +23,7 @@ jobs: # 一連のステップ
           name: JUnit をレポーターとして使用したテストの実行
           command: yarn jest -- --ci --testResultsProcessor="jest-junit"
           environment:
-            JEST_JUNIT_OUTPUT_DIR: "reports/junit/js-test-results.xml"
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
       - store_artifacts: # テスト結果をアーティファクトとして保存する特別なステップ
           # アーティファクト (https://circleci.com/ja/docs/2.0/artifacts/) に表示するテスト サマリーをアップロードします
           path: reports/junit/js-test-results.xml
