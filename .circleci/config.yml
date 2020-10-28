@@ -21,7 +21,7 @@ jobs: # 一連のステップ
           command: yarn add --dev jest-junit
       - run:
           name: JUnit をレポーターとして使用したテストの実行
-          command: jest --ci --runInBand --reporters=default --reporters=jest-junit
+          command: yarn jest -- --ci --testResultsProcessor="jest-junit"
           environment:
             JEST_JUNIT_OUTPUT_DIR: "reports/junit/js-test-results.xml"
       - store_artifacts: # テスト結果をアーティファクトとして保存する特別なステップ
