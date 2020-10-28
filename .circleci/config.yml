@@ -1,9 +1,9 @@
 version: 2.1 # CircleCI 2.1 を使用します
 jobs: # 一連のステップ
   build: # ワークフローを使用しない実行では、エントリポイントとして `build` ジョブが必要です
-    working_directory: ~/mern-starter # ステップが実行されるディレクトリ
+    working_directory: ~/# ステップが実行されるディレクトリ
     docker: # Docker でステップを実行します
-      - image: circleci/node:stable # このイメージをすべての `steps` が実行されるプライマリ コンテナとして使用します
+      - image: circleci/node:latest # このイメージをすべての `steps` が実行されるプライマリ コンテナとして使用します
     steps: # 実行可能コマンドの集合
       - checkout # ソース コードを作業ディレクトリにチェックアウトする特別なステップ
       - run:
