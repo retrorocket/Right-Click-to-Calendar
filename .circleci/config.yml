@@ -17,17 +17,12 @@ jobs: # 一連のステップ
           paths:
             - ./node_modules
       - run:
-          name: JUnit カバレッジ レポーターのインストール
-          command: yarn add --dev jest-junit
-      - run:
           name: JUnit をレポーターとして使用したテストの実行
-          command: yarn jest -- --ci --testResultsProcessor="jest-junit"
+          command: yarn jest --ci --runInBand --reporters=default --reporters=jest-junit
           environment:
-            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
-      - store_artifacts: # テスト結果をアーティファクトとして保存する特別なステップ
-          # アーティファクト (https://circleci.com/ja/docs/2.0/artifacts/) に表示するテスト サマリーをアップロードします
-          path: reports/junit/js-test-results.xml
-          prefix: tests
-      - store_test_results: # テスト サマリー (https://circleci.com/ja/docs/2.0/collect-test-data/) に表示するため
-          path: reports/junit
-      # デプロイ例については https://circleci.com/ja/docs/2.0/deployment-integrations/ を参照してください
+            JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+      - store_test_results:
+          path: ./reports/junit/
+      - store_artifacts:
+          path: ./reports/junit
+          # デプロイ例については https://circleci.com/ja/docs/2.0/deployment-integrations/ を参照してください
