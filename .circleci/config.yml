@@ -6,9 +6,6 @@ jobs: # 一連のステップ
       - image: circleci/node:latest # このイメージをすべての `steps` が実行されるプライマリ コンテナとして使用します
     steps: # 実行可能コマンドの集合
       - checkout # ソース コードを作業ディレクトリにチェックアウトする特別なステップ
-      - run:
-          name: update-yarn
-          command: "sudo npm install -g yarn@latest"
       - restore_cache: # 依存関係キャッシュを復元する特別なステップ
           # 依存関係キャッシュについては https://circleci.com/ja/docs/2.0/caching/ をお読みください
           key: dependency-cache-{{ checksum "yarn.lock" }}
