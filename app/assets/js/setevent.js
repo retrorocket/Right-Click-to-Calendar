@@ -41,6 +41,7 @@ const addEvent = (input) => {
         "start": from,
         "end": to,
       };
+      body = "";
       let conferenceDataVersionParam = "";
       if (input.hangoutsMeet) {
         conferenceDataVersionParam = "?conferenceDataVersion=1";
@@ -323,6 +324,3 @@ const escapeHTML = (str) => {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
-
-const aaa = "bbb";
-aaa = "ttt";
