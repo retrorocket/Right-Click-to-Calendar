@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  test:
+  build:
     working_directory: ~/workspace # ステップが実行されるディレクトリ
     docker: # Dockerでステップを実行
       - image: circleci/node:latest
@@ -15,18 +15,38 @@ jobs:
           key: dependency-cache-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
-      - run:
-          name: Jestによるテストの実行
-          command: yarn jest -i --ci --runInBand
-      - run:
-          name: ESLintの実行
-          command: yarn eslint . --format junit --output-file reports/eslint/results.xml
       - persist_to_workspace:
           root: .
           paths:
             - .
+
+  test:
+    docker: # Dockerでステップを実行
+      - image: circleci/node:latest
+    steps:
+      # 共有したworkspaceをアタッチする
+      - attach_workspace:
+          at: .
+      - run:
+          name: Jestによるテストの実行
+          command: yarn jest -i --ci --runInBand
       - store_artifacts:
           path: coverage
+      - store_artifacts:
+          path: reports
+      - store_test_results:
+          path: reports
+
+  lint:
+    docker: # Dockerでステップを実行
+      - image: circleci/node:latest
+    steps:
+      # 共有したworkspaceをアタッチする
+      - attach_workspace:
+          at: .
+      - run:
+          name: ESLintの実行
+          command: yarn eslint . --format junit --output-file reports/eslint/results.xml
       - store_artifacts:
           path: reports
       - store_test_results:
@@ -38,7 +58,7 @@ jobs:
     steps:
       # 共有したworkspaceをアタッチする
       - attach_workspace:
-          at: ~/workspace
+          at: .
       # 設定した秘密鍵のFingerPrintを追記する
       - add_ssh_keys:
           fingerprints:
@@ -54,10 +74,17 @@ workflows:
   version: 2
   publish: # workflow名
     jobs:
-      - test
+      - build
+      - test:
+          requires: # testが成功したら
+            - build
+      - lint:
+          requires: # testが成功したら
+            - build
       - create_zip:
           requires: # testが成功したら
             - test
+            - lint
           #filters:
           ##  branches: # masterブランチのみ実行する
            #   only:
