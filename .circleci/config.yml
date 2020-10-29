@@ -18,6 +18,9 @@ jobs:
       - run:
           name: Jestによるテストの実行
           command: yarn jest -i --ci --runInBand
+      - run:
+          name: ESLintの実行
+          command: yarn eslint . --format junit --output-file reports/eslint/results.xml
       - persist_to_workspace:
           root: ~/workspace
           paths:
@@ -26,19 +29,9 @@ jobs:
           path: coverage
       - store_artifacts:
           path: reports
-  lint:
-    working_directory: ~/workspace # ステップが実行されるディレクトリ
-    docker: # Dockerでステップを実行
-      - image: circleci/node:latest
-    steps:
-      # 共有したworkspaceをアタッチする
-      - attach_workspace:
-          at: ~/workspace
-      - run:
-          name: ESLintの実行
-          command: yarn eslint . --format junit --output-file reports/eslint/results.xml
       - store_test_results:
           path: reports
+
   create_zip:
     docker: # Dockerでステップを実行
       - image: circleci/node:latest
@@ -63,11 +56,9 @@ workflows:
   publish: # workflow名
     jobs:
       - test
-      - lint
       - create_zip:
-          requires: # buildとtestが成功したら
+          requires: # testが成功したら
             - test
-            - lint
           #filters:
           ##  branches: # masterブランチのみ実行する
            #   only:
