@@ -18,11 +18,11 @@ jobs: # 一連のステップ
             - ./node_modules
       - run:
           name: JUnit をレポーターとして使用したテストの実行
-          command: yarn jest --ci --runInBand --reporters=default --reporters=jest-junit
-          environment:
-            JEST_JUNIT_OUTPUT_DIR: ./reports/junit/
+          command: yarn jest -i --ci --runInBand
       - store_test_results:
-          path: ./reports/junit/
+          path: ./reports
       - store_artifacts:
-          path: ./reports/junit
+          path: coverage
+      - store_artifacts:
+          path: ./reports
           # デプロイ例については https://circleci.com/ja/docs/2.0/deployment-integrations/ を参照してください

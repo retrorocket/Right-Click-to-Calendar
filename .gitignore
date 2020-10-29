@@ -2,3 +2,4 @@ app/icons/
 *.zip
 node_modules/
 coverage/
+reports/
