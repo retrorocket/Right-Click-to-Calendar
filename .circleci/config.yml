@@ -17,7 +17,7 @@ jobs: # 一連のステップ
           paths:
             - ./node_modules
       - run:
-          name: JUnit をレポーターとして使用したテストの実行
+          name: Jestによるテストの実行
           command: yarn jest -i --ci --runInBand
       - run:
           name: ESLintの実行
