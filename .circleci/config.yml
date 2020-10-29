@@ -76,16 +76,16 @@ workflows:
     jobs:
       - build
       - test:
-          requires: # testが成功したら
+          requires: # buildが成功したら
             - build
       - lint:
-          requires: # testが成功したら
+          requires:
             - build
       - create_zip:
-          requires: # testが成功したら
+          requires:
             - test
             - lint
-          #filters:
-          ##  branches: # masterブランチのみ実行する
-           #   only:
-           #     - master
+          # filters:
+            # branches: # masterブランチのみ実行する
+              # only:
+                # - master
