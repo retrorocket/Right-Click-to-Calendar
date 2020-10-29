@@ -85,7 +85,7 @@ workflows:
           requires:
             - test
             - lint
-          # filters:
-            # branches: # masterブランチのみ実行する
-              # only:
-                # - master
+          filters:
+            branches: # masterブランチのみ実行する
+              only:
+                - develop
