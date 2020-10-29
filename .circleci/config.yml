@@ -66,7 +66,7 @@ jobs:
       - run: sudo apt install -y rsync
       - run: ssh-keyscan -p ${PORT} ${HOST_NAME} >> ~/.ssh/known_hosts
       - run: rsync -e "ssh -p ${PORT}" -avz ${USER}@${HOST_NAME}:/home/${USER}/public/icons ./app/
-      - run: zip -r release ./app
+      - run: zip -r release ./app/*
       - store_artifacts:
           path: release.zip
 
