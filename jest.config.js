@@ -12,8 +12,6 @@ module.exports = {
         suiteName: 'jest tests',
         outputDirectory: 'reports/jest',
         outputName: 'js-test-results.xml',
-        classNameTemplate: '{classname}-{title}',
-        titleTemplate: '{classname}-{title}',
         ancestorSeparator: ' › ',
       },
     ],

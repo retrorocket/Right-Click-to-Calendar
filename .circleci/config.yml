@@ -20,9 +20,9 @@ jobs: # 一連のステップ
           name: JUnit をレポーターとして使用したテストの実行
           command: yarn jest -i --ci --runInBand
       - store_test_results:
-          path: ./reports
+          path: reports/jest/js-test-results.xml
       - store_artifacts:
           path: coverage
       - store_artifacts:
-          path: ./reports
+          path: reports/jest/js-test-results.xml
           # デプロイ例については https://circleci.com/ja/docs/2.0/deployment-integrations/ を参照してください
