@@ -323,3 +323,6 @@ const escapeHTML = (str) => {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
 }
+
+const aaa = "bbb";
+aaa = "ttt";
