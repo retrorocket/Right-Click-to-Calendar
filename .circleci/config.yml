@@ -1,31 +1,74 @@
-version: 2.1 # CircleCI 2.1 を使用します
-jobs: # 一連のステップ
-  build: # ワークフローを使用しない実行では、エントリポイントとして `build` ジョブが必要です
+version: 2.1
+jobs:
+  test:
     working_directory: ~/workspace # ステップが実行されるディレクトリ
-    docker: # Docker でステップを実行します
-      - image: circleci/node:latest # このイメージをすべての `steps` が実行されるプライマリ コンテナとして使用します
-    steps: # 実行可能コマンドの集合
-      - checkout # ソース コードを作業ディレクトリにチェックアウトする特別なステップ
-      - restore_cache: # 依存関係キャッシュを復元する特別なステップ
-          # 依存関係キャッシュについては https://circleci.com/ja/docs/2.0/caching/ をお読みください
+    docker: # Dockerでステップを実行
+      - image: circleci/node:latest
+    steps:
+      - checkout # ソースコードを作業ディレクトリにチェックアウト
+      - restore_cache: # 依存関係キャッシュを復元
           key: dependency-cache-{{ checksum "yarn.lock" }}
       - run:
           name: install-yarn
           command: yarn
-      - save_cache: # 依存関係キャッシュを保存する特別なステップ
+      - save_cache: # 依存関係キャッシュを保存
           key: dependency-cache-{{ checksum "yarn.lock" }}
           paths:
             - ./node_modules
       - run:
           name: Jestによるテストの実行
           command: yarn jest -i --ci --runInBand
+      - persist_to_workspace:
+          root: ~/workspace
+          paths:
+            - .
+      - store_artifacts:
+          path: coverage
+      - store_artifacts:
+          path: reports
+  lint:
+    working_directory: ~/workspace # ステップが実行されるディレクトリ
+    docker: # Dockerでステップを実行
+      - image: circleci/node:latest
+    steps:
+      # 共有したworkspaceをアタッチする
+      - attach_workspace:
+          at: ~/workspace
       - run:
           name: ESLintの実行
           command: yarn eslint . --format junit --output-file reports/eslint/results.xml
       - store_test_results:
           path: reports
+  create_zip:
+    docker: # Dockerでステップを実行
+      - image: circleci/node:latest
+    steps:
+      # 共有したworkspaceをアタッチする
+      - attach_workspace:
+          at: ~/workspace
+      # 設定した秘密鍵のFingerPrintを追記する
+      - add_ssh_keys:
+          fingerprints:
+            - "e4:f6:0b:8b:a8:cf:d8:6b:74:5e:99:68:92:f3:da:1b"
+      - run: sudo apt install -y rsync
+      - run: ssh-keyscan ${HOST_NAME} >> ~/.ssh/known_hosts
+      - run: echo ${CONFIG} >> ~/.ssh/config
+      - run: rsync -e "ssh -p ${PORT}" -avz ${user}@${HOST_NAME}:/home/${USER}/public/icons ./app/
+      - run: zip -r release ./app
       - store_artifacts:
-          path: coverage
-      - store_artifacts:
-          path: reports
-          # デプロイ例については https://circleci.com/ja/docs/2.0/deployment-integrations/ を参照してください
+          path: release.zip
+
+workflows:
+  version: 2
+  publish: # workflow名
+    jobs:
+      - test
+      - lint
+      - create_zip:
+          requires: # buildとtestが成功したら
+            - test
+            - lint
+          #filters:
+          ##  branches: # masterブランチのみ実行する
+           #   only:
+           #     - master

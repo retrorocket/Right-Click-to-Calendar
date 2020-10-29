@@ -41,7 +41,6 @@ const addEvent = (input) => {
         "start": from,
         "end": to,
       };
-      body = "";
       let conferenceDataVersionParam = "";
       if (input.hangoutsMeet) {
         conferenceDataVersionParam = "?conferenceDataVersion=1";
