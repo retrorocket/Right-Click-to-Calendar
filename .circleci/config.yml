@@ -19,6 +19,9 @@ jobs: # 一連のステップ
       - run:
           name: JUnit をレポーターとして使用したテストの実行
           command: yarn jest -i --ci --runInBand
+      - run:
+          name: ESLintの実行
+          command: yarn eslint . --format junit --output-file reports/eslint/results.xml'
       - store_test_results:
           path: reports
       - store_artifacts:
