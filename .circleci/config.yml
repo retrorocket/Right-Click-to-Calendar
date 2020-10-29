@@ -86,6 +86,6 @@ workflows:
             - test
             - lint
           filters:
-            branches: # masterブランチのみ実行する
+            branches: # 指定ブランチでのみ実行する
               only:
                 - develop
