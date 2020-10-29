@@ -22,7 +22,7 @@ jobs:
           name: ESLintの実行
           command: yarn eslint . --format junit --output-file reports/eslint/results.xml
       - persist_to_workspace:
-          root: ~/workspace
+          root: .
           paths:
             - .
       - store_artifacts:
