@@ -21,7 +21,7 @@ jobs: # 一連のステップ
           command: yarn jest -i --ci --runInBand
       - run:
           name: ESLintの実行
-          command: yarn eslint . --format junit --output-file reports/eslint/results.xml'
+          command: yarn eslint . --format junit --output-file reports/eslint/results.xml
       - store_test_results:
           path: reports
       - store_artifacts:
