@@ -45,7 +45,7 @@ jobs:
             - "e4:f6:0b:8b:a8:cf:d8:6b:74:5e:99:68:92:f3:da:1b"
       - run: sudo apt install -y rsync
       - run: ssh-keyscan -p ${PORT} ${HOST_NAME} >> ~/.ssh/known_hosts
-      - run: rsync -e "ssh -p ${PORT}" -avz ${user}@${HOST_NAME}:/home/${USER}/public/icons ./app/
+      - run: rsync -e "ssh -p ${PORT}" -avz ${USER}@${HOST_NAME}:/home/${USER}/public/icons ./app/
       - run: zip -r release ./app
       - store_artifacts:
           path: release.zip
