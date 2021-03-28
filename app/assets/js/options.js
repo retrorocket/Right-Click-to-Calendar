@@ -53,21 +53,21 @@ const loadCalendarId = () => {
           'token': accessToken
         },
           () => {
-            alert("無効なアクセストークンを削除しました。" + data.error.code + " : " + data.error.message);
+            alert("無効なアクセストークンを削除しました。 " + data.error.code + " : " + data.error.message);
             $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
             localStorage.removeItem("calenId");
           });
         return;
       } else {
         const data = JSON.parse(xhr.responseText);
-        alert("リストの取得に失敗しました。オプションページをリロードしてください" + data.error.code + " : " + data.error.message);
+        alert("リストの取得に失敗しました。オプションページをリロードしてください。 " + data.error.code + " : " + data.error.message);
         $("#check").text("リストの取得に失敗しました。このページをリロードしてください。");
         localStorage.removeItem("calenId");
       }
 
     };
     xhr.open('GET',
-      "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=owner",
+      "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=writer",
       true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
