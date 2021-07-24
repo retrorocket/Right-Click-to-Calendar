@@ -1,15 +1,12 @@
 "use strict";
 
 let selectedText = "";
-const getObjectFromLocalStorage = (key = null) => new Promise(resolve => {
-  chrome.storage.local.get(key, (data) => { resolve(data) });
-});
 
 /**
  * イベントページと登録ウインドウからのメッセージを受け取る
  */
 chrome.runtime.onMessage.addListener(
-  async (request) => {
+  (request, sender, sendResponse) => {
     //// イベント登録ウインドウに選択中のテキストを返却する ////
     if (request.message === "eventpageLoaded") {
       selectedText = "";
@@ -23,14 +20,15 @@ chrome.runtime.onMessage.addListener(
       } else {
         selectedText = document.getSelection().toString();
       }
-      const selectionText = await getObjectFromLocalStorage("selectionText");
-      selectedText = selectedText || selectionText.selectionText;
-      // 全角英数を半角英数に変換
-      selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => {
-        return String.fromCharCode(s.charCodeAt(0) - 65248);
+      chrome.storage.local.get("selectionText", result => {
+        selectedText = selectedText || result.selectionText;
+        // 全角英数を半角英数に変換
+        selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => {
+          return String.fromCharCode(s.charCodeAt(0) - 65248);
+        });
+        sendResponse({ message: selectedText });
+        chrome.storage.local.remove("selectionText");
       });
-      chrome.runtime.sendMessage({ type: "response", message: selectedText, ustr: request.ustr });
-      chrome.storage.local.remove("selectionText");
     }
     return true;
   }

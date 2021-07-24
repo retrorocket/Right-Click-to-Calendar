@@ -21,7 +21,7 @@
   "version": "3.9.6",
   "manifest_version": 3,
   "oauth2": {
-    "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
+    "client_id": "94384066361-r0c7jrk9cptr4imv5nqt9eb5f0r935kd.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/calendar.events",
       "https://www.googleapis.com/auth/calendar.readonly"
