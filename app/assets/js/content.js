@@ -9,7 +9,7 @@ const getStorage = (key = null) => new Promise(resolve => {
  * イベントページと登録ウインドウからのメッセージを受け取る
  */
 chrome.runtime.onMessage.addListener(
-  async (request, sender, sendResponse) => {
+  async (request) => {
     //// イベント登録ウインドウに選択中のテキストを返却する ////
     if (request.message === "eventpageLoaded") {
       selectedText = "";

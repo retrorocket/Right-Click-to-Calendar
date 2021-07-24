@@ -311,7 +311,7 @@ let tabId = parseInt(location.search.split("=")[1], 10);
 chrome.tabs.sendMessage(tabId, {
   message: "eventpageLoaded",
 });
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((message) => {
   if (message.type === "response") {
     // 取得したテキストをフォームにセットする
     convertSelectedTextToForm(message.message)
