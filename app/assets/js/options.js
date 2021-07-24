@@ -27,7 +27,11 @@ const loadCalendarId = () => {
     if (chrome.runtime.lastError) {
       alert(chrome.runtime.lastError.message);
       localStorage.removeItem("calenId");
+      chrome.storage.local.remove("calenId");
       $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
+      if (location.search.split("=")[1]) {
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
+      }
       return;
     }
 
@@ -39,6 +43,13 @@ const loadCalendarId = () => {
         const list = data.items;
         if (!localStorage["calenId"]) {
           localStorage["calenId"] = list[0].id;
+          chrome.storage.local.set({ "calenId": list[0].id });
+        } else {
+          chrome.storage.local.get("calenId", result => {
+            if (!result.calenId) {
+              chrome.storage.local.set({ "calenId": localStorage["calenId"] });
+            }
+          });
         }
         for (let i = 0; i < list.length; i++) {
           $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
@@ -47,22 +58,27 @@ const loadCalendarId = () => {
         $("#selected-calendar").val(localStorage["calenId"]);
         $("#setter").show();
         $("#check").text("アプリケーションを承認済みです。");
+        if (location.search.split("=")[1]) {
+          alert("アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。");
+        }
       } else if (xhr.status === 401) {
         const data = JSON.parse(xhr.responseText);
         chrome.identity.removeCachedAuthToken({
           'token': accessToken
         },
           () => {
-            alert("無効なアクセストークンを削除しました。 " + data.error.code + " : " + data.error.message);
+            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください。\n" + data.error.code + " : " + data.error.message);
             $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
             localStorage.removeItem("calenId");
+            chrome.storage.local.remove("calenId");
           });
         return;
       } else {
         const data = JSON.parse(xhr.responseText);
-        alert("リストの取得に失敗しました。オプションページをリロードしてください。 " + data.error.code + " : " + data.error.message);
-        $("#check").text("リストの取得に失敗しました。このページをリロードしてください。");
+        alert("カレンダーリストの取得に失敗しました。オプションページをリロードしてください。\n" + data.error.code + " : " + data.error.message);
+        $("#check").text("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
         localStorage.removeItem("calenId");
+        chrome.storage.local.remove("calenId");
       }
 
     };
