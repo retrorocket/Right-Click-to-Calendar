@@ -66,7 +66,7 @@ const loadCalendarId = () => {
           'token': accessToken
         },
           () => {
-            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください\n" + data.error.code + " : " + data.error.message);
+            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください。\n" + data.error.code + " : " + data.error.message);
             $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
             localStorage.removeItem("calenId");
             chrome.storage.local.remove("calenId");
@@ -74,7 +74,7 @@ const loadCalendarId = () => {
         return;
       } else {
         const data = JSON.parse(xhr.responseText);
-        alert("カレンダーリストの取得に失敗しました。オプションページをリロードしてください。 " + data.error.code + " : " + data.error.message);
+        alert("カレンダーリストの取得に失敗しました。オプションページをリロードしてください。\n" + data.error.code + " : " + data.error.message);
         $("#check").text("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
         localStorage.removeItem("calenId");
         chrome.storage.local.remove("calenId");
