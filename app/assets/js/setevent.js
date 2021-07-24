@@ -310,9 +310,12 @@ $("#create-cal").on("click", () => {
 let tabId = parseInt(location.search.split("=")[1], 10);
 chrome.tabs.sendMessage(tabId, {
   message: "eventpageLoaded",
-}, response => {
-  // 取得したテキストをフォームにセットする
-  convertSelectedTextToForm(response.message)
+});
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "response") {
+    // 取得したテキストをフォームにセットする
+    convertSelectedTextToForm(message.message)
+  }
 });
 
 // SweetAlert向けに文字列をサニタイズする
