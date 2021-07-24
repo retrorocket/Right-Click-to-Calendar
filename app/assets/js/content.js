@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener(
       selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => {
         return String.fromCharCode(s.charCodeAt(0) - 65248);
       });
-      chrome.runtime.sendMessage({ type: "response", message: selectedText });
+      chrome.runtime.sendMessage({ type: "response", message: selectedText, ustr: request.ustr });
     }
     return true;
   }
