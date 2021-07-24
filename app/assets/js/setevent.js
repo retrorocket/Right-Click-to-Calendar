@@ -307,12 +307,19 @@ $("#create-cal").on("click", () => {
 });
 
 // content scriptと通信して選択されたテキストを取得する
-let tabId = parseInt(location.search.split("=")[1], 10);
+const tabId = parseInt(location.search.split("=")[1], 10);
+// chrome.tabs.getCurrent だと undefined になる場合があるため、適当な文字列を固有IDにする
+const ustr = Math.random().toString(32).substring(2);
 chrome.tabs.sendMessage(tabId, {
   message: "eventpageLoaded",
+  ustr: ustr,
 });
+// FIXME
+// sendMessage した結果を response 関数で受け取れない、かつ
+// contentスクリプトからchrome.tabs.sendMessageが呼べないため
+// chrome.runtime.onMessage で受けている
 chrome.runtime.onMessage.addListener((message) => {
-  if (message.type === "response") {
+  if (message.type === "response" && ustr === message.ustr) {
     // 取得したテキストをフォームにセットする
     convertSelectedTextToForm(message.message)
   }
