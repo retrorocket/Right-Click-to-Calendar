@@ -44,12 +44,13 @@ const loadCalendarId = () => {
         if (!localStorage["calenId"]) {
           localStorage["calenId"] = list[0].id;
           chrome.storage.local.set({ "calenId": list[0].id });
+        } else {
+          chrome.storage.local.get("calenId", result => {
+            if (!result.calenId) {
+              chrome.storage.local.set({ "calenId": localStorage["calenId"] });
+            }
+          });
         }
-        chrome.storage.local.get("calenId", result => {
-          if (!result.calenId) {
-            chrome.storage.local.set({ "calenId": localStorage["calenId"] });
-          }
-        });
         for (let i = 0; i < list.length; i++) {
           $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
         }

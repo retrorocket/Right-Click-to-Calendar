@@ -1,7 +1,7 @@
 "use strict";
 
 let selectedText = "";
-const getStorage = (key = null) => new Promise(resolve => {
+const getObjectFromLocalStorage = (key = null) => new Promise(resolve => {
   chrome.storage.local.get(key, (data) => { resolve(data) });
 });
 
@@ -23,7 +23,7 @@ chrome.runtime.onMessage.addListener(
       } else {
         selectedText = document.getSelection().toString();
       }
-      const selectionText = await getStorage("selectionText");
+      const selectionText = await getObjectFromLocalStorage("selectionText");
       selectedText = selectedText || selectionText.selectionText;
       // 全角英数を半角英数に変換
       selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => {
