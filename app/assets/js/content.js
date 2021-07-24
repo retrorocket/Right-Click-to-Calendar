@@ -30,6 +30,7 @@ chrome.runtime.onMessage.addListener(
         return String.fromCharCode(s.charCodeAt(0) - 65248);
       });
       chrome.runtime.sendMessage({ type: "response", message: selectedText, ustr: request.ustr });
+      chrome.storage.local.remove("selectionText");
     }
     return true;
   }
