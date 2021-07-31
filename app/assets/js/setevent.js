@@ -273,15 +273,6 @@ export const convertSelectedTextToForm = (stext) => {
   $("#location").val(args.location);
 };
 
-// カレンダーIDのセット
-chrome.identity.getAuthToken({
-  'interactive': true
-},
-  accessToken => {
-    fetchCalendarId(accessToken)
-  }
-);
-
 // イベント投稿
 $("#sub").on("click", () => {
   createAndAddEventInput()
@@ -307,12 +298,19 @@ $("#create-cal").on("click", () => {
 });
 
 // content scriptと通信して選択されたテキストを取得する
-let tabId = parseInt(location.search.split("=")[1], 10);
+const tabId = parseInt(location.search.split("=")[1], 10);
 chrome.tabs.sendMessage(tabId, {
   message: "eventpageLoaded",
 }, response => {
-  // 取得したテキストをフォームにセットする
-  convertSelectedTextToForm(response.message)
+  convertSelectedTextToForm(response.message);
+  // カレンダーIDのセット
+  chrome.identity.getAuthToken({
+    'interactive': true
+  },
+    accessToken => {
+      fetchCalendarId(accessToken)
+    }
+  );
 });
 
 // SweetAlert向けに文字列をサニタイズする

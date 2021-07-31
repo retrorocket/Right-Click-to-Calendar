@@ -5,25 +5,23 @@
  */
 const getClickHandler = (info, tab) => {
 
-  if (!localStorage["calenId"]) {
-    alert("オプションページでアプリケーションの承認を行ってください");
-    chrome.tabs.create({
-      "url": chrome.extension.getURL("options.html"),
-    });
-    return;
-  }
-  // content scriptで選択中のテキストを取得する
-  chrome.tabs.sendMessage(tab.id, {
-    message: "textSelected",
-    infoText: info.selectionText,
+  chrome.storage.local.get("calenId", result => {
 
-  }, () => {
+    if (!result.calenId) {
+      chrome.tabs.create({
+        "url": "options.html?alert=true"
+      });
+      return;
+    }
+
     // イベント登録ページの生成
-    chrome.windows.create({
-      "url": "setevent.html?id=" + tab.id,
-      "width": 530,
-      "height": 700,
-      "type": "popup"
+    chrome.storage.local.set({ "selectionText": info.selectionText }, () => {
+      chrome.windows.create({
+        "url": "setevent.html?id=" + tab.id,
+        "width": 530,
+        "height": 700,
+        "type": "popup"
+      });
     });
   });
 };

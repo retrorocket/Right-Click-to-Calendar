@@ -7,8 +7,8 @@ let selectedText = "";
  */
 chrome.runtime.onMessage.addListener(
   (request, sender, sendResponse) => {
-    //// 選択中のテキストを取得する ////
-    if (request.message === "textSelected") {
+    //// イベント登録ウインドウに選択中のテキストを返却する ////
+    if (request.message === "eventpageLoaded") {
       selectedText = "";
       const tagName = (document.activeElement.tagName).toUpperCase();
       if (tagName === "IFRAME" || tagName === "FRAME") {
@@ -20,20 +20,16 @@ chrome.runtime.onMessage.addListener(
       } else {
         selectedText = document.getSelection().toString();
       }
-      selectedText = selectedText || request.infoText;
-      // 全角英数を半角英数に変換
-      selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => {
-        return String.fromCharCode(s.charCodeAt(0) - 65248);
-      });
-      sendResponse({
-        message: "return",
-      });
-
-      //// イベント登録ウインドウに選択中のテキストを返却する ////
-    } else if (request.message === "eventpageLoaded") {
-      sendResponse({
-        message: selectedText,
+      chrome.storage.local.get("selectionText", result => {
+        selectedText = selectedText || result.selectionText;
+        // 全角英数を半角英数に変換
+        selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => {
+          return String.fromCharCode(s.charCodeAt(0) - 65248);
+        });
+        sendResponse({ message: selectedText });
+        chrome.storage.local.remove("selectionText");
       });
     }
+    return true;
   }
 );

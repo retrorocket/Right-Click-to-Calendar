@@ -1,9 +1,6 @@
 {
   "background": {
-    "scripts": [
-      "assets/js/background.js"
-    ],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "icons": {
     "128": "icons/128.png",
@@ -18,15 +15,16 @@
   "permissions": [
     "tabs",
     "contextMenus",
-    "identity"
+    "identity",
+    "storage"
   ],
-  "version": "3.9.4.1",
-  "manifest_version": 2,
+  "version": "3.9.6",
+  "manifest_version": 3,
   "oauth2": {
     "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
     "scopes": [
-      "https://www.googleapis.com/auth/calendar.readonly",
-      "https://www.googleapis.com/auth/calendar.events"
+      "https://www.googleapis.com/auth/calendar.events",
+      "https://www.googleapis.com/auth/calendar.readonly"
     ]
   },
   "content_scripts": [
