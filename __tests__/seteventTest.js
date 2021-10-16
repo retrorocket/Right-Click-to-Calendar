@@ -12,6 +12,7 @@ document.body.innerHTML =
   + '<textarea class="form-control" rows="3" id="detail"></textarea>'
   + '<textarea class="form-control" rows="3" id="main-text"></textarea>'
   + '<select class="form-control" id="selected-calendar"></select>'
+  + '<button type="button" class="btn btn-primary" id="sub">Submit</button>'
 '</form>';
 
 test("イベントをフォームにセットする_詳細スイッチ無効", () => {
