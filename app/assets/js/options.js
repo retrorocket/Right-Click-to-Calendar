@@ -16,80 +16,98 @@ const setRegExps = () => {
   }
 };
 
-/**
- * カレンダー一覧の読み込み
- */
-const loadCalendarId = () => {
-  chrome.identity.getAuthToken({
-    'interactive': true
-  }, accessToken => {
-
-    if (chrome.runtime.lastError) {
-      alert(chrome.runtime.lastError.message);
-      localStorage.removeItem("calenId");
-      chrome.storage.local.remove("calenId");
-      $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
-      if (location.search.split("=")[1]) {
-        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
-      }
-      return;
+const loadCalendarIdRequest = (accessToken) => {
+  fetch("https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=writer", {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
     }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      const list = data.items;
+      if (!localStorage["calenId"]) {
+        localStorage["calenId"] = list[0].id;
+        chrome.storage.local.set({ "calenId": list[0].id });
+      } else {
+        chrome.storage.local.get("calenId", result => {
+          if (!result.calenId) {
+            chrome.storage.local.set({ "calenId": localStorage["calenId"] });
+          }
+        });
+      }
+      for (let i = 0; i < list.length; i++) {
+        $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
+      }
 
-    const xhr = new XMLHttpRequest();
-
-    xhr.onloadend = () => {
-      if (xhr.status == 200) {
-        const data = JSON.parse(xhr.responseText);
-        const list = data.items;
-        if (!localStorage["calenId"]) {
-          localStorage["calenId"] = list[0].id;
-          chrome.storage.local.set({ "calenId": list[0].id });
-        } else {
-          chrome.storage.local.get("calenId", result => {
-            if (!result.calenId) {
-              chrome.storage.local.set({ "calenId": localStorage["calenId"] });
-            }
-          });
-        }
-        for (let i = 0; i < list.length; i++) {
-          $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
-        }
-
-        $("#selected-calendar").val(localStorage["calenId"]);
-        $("#setter").show();
-        $("#check").text("アプリケーションを承認済みです。");
-        if (location.search.split("=")[1]) {
-          alert("アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。");
-        }
-      } else if (xhr.status === 401) {
-        const data = JSON.parse(xhr.responseText);
+      $("#selected-calendar").val(localStorage["calenId"]);
+      $("#setter").show();
+      $("#check").text("アプリケーションを承認済みです。");
+      if (location.search.split("=")[1]) {
+        alert("アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。");
+      }
+    })
+    .catch(error => {
+      if (error.message === "401") {
         chrome.identity.removeCachedAuthToken({
           'token': accessToken
         },
           () => {
-            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください。\n" + data.error.code + " : " + data.error.message);
+            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください");
             $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
             localStorage.removeItem("calenId");
             chrome.storage.local.remove("calenId");
           });
         return;
       } else {
-        const data = JSON.parse(xhr.responseText);
-        alert("カレンダーリストの取得に失敗しました。オプションページをリロードしてください。\n" + data.error.code + " : " + data.error.message);
+        alert("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
         $("#check").text("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
         localStorage.removeItem("calenId");
         chrome.storage.local.remove("calenId");
       }
+    });
+};
 
-    };
-    xhr.open('GET',
-      "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=writer",
-      true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-    xhr.send(null);
-  });
+/**
+ * カレンダー一覧の読み込み
+ */
+const loadCalendarId = () => {
 
+  if (localStorage["useChromium"]) {
+    chrome.identity.launchWebAuthFlow({
+      url: "https://rcapi.retrorocket.biz/try",
+      interactive: true
+    }, responseUrl => {
+      if (chrome.runtime.lastError) {
+        localStorage.removeItem("calenId");
+        chrome.storage.local.remove("calenId");
+        $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
+      } else {
+        const url = new URL(responseUrl);
+        const accessToken = url.hash.split("=")[1];
+        loadCalendarIdRequest(accessToken);
+      }
+    })
+  } else {
+    chrome.identity.getAuthToken({
+      'interactive': true
+    }, accessToken => {
+      if (chrome.runtime.lastError) {
+        localStorage.removeItem("calenId");
+        chrome.storage.local.remove("calenId");
+        $("#check").text("このページをリロードして再度アプリケーションを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。");
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。");
+      } else {
+        loadCalendarIdRequest(accessToken);
+      }
+    });
+  }
 };
 
 /**
@@ -160,6 +178,19 @@ $("#detail-switch").on("click", event => {
     localStorage.removeItem("detailSwitch");
   }
 });
+
+// Chromiumを使用する
+if (localStorage["useChromium"]) {
+  $("#chromium-switch").prop("checked", true);
+}
+$("#chromium-switch").on("click", event => {
+  if ($(event.currentTarget).prop('checked')) {
+    localStorage["useChromium"] = true;
+  } else {
+    localStorage.removeItem("useChromium");
+  }
+});
+
 
 // 正規表現の設定
 $("#reg-set").on("click", () => {

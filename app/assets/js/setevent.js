@@ -4,108 +4,123 @@ import { expDate } from './expdate.js';
 /**
  * イベントをカレンダーに投稿する
  */
-const addEvent = (input) => {
-  chrome.identity.getAuthToken({
-    'interactive': true
-  },
-    accessToken => {
+const addEventRequest = (input, accessToken) => {
 
-      //// 開始～終了日時設定 ////
-      let from;
-      let to;
+  //// 開始～終了日時設定 ////
+  let from;
+  let to;
 
-      if (input.allday) { //終日設定
-        from = {
-          "date": input.fromDate,
-        };
-        to = {
-          "date": input.toDate,
-        };
-      } else {
-        const timezone = ":00.000+09:00";
-        from = {
-          "dateTime": input.fromDate + "T" + input.fromTime + timezone,
-        };
-        to = {
-          "dateTime": input.toDate + "T" + input.toTime + timezone,
-        };
+  if (input.allday) { //終日設定
+    from = {
+      "date": input.fromDate,
+    };
+    to = {
+      "date": input.toDate,
+    };
+  } else {
+    const timezone = ":00.000+09:00";
+    from = {
+      "dateTime": input.fromDate + "T" + input.fromTime + timezone,
+    };
+    to = {
+      "dateTime": input.toDate + "T" + input.toTime + timezone,
+    };
+  }
+
+  //// API投稿用のオブジェクトを作成 ////
+  const body = {
+    "description": input.detail,
+    "location": input.location,
+    "summary": input.title,
+    "transparency": "opaque",
+    "status": "confirmed",
+    "start": from,
+    "end": to,
+  };
+  let conferenceDataVersionParam = "";
+  if (input.hangoutsMeet) {
+    conferenceDataVersionParam = "?conferenceDataVersion=1";
+    const requestId = Math.random().toString(32).substring(2);
+    body.conferenceData = {
+      createRequest: {
+        requestId,
+        conferenceSolutionKey: {
+          type: "hangoutsMeet"
+        },
       }
+    };
+  }
 
-      //// API投稿用のオブジェクトを作成 ////
-      const body = {
-        "description": input.detail,
-        "location": input.location,
-        "summary": input.title,
-        "transparency": "opaque",
-        "status": "confirmed",
-        "start": from,
-        "end": to,
-      };
-      let conferenceDataVersionParam = "";
+  fetch(`https://www.googleapis.com/calendar/v3/calendars/${input.calendar}/events${conferenceDataVersionParam}`, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    body: JSON.stringify(body)
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      let meetUrl = "";
       if (input.hangoutsMeet) {
-        conferenceDataVersionParam = "?conferenceDataVersion=1";
-        const requestId = Math.random().toString(32).substring(2);
-        body.conferenceData = {
-          createRequest: {
-            requestId,
-            conferenceSolutionKey: {
-              type: "hangoutsMeet"
-            },
-          }
-        };
+        meetUrl = (data.conferenceData.createRequest.status.statusCode === "success")
+          ? "<br>📞 " + data.conferenceData.entryPoints[0].uri
+          : "<br>MeetのURLはカレンダーから確認してください。";
       }
-
-      const xhr = new XMLHttpRequest();
-      xhr.onloadend = () => {
-
-        if (xhr.status === 200) {
-          const data = JSON.parse(xhr.responseText);
-          let meetUrl = "";
-          if (input.hangoutsMeet) {
-            meetUrl = (data.conferenceData.createRequest.status.statusCode === "success")
-              ? "<br>📞 " + data.conferenceData.entryPoints[0].uri
-              : "<br>MeetのURLはカレンダーから確認してください。";
-          }
-          Swal.fire({
-            html: '<span style="font-weight: bold;">' + escapeHTML(input.title) + "</span>" + " を登録しました。" + meetUrl,
-            animation: false,
-            onClose: () => {
-              window.close();
-            }
-          });
-        } else if (xhr.status === 401) {
-          const data = JSON.parse(xhr.responseText);
-          chrome.identity.removeCachedAuthToken({
-            'token': accessToken
-          },
-            () => {
-              Swal.fire({
-                title: "Invalid AccessToken",
-                text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。 " + data.error.code + " : " + data.error.message,
-                animation: false
-              });
-            });
-          return;
-        } else {
-          const data = JSON.parse(xhr.responseText);
-          Swal.fire({
-            title: "An error occurred",
-            text: data.error.code + " : " + data.error.message,
-            animation: false
-          });
-          return;
-
+      Swal.fire({
+        html: '<span style="font-weight: bold;">' + escapeHTML(input.title) + "</span>" + " を登録しました。" + meetUrl,
+        animation: false,
+        onClose: () => {
+          window.close();
         }
-      };
-      xhr.open('POST',
-        "https://www.googleapis.com/calendar/v3/calendars/" + input.calendar + "/events" + conferenceDataVersionParam,
-        true);
+      });
+    })
+    .catch(error => {
+      if (error.message === "401") {
+        chrome.identity.removeCachedAuthToken({
+          'token': accessToken
+        },
+          () => {
+            Swal.fire({
+              title: "Invalid AccessToken",
+              text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。",
+              animation: false
+            });
+          });
+        return;
+      } else {
+        Swal.fire({
+          title: "An error occurred",
+          text: "An unexpected error occurred",
+          animation: false
+        });
+        return;
+      }
+    });
+};
 
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-      xhr.send(JSON.stringify(body));
-    }
-  );
+const addEvent = (input) => {
+  if (localStorage["useChromium"]) {
+    chrome.identity.launchWebAuthFlow({
+      url: "https://rcapi.retrorocket.biz/try",
+      interactive: true
+    }, responseUrl => {
+      const url = new URL(responseUrl);
+      const accessToken = url.hash.split("=")[1];
+      addEventRequest(input, accessToken);
+    });
+  } else {
+    chrome.identity.getAuthToken({
+      'interactive': true
+    }, accessToken => {
+      addEventRequest(input, accessToken);
+    });
+  }
 };
 
 /**
@@ -160,54 +175,55 @@ const createAndAddEventInput = () => {
 
 const fetchCalendarId = (accessToken) => {
 
-  const xhr = new XMLHttpRequest();
-
-  xhr.onloadend = () => {
-    if (xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
+  fetch("https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=owner", {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    }
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
       const list = data.items;
       for (let i = 0; i < list.length; i++) {
         $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
       }
       $("#selected-calendar").val(localStorage["calenId"]);
+    })
+    .catch(error => {
+      if (error.message === "401") {
+        chrome.identity.removeCachedAuthToken({
+          'token': accessToken
+        },
+          () => {
+            Swal.fire({
+              title: "Invalid AccessToken",
+              text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。",
+              animation: false,
+              onClose: () => {
+                window.close();
+              },
+            });
 
-    } else if (xhr.status === 401) {
-      const data = JSON.parse(xhr.responseText);
-      chrome.identity.removeCachedAuthToken({
-        'token': accessToken
-      },
-        () => {
-          Swal.fire({
-            title: "Invalid AccessToken",
-            text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。 " + data.error.code + " : " + data.error.message,
-            animation: false,
-            onClose: () => {
-              window.close();
-            },
           });
+        return;
 
+      } else {
+        Swal.fire({
+          title: "Acquisition failure",
+          text: "リストの取得に失敗しました。ウインドウを閉じます",
+          animation: false,
+          onClose: () => {
+            window.close();
+          }
         });
-      return;
-
-    } else {
-      Swal.fire({
-        title: "Acquisition failure",
-        text: "リストの取得に失敗しました。ウインドウを閉じます",
-        animation: false,
-        onClose: () => {
-          window.close();
-        }
-      });
-      return;
-    }
-  };
-  xhr.open('GET',
-    "https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=owner",
-    true);
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken);
-  xhr.send(null);
-
+        return;
+      }
+    })
 };
 
 /**
@@ -304,13 +320,25 @@ chrome.tabs.sendMessage(tabId, {
 }, response => {
   convertSelectedTextToForm(response.message);
   // カレンダーIDのセット
-  chrome.identity.getAuthToken({
-    'interactive': true
-  },
-    accessToken => {
-      fetchCalendarId(accessToken)
-    }
-  );
+
+  if (localStorage["useChromium"]) {
+    chrome.identity.launchWebAuthFlow({
+      url: "https://rcapi.retrorocket.biz/try",
+      interactive: true
+    }, responseUrl => {
+      const url = new URL(responseUrl);
+      const accessToken = url.hash.split("=")[1];
+      fetchCalendarId(accessToken);
+    });
+  } else {
+    chrome.identity.getAuthToken({
+      'interactive': true
+    },
+      accessToken => {
+        fetchCalendarId(accessToken)
+      }
+    );
+  }
 });
 
 // SweetAlert向けに文字列をサニタイズする
