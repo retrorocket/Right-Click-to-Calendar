@@ -58,12 +58,11 @@ const loadCalendarIdRequest = (accessToken) => {
           'token': accessToken
         },
           () => {
-            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください");
+            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください。");
             $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
             localStorage.removeItem("calenId");
             chrome.storage.local.remove("calenId");
           });
-        return;
       } else {
         alert("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
         $("#check").text("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
