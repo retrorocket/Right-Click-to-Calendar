@@ -1,5 +1,6 @@
 import { expDefault } from './expdefault.js';
 import { expDate } from './expdate.js';
+import { checkToken } from './tokenutil.js';
 
 /**
  * イベントをカレンダーに投稿する
@@ -106,14 +107,10 @@ const addEventRequest = (input, accessToken) => {
 
 const addEvent = (input) => {
   if (localStorage["useChromium"]) {
-    chrome.identity.launchWebAuthFlow({
-      url: "https://rcapi.retrorocket.biz/try",
-      interactive: true
-    }, responseUrl => {
-      const url = new URL(responseUrl);
-      const accessToken = url.hash.split("=")[1];
-      addEventRequest(input, accessToken);
-    });
+    checkToken(localStorage["accessToken"])
+      .then(() => {
+        addEventRequest(input, localStorage["accessToken"])
+      })
   } else {
     chrome.identity.getAuthToken({
       'interactive': true
@@ -322,14 +319,10 @@ chrome.tabs.sendMessage(tabId, {
   // カレンダーIDのセット
 
   if (localStorage["useChromium"]) {
-    chrome.identity.launchWebAuthFlow({
-      url: "https://rcapi.retrorocket.biz/try",
-      interactive: true
-    }, responseUrl => {
-      const url = new URL(responseUrl);
-      const accessToken = url.hash.split("=")[1];
-      fetchCalendarId(accessToken);
-    });
+    checkToken(localStorage["accessToken"])
+      .then(() => {
+        fetchCalendarId(localStorage["accessToken"])
+      })
   } else {
     chrome.identity.getAuthToken({
       'interactive': true
