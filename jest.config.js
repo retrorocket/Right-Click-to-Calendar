@@ -4,6 +4,11 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['app/assets/js/*.{js,ts}'],
   coverageDirectory: 'coverage',
+  resetMocks: false,
+  testEnvironment: "jest-environment-jsdom-global",
+  setupFiles: [
+    "jest-localstorage-mock",
+  ],
   reporters: [
     'default',
     [

@@ -9,7 +9,7 @@
   <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
 
   <script src="./assets/js/vendor/jquery.min.js" defer></script>
-  <script src="./assets/js/options.js" defer></script>
+  <script type="module" src="./assets/js/options.js"></script>
   <style>
     h1 {
       font-size: 2.3rem;
@@ -55,6 +55,24 @@
           <input type="checkbox" id="detail-switch"> <span style="font-weight:bold">選択したテキストを「予定の詳細」にセットする</span>
         </label>
         <p>正規表現編集がオンの場合は、設定した正規表現を優先します。</p>
+        <label>
+          <input type="checkbox" id="chromium-switch"> <span style="font-weight:bold">Chromium派生ブラウザ（Edge, Vivaldi
+            etc...）を使用する
+            （ベータ）</span>
+        </label>
+        <p>Chromium派生ブラウザを使用する場合はチェックを入れた後、このページをリロードしてください。</p>
+        <h6>承認手順・注意点</h6>
+        <ul>
+          <li>リロード後に表示されるOAuth同意画面で、「カレンダーの参照、ダウンロード」「すべてのカレンダーの予定の表示と編集」にチェックを入れて権限を承認してください。</li>
+          <li>予定の登録でエラーが発生する場合、権限承認後にアクティビティ確認を実行してください。</li>
+          <li>トークンを取得する目的で retrorocket.biz 上のエンドポイントと通信を行います。</li>
+          <li>本機能により生じた損害等の一切の責任を負いかねます。</li>
+          <li>本機能に関しては、<a
+              href="https://github.com/retrorocket/Right-Click-to-Calendar">GitHub</a>のissue・Discussion・PRからのみ質問・不具合報告・ご意見を受け付けます。
+          </li>
+        </ul>
+
+        </p>
       </div>
       <hr>
     </div>

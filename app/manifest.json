@@ -18,7 +18,7 @@
     "identity",
     "storage"
   ],
-  "version": "3.9.6",
+  "version": "3.10",
   "manifest_version": 3,
   "oauth2": {
     "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
