@@ -76,44 +76,16 @@ const loadCalendarIdRequest = (accessToken) => {
  * カレンダー一覧の読み込みとChromiumの場合はrefreshTokenを取得する
  */
 const loadCalendarId = () => {
-
-  // FIXME クソコードが過ぎるので、ある程度動作実績が上がった後にリファクタリングしてください
   if (localStorage["useChromium"]) {
-    if (!localStorage["accessToken"] || !localStorage["refreshToken"]) {
-      chrome.identity.launchWebAuthFlow({
-        url: "https://rcapi.retrorocket.biz/try",
-        interactive: true
-      }, responseUrl => {
-        if (chrome.runtime.lastError) {
-          localStorage.removeItem("calenId");
-          chrome.storage.local.remove("calenId");
-          $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
-          alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
-        } else {
-          const url = new URL(responseUrl);
-          // searchParams を使いたいので適当なURLにくっつける
-          const urlsearch = new URL("http://example.com?" + url.hash.slice(1));
-          const accessToken = urlsearch.searchParams.get("access_token");
-          const refreshToken = urlsearch.searchParams.get("refresh_token");
-          localStorage["accessToken"] = accessToken;
-          localStorage["refreshToken"] = refreshToken;
-          loadCalendarIdRequest(accessToken);
-        }
-      })
-    } else {
-      checkToken(localStorage["accessToken"])
-        .then(() => {
-          loadCalendarIdRequest(localStorage["accessToken"]);
-        })
-        .catch(() => {
-          localStorage.removeItem("calenId");
-          chrome.storage.local.remove("calenId");
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
-          alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
-        })
-    }
+    localStorage.removeItem("refreshToken");
+    checkToken(localStorage["accessToken"])
+      .then(() => loadCalendarIdRequest(localStorage["accessToken"]))
+      .catch(() => {
+        localStorage.removeItem("calenId");
+        chrome.storage.local.remove("calenId");
+        $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
+      });
   } else {
     chrome.identity.getAuthToken({
       'interactive': true
