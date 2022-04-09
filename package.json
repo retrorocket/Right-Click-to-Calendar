@@ -18,7 +18,7 @@
     "jest-junit": "^13.0.0",
     "jest-localstorage-mock": "^2.4.18",
     "jquery": "^3.6.0",
-    "moment": "^2.29.1"
+    "moment": "^2.29.2"
   },
   "scripts": {
     "test": "jest"
