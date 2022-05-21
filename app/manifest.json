@@ -3,22 +3,21 @@
     "service_worker": "background.js"
   },
   "icons": {
-    "128": "icons/128.png",
     "16": "icons/16.png",
-    "48": "icons/48.png",
     "19": "icons/19.png",
-    "38": "icons/38.png"
+    "38": "icons/38.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
   },
   "name": "Right-Click to Calendar",
   "description": "選択したテキストをGoogleカレンダーに投稿できる拡張です。",
   "options_page": "options.html",
   "permissions": [
-    "tabs",
     "contextMenus",
     "identity",
     "storage"
   ],
-  "version": "3.11.1",
+  "version": "3.12",
   "manifest_version": 3,
   "oauth2": {
     "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
