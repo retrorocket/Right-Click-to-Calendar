@@ -126,12 +126,12 @@ const addEvent = (input) => {
 const createAndAddEventInput = () => {
 
   let isValidRange = false;
-  const fromDateVal = $("#from-date").val();
-  const fromTimeVal = $("#from-time").val();
-  let toDateVal = $("#to-date").val();
-  const toTimeVal = $("#to-time").val();
+  const fromDateVal = document.getElementById("from-date").value;
+  const fromTimeVal = document.getElementById("from-time").value;
+  let toDateVal = document.getElementById("to-date").value;
+  const toTimeVal = document.getElementById("to-time").value;
 
-  if ($('#allday').prop('checked')) {
+  if (document.getElementById("allday").checked) {
     // 終日設定は最終日に24時間足さないと認識されない
     const toDate = moment(toDateVal);
     toDate.add(1, "days");
@@ -147,16 +147,16 @@ const createAndAddEventInput = () => {
 
   if (isValidRange) {
     const input = {
-      title: $("#tit").val(),
-      detail: $("#detail").val(),
-      location: $("#location").val(),
+      title: document.getElementById("tit").value,
+      detail: document.getElementById("detail").value,
+      location: document.getElementById("location").value,
       fromDate: fromDateVal,
       fromTime: fromTimeVal,
       toDate: toDateVal,
       toTime: toTimeVal,
-      allday: $("#allday").prop("checked"),
-      calendar: $("#selected-calendar").val(),
-      hangoutsMeet: $("#hangoutsMeet").prop("checked"),
+      allday: document.getElementById("allday").checked,
+      calendar: document.getElementById("selected-calendar").value,
+      hangoutsMeet: document.getElementById("hangoutsMeet").checked,
     };
 
     //イベント投稿
@@ -187,9 +187,12 @@ const fetchCalendarId = (accessToken) => {
     .then(data => {
       const list = data.items;
       for (let i = 0; i < list.length; i++) {
-        $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
+        const child = document.createElement('option');
+        child.textContent = list[i].summary;
+        child.value = list[i].id;
+        document.getElementById("selected-calendar").appendChild(child);
       }
-      $("#selected-calendar").val(localStorage["calenId"]);
+      document.getElementById("selected-calendar").value = localStorage["calenId"];
     })
     .catch(error => {
       if (error.message === "401") {
@@ -265,43 +268,47 @@ export const convertSelectedTextToForm = (stext) => {
     if (args.start.tf) {
       fromDate.add(1, "days");
     }
-    $("#from-date").val(fromDate.format("YYYY-MM-DD"));
+    document.getElementById("from-date").value = fromDate.format("YYYY-MM-DD");
   }
   if (fromTime.isValid()) {
-    $("#from-time").val(fromTime.format("HH:mm"));
+    document.getElementById("from-time").value = fromTime.format("HH:mm");
   }
   if (toDate.isValid()) {
     if (args.end.tf) {
       toDate.add(1, "days");
     }
-    $("#to-date").val(toDate.format("YYYY-MM-DD"));
+    document.getElementById("to-date").value = toDate.format("YYYY-MM-DD");
   }
   if (toTime.isValid()) {
-    $("#to-time").val(toTime.format("HH:mm"));
+    document.getElementById("to-time").value = toTime.format("HH:mm");
   }
 
-  $("#tit").val(args.title);
-  $("#main-text").val(args.selected_text);
-  $("#detail").val(args.detail);
-  $("#location").val(args.location);
+  document.getElementById("tit").value = args.title;
+  document.getElementById("main-text").value = args.selected_text;
+  document.getElementById("detail").value = args.detail;
+  document.getElementById("location").value = args.location;
 };
 
 // イベント投稿
-$("#sub").on("click", () => {
+document.getElementById("sub").addEventListener("click", () => {
   createAndAddEventInput()
 });
 
 // 終日設定
-$("#allday").on("click", event => {
-  if ($(event.currentTarget).prop('checked')) {
-    $('input[type="time"]').prop("disabled", true);
+document.getElementById("allday").addEventListener('click', event => {
+  if (event.target.checked) {
+    document.querySelectorAll('input[type="time"]').forEach(elem => {
+      elem.disabled = true;
+    });
   } else {
-    $('input[type="time"]').prop("disabled", false);
+    document.querySelectorAll('input[type="time"]').forEach(elem => {
+      elem.disabled = false;
+    });
   }
 });
 
 // カレンダーを直接表示
-$("#create-cal").on("click", () => {
+document.getElementById("create-cal").addEventListener("click", () => {
   chrome.windows.create({
     "url": "https://calendar.google.com/calendar/",
     "width": 800,
