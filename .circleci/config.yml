@@ -88,4 +88,4 @@ workflows:
           filters:
             branches: # 指定ブランチでのみ実行する
               only:
-                - develop
+                - main

@@ -1,7 +1,6 @@
-import { convertSelectedTextToForm } from '../app/assets/js/setevent';
-
 document.body.innerHTML =
   '<form>'
+  + '<legend>イベント設定 <a class="btn btn-secondary btn-sm" id="create-cal" href="#">カレンダーを表示</a></legend>'
   + '<input type="text" class="form-control" id="tit" placeholder="イベントのタイトル">'
   + '<input type="date" class="form-control" id="from-date" required>'
   + '<input type="time" class="form-control" id="from-time">'
@@ -15,9 +14,10 @@ document.body.innerHTML =
   + '<button type="button" class="btn btn-primary" id="sub">Submit</button>'
 '</form>';
 
-test("イベントをフォームにセットする_詳細スイッチ無効", () => {
+const setevent = require("../app/assets/js/setevent");
 
-  convertSelectedTextToForm("2020年9月9日 28:45　テスト\n場所 あいうえお\n2020年9月21日 28:48");
+test("イベントをフォームにセットする_詳細スイッチ無効", () => {
+  setevent.convertSelectedTextToForm("2020年9月9日 28:45　テスト\n場所 あいうえお\n2020年9月21日 28:48");
 
   expect(document.getElementById("tit").value).toEqual("テスト");
   expect(document.getElementById("main-text").value).toEqual("2020年9月9日 28:45　テスト\n場所 あいうえお\n2020年9月21日 28:48");
@@ -32,9 +32,8 @@ test("イベントをフォームにセットする_詳細スイッチ無効", (
 });
 
 test("イベントをフォームにセットする_詳細スイッチ有効", () => {
-
   localStorage.setItem("detailSwitch", true);
-  convertSelectedTextToForm("2020年9月9日 28:45　テスト\n場所 あいうえお\n2020年9月21日 28:48");
+  setevent.convertSelectedTextToForm("2020年9月9日 28:45　テスト\n場所 あいうえお\n2020年9月21日 28:48");
 
   expect(document.getElementById("tit").value).toEqual("テスト");
   expect(document.getElementById("main-text").value).toEqual("2020年9月9日 28:45　テスト\n場所 あいうえお\n2020年9月21日 28:48");

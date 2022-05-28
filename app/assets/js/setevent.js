@@ -296,15 +296,9 @@ document.getElementById("sub").addEventListener("click", () => {
 
 // 終日設定
 document.getElementById("allday").addEventListener('click', event => {
-  if (event.target.checked) {
-    document.querySelectorAll('input[type="time"]').forEach(elem => {
-      elem.disabled = true;
-    });
-  } else {
-    document.querySelectorAll('input[type="time"]').forEach(elem => {
-      elem.disabled = false;
-    });
-  }
+  document.querySelectorAll('input[type="time"]').forEach(elem => {
+    elem.disabled = event.target.checked;
+  });
 });
 
 // カレンダーを直接表示

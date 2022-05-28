@@ -19,7 +19,7 @@ const tokenRefresh = () => {
       } else {
         const url = new URL(responseUrl);
         // searchParams を使いたいので適当なURLにくっつける
-        const urlsearch = new URL("http://example.com?" + url.hash.slice(1));
+        const urlsearch = new URL("http://127.0.0.1?" + url.hash.slice(1));
         const accessToken = urlsearch.searchParams.get("access_token");
         localStorage["accessToken"] = accessToken;
         resolve(accessToken);
