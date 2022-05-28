@@ -50,7 +50,7 @@ const loadCalendarIdRequest = (accessToken) => {
 
       document.getElementById("selected-calendar").value = localStorage["calenId"];
       document.getElementById("setter").style.display = "block";
-      document.getElementById("check").textContent = "アプリケーションを承認済みです。";
+      document.getElementById("check").textContent = "Right Click to CalendarからGoogle Calendarへのアクセスを承認済みです。";
       if (location.search.split("=")[1]) {
         alert("アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。");
       }
@@ -61,8 +61,8 @@ const loadCalendarIdRequest = (accessToken) => {
           'token': accessToken
         },
           () => {
-            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください。");
-            document.getElementById("check").textContent = "このページをリロードして再度アプリケーションを承認してください。";
+            alert("無効なアクセストークンを削除しました。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
+            document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
             localStorage.removeItem("calenId");
             chrome.storage.local.remove("calenId");
           });
@@ -86,8 +86,8 @@ const loadCalendarId = () => {
       .catch(() => {
         localStorage.removeItem("calenId");
         chrome.storage.local.remove("calenId");
-        document.getElementById("check").textContent = "このページをリロードして再度アプリケーションを承認してください。";
-        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
+        document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
       });
   } else {
     chrome.identity.getAuthToken({
@@ -96,8 +96,8 @@ const loadCalendarId = () => {
       if (chrome.runtime.lastError) {
         localStorage.removeItem("calenId");
         chrome.storage.local.remove("calenId");
-        document.getElementById("check").textContent = "このページをリロードして再度アプリケーションを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
-        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。");
+        document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。");
       } else {
         loadCalendarIdRequest(accessToken);
       }
@@ -127,7 +127,7 @@ const checkRegExps = () => {
 };
 
 // ページ読み込み時の初期設定
-document.getElementById("check").textContent = "アプリケーションが承認されていません。自動で承認用のページが表示されます。";
+document.getElementById("check").textContent = "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
 document.getElementById("selected-calendar").innerHTML = "";
 document.getElementById("setter").style.display = "none";
 // カレンダーの読み込み
