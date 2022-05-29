@@ -9,7 +9,7 @@ const setRegExps = () => {
     if (id_name === "reg_set") {
       return true; // continue;
     }
-    document.getElementById(id_name).value = localStorage[id_name];
+    document.getElementById(id_name).value = localStorage[id_name] || "";
   });
   if (localStorage["check_str"]) {
     document.getElementById("check_str").value = localStorage["check_str"];
@@ -50,7 +50,7 @@ const loadCalendarIdRequest = (accessToken) => {
 
       document.getElementById("selected-calendar").value = localStorage["calenId"];
       document.getElementById("setter").style.display = "block";
-      document.getElementById("check").textContent = "Right Click to CalendarからGoogle Calendarへのアクセスを承認済みです。";
+      document.getElementById("check").textContent = "Google Calendarへのアクセスを承認済みです。";
       if (location.search.split("=")[1]) {
         alert("アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。");
       }

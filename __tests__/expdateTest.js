@@ -17,21 +17,21 @@ test("ユーザ設定正規表現テスト_詳細スイッチ無効", () => {
   localStorage.setItem("title", 6);
   localStorage.setItem("location", 7);
 
-  expect(expDate("2019年4月12日 12:44 映画公開日 場所:東宝系映画館")).toStrictEqual(
+  expect(expDate("2019年04月12日 12:44 映画公開日 場所:東宝系映画館")).toStrictEqual(
     {
       "start": {
-        "year": "2019",
-        "month": "4",
-        "day": "12",
-        "hour": "12",
-        "min": "44",
+        "year": 2019,
+        "month": 4,
+        "day": 12,
+        "hour": 12,
+        "min": 44,
       },
       "end": {
-        "year": "2019",
-        "month": "4",
-        "day": "12",
-        "hour": "12",
-        "min": "44",
+        "year": 2019,
+        "month": 4,
+        "day": 12,
+        "hour": 12,
+        "min": 44,
       },
       "title": "映画公開日",
       "location": "東宝系映画館",
@@ -63,18 +63,18 @@ test("ユーザ設定正規表現テスト_詳細スイッチ有効", () => {
   expect(expDate("2019年4月12日 12:44 映画公開日 場所:東宝系映画館")).toStrictEqual(
     {
       "start": {
-        "year": "2019",
-        "month": "4",
-        "day": "12",
-        "hour": "12",
-        "min": "44",
+        "year": 2019,
+        "month": 4,
+        "day": 12,
+        "hour": 12,
+        "min": 44,
       },
       "end": {
-        "year": "2019",
-        "month": "4",
-        "day": "12",
-        "hour": "12",
-        "min": "44",
+        "year": 2019,
+        "month": 4,
+        "day": 12,
+        "hour": 12,
+        "min": 44,
       },
       "title": "映画公開日",
       "location": "東宝系映画館",
