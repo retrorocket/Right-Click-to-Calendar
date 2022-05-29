@@ -9,8 +9,7 @@
   <!-- Bootstrap core CSS -->
   <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
 
-  <script src="./assets/js/vendor/sweetalert2.all.min.js" defer></script>
-  <script src="./assets/js/vendor/moment.min.js" defer></script>
+  <script src="./assets/js/vendor/luxon.min.js" defer></script>
 
   <script type="module" src="./assets/js/setevent.js"></script>
 </head>
@@ -32,31 +31,45 @@
             <input type="text" class="form-control" id="tit" placeholder="イベントのタイトル">
           </div>
 
-          <div class="form-group row">
-            <label for="from-date" class="col-3 col-form-label">🕛 開始日時</label>
-            <div class="col-5">
-              <input type="date" class="form-control" id="from-date" required>
-            </div>
-            <div class="col-4">
-              <input type="time" class="form-control" id="from-time">
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="to-date" class="col-3 col-form-label">🕕 終了日時</label>
-            <div class="col-5">
-              <input type="date" class="form-control" id="to-date" required>
-            </div>
-            <div class="col-4">
-              <input type="time" class="form-control" id="to-time">
-            </div>
-          </div>
-
           <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="allday">
-              <label class="form-check-label" for="allday">
-                終日設定
-              </label>
+            <div class="form-row mb-2">
+              <label for="from-date" class="col-2 col-form-label">🕛 開始</label>
+              <div class="col-5">
+                <input type="date" class="form-control" id="from-date" required>
+              </div>
+              <div class="col-5">
+                <input type="time" class="form-control" id="from-time">
+              </div>
+            </div>
+
+            <div class="form-row mb-2">
+              <label for="to-date" class="col-2 col-form-label">🕕 終了</label>
+              <div class="col-5">
+                <input type="date" class="form-control" id="to-date" required>
+              </div>
+              <div class="col-5">
+                <input type="time" class="form-control" id="to-time">
+              </div>
+            </div>
+
+            <div class="form-row align-items-center">
+              <div class="col-3">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="allday">
+                  <label class="form-check-label" for="allday">
+                    🌃 終日設定
+                  </label>
+                </div>
+              </div>
+              <div class="col-2">
+                <div class="form-check text-right">
+                  <input class="form-check-input" type="checkbox" id="to-timezone">
+                  <label for="to-timezone" class="form-check-label">🌍 TZ</label>
+                </div>
+              </div>
+              <div class="col-7">
+                <select class="form-control" id="timezone-list"></select>
+              </div>
             </div>
           </div>
 
@@ -79,7 +92,7 @@
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="hangoutsMeet">
               <label class="form-check-label" for="hangoutsMeet">
-                Google MeetのURLを発行する
+                📹 Google MeetのURLを発行する
               </label>
             </div>
           </div>

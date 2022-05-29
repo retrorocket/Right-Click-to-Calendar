@@ -56,14 +56,14 @@ export const expDate = (selectedText) => {
   const args = {
     "start": {
       "year": syear,
-      "month": ((parseInt(smon, 10) - 1) > -1) ? (parseInt(smon, 10) - 1) : smon,
+      "month": smon,
       "day": sday,
       "hour": shour,
       "min": smin
     },
     "end": {
       "year": eyear,
-      "month": ((parseInt(emon, 10) - 1) > -1) ? (parseInt(emon, 10) - 1) : emon,
+      "month": emon,
       "day": eday,
       "hour": ehour,
       "min": emin

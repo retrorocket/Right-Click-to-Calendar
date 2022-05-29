@@ -31,7 +31,7 @@ export const expDefault = (stext) => {
   const detail = localStorage.getItem("detailSwitch") ? stext : "";
 
   // 開始年日付
-  const mm = stext.match(/(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})/);
+  const mm = stext.match(/(\d{2,4})(\/|年|\.|-)(\d{1,2})(\/|月|\.|-)(\d{1,2})/);
   if (mm) {
     syear = parseInt(mm[1], 10);
     if (syear < 100) {
@@ -42,7 +42,7 @@ export const expDefault = (stext) => {
     matched = true;
   } else {
     // 開始日付
-    const m = stext.match(/(\d{1,2})(\/|月)(\d{1,2})/);
+    const m = stext.match(/(\d{1,2})(\/|月|\.|-)(\d{1,2})/);
     if (m) {
       smon = m[1];
       sday = m[3];
@@ -68,7 +68,7 @@ export const expDefault = (stext) => {
   }
 
   // 終了年日付
-  const em = stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{2,4})(\/|年)(\d{1,2})(\/|月)(\d{1,2})(?!\/|\d)/);
+  const em = stext.match(/\d{1,2}(\/|月|\.|-)\d{1,2}(?!\/|\d)[\s\S]*(\d{2,4})(\/|年|\.|-)(\d{1,2})(\/|月|\.|-)(\d{1,2})(?!\/|\d)/);
   if (em) {
     eyear = em[2];
     eyear = parseInt(eyear, 10);
@@ -79,8 +79,8 @@ export const expDefault = (stext) => {
     eday = em[6];
     matched = true;
   } else {
-    const emm = stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{2})(\/|月)(\d{1,2})(?!\/|\d)/) ||
-      stext.match(/\d{1,2}(\/|月)\d{1,2}(?!\/|\d)[\s\S]*(\d{1})(\/|月)(\d{1,2})(?!\/|\d)/);
+    const emm = stext.match(/\d{1,2}(\/|月|\.|-)\d{1,2}(?!\/|\d)[\s\S]*(\d{2})(\/|月|\.|-)(\d{1,2})(?!\/|\d)/) ||
+      stext.match(/\d{1,2}(\/|月|\.|-)\d{1,2}(?!\/|\d)[\s\S]*(\d{1})(\/|月|\.|-)(\d{1,2})(?!\/|\d)/);
     if (emm) {
       emon = emm[2];
       eday = emm[4];
@@ -126,7 +126,7 @@ export const expDefault = (stext) => {
   const args = {
     "start": {
       "year": syear,
-      "month": ((parseInt(smon, 10) - 1) > -1) ? (parseInt(smon, 10) - 1) : smon,
+      "month": smon,
       "day": sday,
       "hour": shour,
       "min": smin,
@@ -134,7 +134,7 @@ export const expDefault = (stext) => {
     },
     "end": {
       "year": eyear,
-      "month": ((parseInt(emon, 10) - 1) > -1) ? (parseInt(emon, 10) - 1) : emon,
+      "month": emon,
       "day": eday,
       "hour": ehour,
       "min": emin,

@@ -3,3 +3,5 @@ app/icons/
 node_modules/
 coverage/
 reports/
+yarn-error.log
+yarn-debug.log

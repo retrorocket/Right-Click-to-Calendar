@@ -3,7 +3,6 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "jquery": true,
     "webextensions": true,
     "jest/globals": true,
     "node": true
@@ -15,10 +14,10 @@
   },
   "rules": {},
   "globals": {
-    "Swal": false,
-    "moment": false
+    "luxon": false
   },
   "plugins": [
-    "jest"
+    "jest",
+    "@babel/plugin-syntax-import-assertions"
   ]
 }
