@@ -6,15 +6,18 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout # ソースコードを作業ディレクトリにチェックアウト
-      - restore_cache: # 依存関係キャッシュを復元
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          name: Yarn パッケージのキャッシュの復元
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
-          name: install-yarn
-          command: yarn
-      - save_cache: # 依存関係キャッシュを保存
-          key: dependency-cache-{{ checksum "yarn.lock" }}
+          name: 依存関係のインストール
+          command: yarn install --immutable
+      - save_cache:
+          name: Yarn パッケージのキャッシュの保存
+          key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - ./node_modules
+            - ~/.cache/yarn
       - persist_to_workspace:
           root: .
           paths:
