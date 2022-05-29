@@ -5,6 +5,7 @@
   "main": "index.js",
   "devDependencies": {
     "@babel/core": "^7.15.8",
+    "@babel/eslint-parser": "^7.18.2",
     "@babel/plugin-syntax-import-assertions": "^7.17.12",
     "@babel/plugin-transform-modules-commonjs": "^7.15.4",
     "@babel/preset-env": "^7.15.8",

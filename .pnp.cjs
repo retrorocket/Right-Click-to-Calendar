@@ -34,6 +34,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@babel/core", "npm:7.18.2"],\
+            ["@babel/eslint-parser", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2"],\
             ["@babel/plugin-syntax-import-assertions", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.17.12"],\
             ["@babel/plugin-transform-modules-commonjs", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2"],\
             ["@babel/preset-env", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2"],\
@@ -101,6 +102,35 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["gensync", "npm:1.0.0-beta.2"],\
             ["json5", "npm:2.2.1"],\
             ["semver", "npm:6.3.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@babel/eslint-parser", [\
+        ["npm:7.18.2", {\
+          "packageLocation": "./.yarn/cache/@babel-eslint-parser-npm-7.18.2-8989f47b38-dc9328cf33.zip/node_modules/@babel/eslint-parser/",\
+          "packageDependencies": [\
+            ["@babel/eslint-parser", "npm:7.18.2"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2", {\
+          "packageLocation": "./.yarn/__virtual__/@babel-eslint-parser-virtual-c43cdf369f/0/cache/@babel-eslint-parser-npm-7.18.2-8989f47b38-dc9328cf33.zip/node_modules/@babel/eslint-parser/",\
+          "packageDependencies": [\
+            ["@babel/eslint-parser", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2"],\
+            ["@babel/core", "npm:7.18.2"],\
+            ["@types/babel__core", null],\
+            ["@types/eslint", null],\
+            ["eslint", "npm:8.16.0"],\
+            ["eslint-scope", "npm:5.1.1"],\
+            ["eslint-visitor-keys", "npm:2.1.0"],\
+            ["semver", "npm:6.3.0"]\
+          ],\
+          "packagePeers": [\
+            "@babel/core",\
+            "@types/babel__core",\
+            "@types/eslint",\
+            "eslint"\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6900,6 +6930,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["right-click-to-calendar", "workspace:."],\
             ["@babel/core", "npm:7.18.2"],\
+            ["@babel/eslint-parser", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2"],\
             ["@babel/plugin-syntax-import-assertions", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.17.12"],\
             ["@babel/plugin-transform-modules-commonjs", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2"],\
             ["@babel/preset-env", "virtual:b1c6dcf4f47af7d72e65a6779a1680ff30002a292b11ce7405de43327472bf7d7afc1cfc0226f513a78d4803008cc254c04b2c1dabc32a1c62101ce594740961#npm:7.18.2"],\

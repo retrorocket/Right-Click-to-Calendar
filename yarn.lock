@@ -54,6 +54,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/eslint-parser@npm:^7.18.2":
+  version: 7.18.2
+  resolution: "@babel/eslint-parser@npm:7.18.2"
+  dependencies:
+    eslint-scope: ^5.1.1
+    eslint-visitor-keys: ^2.1.0
+    semver: ^6.3.0
+  peerDependencies:
+    "@babel/core": ">=7.11.0"
+    eslint: ^7.5.0 || ^8.0.0
+  checksum: dc9328cf3304b25c9029682e6b6196761e18d3ab80d66c3085a69c6f240fa2db91b824a61672e94139e73683b7ceeefe9ff58acac1ee89fe73274007b16e43d5
+  languageName: node
+  linkType: hard
+
 "@babel/generator@npm:^7.18.2, @babel/generator@npm:^7.7.2":
   version: 7.18.2
   resolution: "@babel/generator@npm:7.18.2"
@@ -2878,7 +2892,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-visitor-keys@npm:^2.0.0":
+"eslint-visitor-keys@npm:^2.0.0, eslint-visitor-keys@npm:^2.1.0":
   version: 2.1.0
   resolution: "eslint-visitor-keys@npm:2.1.0"
   checksum: e3081d7dd2611a35f0388bbdc2f5da60b3a3c5b8b6e928daffff7391146b434d691577aa95064c8b7faad0b8a680266bcda0a42439c18c717b80e6718d7e267d
@@ -5070,6 +5084,7 @@ __metadata:
   resolution: "right-click-to-calendar@workspace:."
   dependencies:
     "@babel/core": ^7.15.8
+    "@babel/eslint-parser": ^7.18.2
     "@babel/plugin-syntax-import-assertions": ^7.17.12
     "@babel/plugin-transform-modules-commonjs": ^7.15.4
     "@babel/preset-env": ^7.15.8
