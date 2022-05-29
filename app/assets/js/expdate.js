@@ -31,18 +31,18 @@ export const expDate = (selectedText) => {
   /** 正規表現で日付処理 **/
   /** setting **/
   // start
-  const syear = checkDates("start_year", max, match_arr) || d.getFullYear();
-  const smon = checkDates("start_mon", max, match_arr) || d.getMonth() + 1;
-  const sday = checkDates("start_day", max, match_arr) || d.getDate();
-  const shour = checkDates("start_hour", max, match_arr) || d.getHours();
-  const smin = checkDates("start_min", max, match_arr) || d.getMinutes();
+  const syear = parseInt(checkDates("start_year", max, match_arr), 10) || d.getFullYear();
+  const smon = parseInt(checkDates("start_mon", max, match_arr), 10) || d.getMonth() + 1;
+  const sday = parseInt(checkDates("start_day", max, match_arr), 10) || d.getDate();
+  const shour = parseInt(checkDates("start_hour", max, match_arr), 10) || d.getHours();
+  const smin = parseInt(checkDates("start_min", max, match_arr), 10) || d.getMinutes();
 
   // end
-  const eyear = checkDates("end_year", max, match_arr) || d.getFullYear();
-  const emon = checkDates("end_mon", max, match_arr) || d.getMonth() + 1;
-  const eday = checkDates("end_day", max, match_arr) || d.getDate();
-  const ehour = checkDates("end_hour", max, match_arr) || d.getHours();
-  const emin = checkDates("end_min", max, match_arr) || d.getMinutes();
+  const eyear = parseInt(checkDates("end_year", max, match_arr), 10) || d.getFullYear();
+  const emon = parseInt(checkDates("end_mon", max, match_arr), 10) || d.getMonth() + 1;
+  const eday = parseInt(checkDates("end_day", max, match_arr), 10) || d.getDate();
+  const ehour = parseInt(checkDates("end_hour", max, match_arr), 10) || d.getHours();
+  const emin = parseInt(checkDates("end_min", max, match_arr), 10) || d.getMinutes();
 
   // title
   const title = checkDates("title", max, match_arr) || base_str;
