@@ -4,15 +4,15 @@ import { checkToken } from './tokenutil.js';
  * 正規表現の設定
  */
 const setRegExps = () => {
-  $("#exp-field").find(":input").each((i, elem) => {
-    const id_name = $(elem).attr("id");
+  document.getElementById("exp-field").querySelectorAll("input").forEach(elem => {
+    const id_name = elem.getAttribute("id");
     if (id_name === "reg_set") {
       return true; // continue;
     }
-    $("#" + id_name).val(localStorage[id_name]);
+    document.getElementById(id_name).value = localStorage[id_name] || "";
   });
   if (localStorage["check_str"]) {
-    $("#check_str").val(localStorage["check_str"]);
+    document.getElementById("check_str").value = localStorage["check_str"];
   }
 };
 
@@ -42,12 +42,15 @@ const loadCalendarIdRequest = (accessToken) => {
         });
       }
       for (let i = 0; i < list.length; i++) {
-        $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
+        const child = document.createElement('option');
+        child.textContent = list[i].summary;
+        child.value = list[i].id;
+        document.getElementById("selected-calendar").appendChild(child);
       }
 
-      $("#selected-calendar").val(localStorage["calenId"]);
-      $("#setter").show();
-      $("#check").text("アプリケーションを承認済みです。");
+      document.getElementById("selected-calendar").value = localStorage["calenId"];
+      document.getElementById("setter").style.display = "block";
+      document.getElementById("check").textContent = "Google Calendarへのアクセスを承認済みです。";
       if (location.search.split("=")[1]) {
         alert("アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。");
       }
@@ -58,14 +61,14 @@ const loadCalendarIdRequest = (accessToken) => {
           'token': accessToken
         },
           () => {
-            alert("無効なアクセストークンを削除しました。このページをリロードして再度アプリケーションを承認してください。");
-            $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
+            alert("無効なアクセストークンを削除しました。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
+            document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
             localStorage.removeItem("calenId");
             chrome.storage.local.remove("calenId");
           });
       } else {
         alert("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
-        $("#check").text("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
+        document.getElementById("check").textContent = "カレンダーリストの取得に失敗しました。このページをリロードしてください。";
         localStorage.removeItem("calenId");
         chrome.storage.local.remove("calenId");
       }
@@ -83,8 +86,8 @@ const loadCalendarId = () => {
       .catch(() => {
         localStorage.removeItem("calenId");
         chrome.storage.local.remove("calenId");
-        $("#check").text("このページをリロードして再度アプリケーションを承認してください。");
-        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。");
+        document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
       });
   } else {
     chrome.identity.getAuthToken({
@@ -93,8 +96,8 @@ const loadCalendarId = () => {
       if (chrome.runtime.lastError) {
         localStorage.removeItem("calenId");
         chrome.storage.local.remove("calenId");
-        $("#check").text("このページをリロードして再度アプリケーションを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。");
-        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度アプリケーションを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。");
+        document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
+        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。");
       } else {
         loadCalendarIdRequest(accessToken);
       }
@@ -106,65 +109,69 @@ const loadCalendarId = () => {
  * 正規表現のチェック
  */
 const checkRegExps = () => {
-  const regExp = new RegExp($("#exp_str").val());
-  const checkString = $("#check_str").val();
+  const regExp = new RegExp(document.getElementById("exp_str").value);
+  const checkString = document.getElementById("check_str").value;
   const matches = checkString.match(regExp);
   if (!matches) {
-    $("#regexp-group").append("<li>検証用文字列が正規表現にマッチしません。</li>");
+    const child = document.createElement('li');
+    child.textContent = "検証用文字列が正規表現にマッチしません。";
+    document.getElementById("regexp-group").appendChild(child);
     return false;
   }
   const machedLength = matches.length;
   for (let i = 0; i < machedLength; i++) {
-    $("#regexp-group").append("<li>group(" + i + "): " + matches[i] + "</li>");
+    const child = document.createElement('li');
+    child.textContent = `group(${i}): ${matches[i]}`;
+    document.getElementById("regexp-group").appendChild(child);
   }
 };
 
 // ページ読み込み時の初期設定
-$("#check").text("アプリケーションが承認されていません。自動で承認用のページが表示されます。");
-$("#selected-calendar").empty();
-$("#setter").hide();
+document.getElementById("check").textContent = "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
+document.getElementById("selected-calendar").innerHTML = "";
+document.getElementById("setter").style.display = "none";
 // カレンダーの読み込み
 loadCalendarId();
 
 // デフォルトで登録するカレンダーの設定
-$("#sub").on("click", () => {
-  localStorage["calenId"] = $("#selected-calendar").val();
-  $("#comp").text("設定を保存しました");
+document.getElementById("sub").addEventListener('click', () => {
+  localStorage["calenId"] = document.getElementById("selected-calendar").value;
+  document.getElementById("comp").textContent = "設定を保存しました";
 });
-$("#selected-calendar").change(() => {
-  $("#comp").text("");
+document.getElementById("selected-calendar").addEventListener("change", () => {
+  document.getElementById("comp").textContent = "";
 });
 
 // 正規表現設定用のフォームの表示
-$("#exp-field").hide();
-$("#exp-test-field").hide();
+document.getElementById("exp-field").style.display = "none";
+document.getElementById("exp-test-field").style.display = "none";
 if (localStorage["expSwitch"]) {
-  $("#exp-switch").prop("checked", true);
-  $("#exp-field").show();
-  $("#exp-test-field").show();
+  document.getElementById("exp-switch").checked = true;
+  document.getElementById("exp-field").style.display = "block";
+  document.getElementById("exp-test-field").style.display = "block";
   setRegExps();
 }
 
 // 正規表現設定用のフォームの表示
-$("#exp-switch").on("click", event => {
-  if ($(event.currentTarget).prop('checked')) {
+document.getElementById("exp-switch").addEventListener('click', event => {
+  if (event.target.checked) {
     localStorage["expSwitch"] = true;
-    $("#exp-field").show();
-    $("#exp-test-field").show();
+    document.getElementById("exp-field").style.display = "block";
+    document.getElementById("exp-test-field").style.display = "block";
     setRegExps();
   } else {
     localStorage.removeItem("expSwitch");
-    $("#exp-field").hide();
-    $("#exp-test-field").hide();
+    document.getElementById("exp-field").style.display = "none";
+    document.getElementById("exp-test-field").style.display = "none";
   }
 });
 
 // 選択したテキストを詳細に設定する
 if (localStorage["detailSwitch"]) {
-  $("#detail-switch").prop("checked", true);
+  document.getElementById("detail-switch").checked = true;
 }
-$("#detail-switch").on("click", event => {
-  if ($(event.currentTarget).prop('checked')) {
+document.getElementById("detail-switch").addEventListener('click', event => {
+  if (event.target.checked) {
     localStorage["detailSwitch"] = true;
   } else {
     localStorage.removeItem("detailSwitch");
@@ -173,10 +180,10 @@ $("#detail-switch").on("click", event => {
 
 // Chromiumを使用する
 if (localStorage["useChromium"]) {
-  $("#chromium-switch").prop("checked", true);
+  document.getElementById("chromium-switch").checked = true;
 }
-$("#chromium-switch").on("click", event => {
-  if ($(event.currentTarget).prop('checked')) {
+document.getElementById("chromium-switch").addEventListener('click', event => {
+  if (event.target.checked) {
     localStorage["useChromium"] = true;
   } else {
     localStorage.removeItem("useChromium");
@@ -185,20 +192,20 @@ $("#chromium-switch").on("click", event => {
 
 
 // 正規表現の設定
-$("#reg-set").on("click", () => {
-  $("#exp-field").find(":input").each((i, elem) => {
-    const id_name = $(elem).attr("id");
+document.getElementById("reg-set").addEventListener('click', () => {
+  document.getElementById("exp-field").querySelectorAll("input").forEach(elem => {
+    const id_name = elem.getAttribute("id");
     if (id_name === "reg-set") {
       return true; // continue;
     }
-    localStorage[id_name] = $("#" + id_name).val();
+    localStorage[id_name] = document.getElementById(id_name).value;
   });
-  $("#edited").text("設定しました。");
+  document.getElementById("edited").textContent = "設定しました。";
 });
 
 // 正規表現のチェック
-$("#check-regexp").on("click", () => {
-  $("#regexp-group").empty();
-  localStorage["check_str"] = $("#check_str").val();
+document.getElementById("check-regexp").addEventListener("click", () => {
+  document.getElementById("regexp-group").innerHTML = "";
+  localStorage["check_str"] = document.getElementById("check_str").value;
   checkRegExps();
 });

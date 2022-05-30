@@ -1,6 +1,9 @@
 import { expDefault } from './expdefault.js';
 import { expDate } from './expdate.js';
 import { checkToken } from './tokenutil.js';
+import timezones from './vendor/timezones.json' assert { type: 'json' };
+
+const DateTime = luxon.DateTime;
 
 /**
  * イベントをカレンダーに投稿する
@@ -19,7 +22,8 @@ const addEventRequest = (input, accessToken) => {
       "date": input.toDate,
     };
   } else {
-    const timezone = ":00.000+09:00";
+    const offset = document.getElementById("timezone-list").value;
+    const timezone = `:00.000${offset}`
     from = {
       "dateTime": input.fromDate + "T" + input.fromTime + timezone,
     };
@@ -70,16 +74,11 @@ const addEventRequest = (input, accessToken) => {
       let meetUrl = "";
       if (input.hangoutsMeet) {
         meetUrl = (data.conferenceData.createRequest.status.statusCode === "success")
-          ? "<br>📞 " + data.conferenceData.entryPoints[0].uri
-          : "<br>MeetのURLはカレンダーから確認してください。";
+          ? "\n📹 " + data.conferenceData.entryPoints[0].uri
+          : "\nMeetのURLはカレンダーから確認してください。";
       }
-      Swal.fire({
-        html: '<span style="font-weight: bold;">' + escapeHTML(input.title) + "</span>" + " を登録しました。" + meetUrl,
-        animation: false,
-        onClose: () => {
-          window.close();
-        }
-      });
+      alert(`${input.title}を登録しました。${meetUrl}`);
+      window.close();
     })
     .catch(error => {
       if (error.message === "401") {
@@ -87,19 +86,11 @@ const addEventRequest = (input, accessToken) => {
           'token': accessToken
         },
           () => {
-            Swal.fire({
-              title: "Invalid AccessToken",
-              text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。",
-              animation: false
-            });
+            alert("無効なアクセストークンを削除しました。オプションページで再度Google Calendarへのアクセスを承認してください。");
           });
         return;
       } else {
-        Swal.fire({
-          title: "An error occurred",
-          text: "An unexpected error occurred",
-          animation: false
-        });
+        alert("予期せぬエラーが発生しました。再度登録を行ってください。");
         return;
       }
     });
@@ -124,54 +115,47 @@ const addEvent = (input) => {
  * 日時の検証, イベント投稿用のオブジェクトを作成する
  */
 const createAndAddEventInput = () => {
-
   let isValidRange = false;
-  const fromDateVal = $("#from-date").val();
-  const fromTimeVal = $("#from-time").val();
-  let toDateVal = $("#to-date").val();
-  const toTimeVal = $("#to-time").val();
+  const fromDateVal = document.getElementById("from-date").value;
+  const fromTimeVal = document.getElementById("from-time").value;
+  let toDateVal = document.getElementById("to-date").value;
+  const toTimeVal = document.getElementById("to-time").value;
 
-  if ($('#allday').prop('checked')) {
+  if (document.getElementById("allday").checked) {
     // 終日設定は最終日に24時間足さないと認識されない
-    const toDate = moment(toDateVal);
-    toDate.add(1, "days");
-    toDateVal = toDate.format("YYYY-MM-DD");
+    const toDate = DateTime.fromISO(toDateVal).plus({ days: 1 });
+    toDateVal = toDate.toFormat("yyyy-MM-dd");
 
-    const fromDate = moment(fromDateVal);
-    isValidRange = (toDate.diff(fromDate, "days") > 0);
+    const fromDate = DateTime.fromISO(fromDateVal);
+    isValidRange = (toDate.diff(fromDate, "days").days > 0);
   } else {
-    const toDate = moment(toDateVal + " " + toTimeVal);
-    const fromDate = moment(fromDateVal + " " + fromTimeVal);
-    isValidRange = (toDate.diff(fromDate, "minutes") >= 0);
+    const toDate = DateTime.fromISO(toDateVal + "T" + toTimeVal);
+    const fromDate = DateTime.fromISO(fromDateVal + "T" + fromTimeVal);
+    isValidRange = (toDate.diff(fromDate, "minutes").minutes >= 0);
   }
 
   if (isValidRange) {
     const input = {
-      title: $("#tit").val(),
-      detail: $("#detail").val(),
-      location: $("#location").val(),
+      title: document.getElementById("tit").value,
+      detail: document.getElementById("detail").value,
+      location: document.getElementById("location").value,
       fromDate: fromDateVal,
       fromTime: fromTimeVal,
       toDate: toDateVal,
       toTime: toTimeVal,
-      allday: $("#allday").prop("checked"),
-      calendar: $("#selected-calendar").val(),
-      hangoutsMeet: $("#hangoutsMeet").prop("checked"),
+      allday: document.getElementById("allday").checked,
+      calendar: document.getElementById("selected-calendar").value,
+      hangoutsMeet: document.getElementById("hangoutsMeet").checked,
     };
 
     //イベント投稿
     addEvent(input);
   } else {
-    Swal.fire({
-      title: "Invalid date",
-      text: "日時が正しくありません",
-      animation: false
-    });
+    alert("正しい日時を入力してください。");
   }
 };
 
 const fetchCalendarId = (accessToken) => {
-
   fetch("https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=owner", {
     headers: {
       'Content-Type': 'application/json',
@@ -187,9 +171,13 @@ const fetchCalendarId = (accessToken) => {
     .then(data => {
       const list = data.items;
       for (let i = 0; i < list.length; i++) {
-        $("#selected-calendar").append($('<option>').html(list[i].summary).val(list[i].id));
+        const child = document.createElement('option');
+        const targetCalendar = list[i];
+        child.textContent = targetCalendar.summary;
+        child.value = targetCalendar.id;
+        document.getElementById("selected-calendar").appendChild(child);
       }
-      $("#selected-calendar").val(localStorage["calenId"]);
+      document.getElementById("selected-calendar").value = localStorage["calenId"];
     })
     .catch(error => {
       if (error.message === "401") {
@@ -197,28 +185,13 @@ const fetchCalendarId = (accessToken) => {
           'token': accessToken
         },
           () => {
-            Swal.fire({
-              title: "Invalid AccessToken",
-              text: "無効なアクセストークンを削除しました。オプションページで再度アプリケーションを承認してください。",
-              animation: false,
-              onClose: () => {
-                window.close();
-              },
-            });
-
+            alert("無効なアクセストークンを削除しました。オプションページで再度Google Calendarへのアクセスを承認してください。ウィンドウを閉じます。");
+            window.close();
           });
         return;
-
       } else {
-        Swal.fire({
-          title: "Acquisition failure",
-          text: "リストの取得に失敗しました。ウインドウを閉じます",
-          animation: false,
-          onClose: () => {
-            window.close();
-          }
-        });
-        return;
+        alert("予期せぬエラーが発生しました。ウィンドウを閉じます。");
+        window.close();
       }
     })
 };
@@ -238,70 +211,91 @@ export const convertSelectedTextToForm = (stext) => {
     args = expDefault(stext);
   }
 
-  // argsの中身はNumberとは限らないが、融通がきくのでmomentに処理させる
-  const fromDate = moment({
+  // argsの中身はNumberとは限らないが、融通がきくのでluxonに処理させる
+  let fromDate = DateTime.fromObject({
     year: args.start.year,
     month: args.start.month,
     day: args.start.day,
   });
 
-  const fromTime = moment({
+  const fromTime = DateTime.fromObject({
     hour: args.start.hour,
     minute: args.start.min,
   });
 
-  const toDate = moment({
+  let toDate = DateTime.fromObject({
     year: args.end.year,
     month: args.end.month,
     day: args.end.day,
   });
 
-  const toTime = moment({
+  const toTime = DateTime.fromObject({
     hour: args.end.hour,
     minute: args.end.min,
   });
 
-  if (fromDate.isValid()) {
+  if (fromDate.isValid) {
     if (args.start.tf) {
-      fromDate.add(1, "days");
+      fromDate = fromDate.plus({ days: 1 });
     }
-    $("#from-date").val(fromDate.format("YYYY-MM-DD"));
+    document.getElementById("from-date").value = fromDate.toFormat("yyyy-MM-dd");
   }
-  if (fromTime.isValid()) {
-    $("#from-time").val(fromTime.format("HH:mm"));
+  if (fromTime.isValid) {
+    document.getElementById("from-time").value = fromTime.toFormat("HH:mm");
   }
-  if (toDate.isValid()) {
+  if (toDate.isValid) {
     if (args.end.tf) {
-      toDate.add(1, "days");
+      toDate = toDate.plus({ days: 1 });
     }
-    $("#to-date").val(toDate.format("YYYY-MM-DD"));
+    document.getElementById("to-date").value = toDate.toFormat("yyyy-MM-dd");
   }
-  if (toTime.isValid()) {
-    $("#to-time").val(toTime.format("HH:mm"));
+  if (toTime.isValid) {
+    document.getElementById("to-time").value = toTime.toFormat("HH:mm");
   }
 
-  $("#tit").val(args.title);
-  $("#main-text").val(args.selected_text);
-  $("#detail").val(args.detail);
-  $("#location").val(args.location);
+  document.getElementById("tit").value = args.title;
+  document.getElementById("main-text").value = args.selected_text;
+  document.getElementById("detail").value = args.detail;
+  document.getElementById("location").value = args.location;
 };
 
 // イベント投稿
-$("#sub").on("click", () => {
+document.getElementById("sub").addEventListener("click", () => {
   createAndAddEventInput()
 });
 
-// 終日設定
-$("#allday").on("click", event => {
-  if ($(event.currentTarget).prop('checked')) {
-    $('input[type="time"]').prop("disabled", true);
-  } else {
-    $('input[type="time"]').prop("disabled", false);
+// タイムゾーン設定の作成
+const tzlength = timezones.length;
+for (let i = 0; i < tzlength; i++) {
+  const child = document.createElement('option');
+  const targetTZ = timezones[i];
+  child.textContent = targetTZ.text;
+  const ret = targetTZ.text.match(/\(UTC(.+?)\)/);
+  child.value = (ret && ret.length > 1) ? ret[1] : "Z";
+  if (targetTZ.value.includes("Japan")) {
+    child.selected = true;
   }
+  document.getElementById("timezone-list").appendChild(child);
+}
+
+// タイムゾーン設定はデフォルト無効
+document.getElementById("timezone-list").disabled = true;
+document.getElementById("to-timezone").addEventListener('click', event => {
+  document.getElementById("timezone-list").disabled = !event.target.checked;
+});
+
+// 終日設定
+document.getElementById("allday").addEventListener('click', event => {
+  document.querySelectorAll('input[type="time"]').forEach(elem => {
+    elem.disabled = event.target.checked;
+  });
+  // 終日設定が有効のときタイムゾーンは無効
+  document.getElementById("to-timezone").disabled = event.target.checked;
+  document.getElementById("timezone-list").disabled = event.target.checked;
 });
 
 // カレンダーを直接表示
-$("#create-cal").on("click", () => {
+document.getElementById("create-cal").addEventListener("click", () => {
   chrome.windows.create({
     "url": "https://calendar.google.com/calendar/",
     "width": 800,
@@ -333,12 +327,3 @@ chrome.tabs.sendMessage(tabId, {
     );
   }
 });
-
-// SweetAlert向けに文字列をサニタイズする
-const escapeHTML = (str) => {
-  return str.replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
