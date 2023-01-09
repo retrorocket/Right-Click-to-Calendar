@@ -47,7 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-environment-jsdom", "npm:28.1.0"],\
             ["jest-junit", "npm:13.2.0"],\
             ["jest-localstorage-mock", "npm:2.4.21"],\
-            ["luxon", "npm:2.4.0"]\
+            ["luxon", "npm:2.5.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -6092,10 +6092,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["luxon", [\
-        ["npm:2.4.0", {\
-          "packageLocation": "./.yarn/cache/luxon-npm-2.4.0-53e53c605a-6071028d65.zip/node_modules/luxon/",\
+        ["npm:2.5.2", {\
+          "packageLocation": "./.yarn/cache/luxon-npm-2.5.2-d4f55f89d0-d8b671ffd2.zip/node_modules/luxon/",\
           "packageDependencies": [\
-            ["luxon", "npm:2.4.0"]\
+            ["luxon", "npm:2.5.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -6943,7 +6943,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jest-environment-jsdom", "npm:28.1.0"],\
             ["jest-junit", "npm:13.2.0"],\
             ["jest-localstorage-mock", "npm:2.4.21"],\
-            ["luxon", "npm:2.4.0"]\
+            ["luxon", "npm:2.5.2"]\
           ],\
           "linkType": "SOFT"\
         }]\
