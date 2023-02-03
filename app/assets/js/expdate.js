@@ -1,5 +1,5 @@
 /**
- * 正規表現で値を抜き出す
+ * オプションで設定された正規表現のグループ番号と合致した値を返却する
  */
 const checkDates = (key, max, match_arr) => {
   if (localStorage[key]) {
@@ -28,21 +28,27 @@ export const expDate = (selectedText) => {
   // 年月日・曜日・時分秒の取得
   const d = new Date();
 
-  /** 正規表現で日付処理 **/
-  /** setting **/
   // start
   const syear = parseInt(checkDates("start_year", max, match_arr), 10) || d.getFullYear();
   const smon = parseInt(checkDates("start_mon", max, match_arr), 10) || d.getMonth() + 1;
   const sday = parseInt(checkDates("start_day", max, match_arr), 10) || d.getDate();
-  const shour = parseInt(checkDates("start_hour", max, match_arr), 10) || d.getHours();
-  const smin = parseInt(checkDates("start_min", max, match_arr), 10) || d.getMinutes();
+
+  const start_hour = parseInt(checkDates("start_hour", max, match_arr), 10);
+  const shour = start_hour >= 0 ? start_hour : d.getHours();
+
+  const start_min = parseInt(checkDates("start_min", max, match_arr), 10);
+  const smin = start_min >= 0 ? start_min : d.getMinutes();
 
   // end
   const eyear = parseInt(checkDates("end_year", max, match_arr), 10) || d.getFullYear();
   const emon = parseInt(checkDates("end_mon", max, match_arr), 10) || d.getMonth() + 1;
   const eday = parseInt(checkDates("end_day", max, match_arr), 10) || d.getDate();
-  const ehour = parseInt(checkDates("end_hour", max, match_arr), 10) || d.getHours();
-  const emin = parseInt(checkDates("end_min", max, match_arr), 10) || d.getMinutes();
+
+  const end_hour = parseInt(checkDates("end_hour", max, match_arr), 10);
+  const ehour = end_hour >= 0 ? end_hour : d.getHours();
+
+  const end_min = parseInt(checkDates("end_min", max, match_arr), 10);
+  const emin = end_min >= 0 ? end_min : d.getMinutes();
 
   // title
   const title = checkDates("title", max, match_arr) || base_str;
