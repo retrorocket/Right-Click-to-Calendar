@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/workspace # ステップが実行されるディレクトリ
     docker: # Dockerでステップを実行
-      - image: circleci/node:latest
+      - image: cimg/node:18.13.0
     steps:
       - checkout # ソースコードを作業ディレクトリにチェックアウト
       - restore_cache:
@@ -17,7 +17,7 @@ jobs:
           name: Yarn パッケージのキャッシュの保存
           key: yarn-packages-{{ checksum "yarn.lock" }}
           paths:
-            - ~/.cache/yarn
+            - ~/.yarn/cache
       - persist_to_workspace:
           root: .
           paths:
@@ -42,7 +42,7 @@ jobs:
 
   lint:
     docker: # Dockerでステップを実行
-      - image: circleci/node:latest
+      - image: cimg/node:18.13.0
     steps:
       # 共有したworkspaceをアタッチする
       - attach_workspace:
@@ -57,7 +57,7 @@ jobs:
 
   create_zip:
     docker: # Dockerでステップを実行
-      - image: circleci/node:latest
+      - image: cimg/node:18.13.0
     steps:
       # 共有したworkspaceをアタッチする
       - attach_workspace:
