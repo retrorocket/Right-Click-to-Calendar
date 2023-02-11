@@ -179,14 +179,18 @@ document.getElementById("detail-switch").addEventListener('click', event => {
 });
 
 // Chromiumを使用する
+document.getElementById("chromium-notice").style.display = "none";
 if (localStorage["useChromium"]) {
   document.getElementById("chromium-switch").checked = true;
+  document.getElementById("chromium-notice").style.display = "block";
 }
 document.getElementById("chromium-switch").addEventListener('click', event => {
   if (event.target.checked) {
     localStorage["useChromium"] = true;
+    document.getElementById("chromium-notice").style.display = "block";
   } else {
     localStorage.removeItem("useChromium");
+    document.getElementById("chromium-notice").style.display = "none";
   }
 });
 

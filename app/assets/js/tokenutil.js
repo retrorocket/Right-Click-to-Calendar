@@ -1,11 +1,14 @@
 "use strict";
 
+const S = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const state = Array.from(crypto.getRandomValues(new Uint8Array(12))).map((n) => S[n % S.length]).join('');
+
 const REDIRECT_URL = chrome.identity.getRedirectURL("/oauth2");
 const CLIENT_ID = "94384066361-kgpm35l8cdcn4kqrd09tob7sssulnj1c.apps.googleusercontent.com"
 const SCOPES = ["https://www.googleapis.com/auth/calendar.events", "https://www.googleapis.com/auth/calendar.readonly"];
-const AUTH_URL = `https://accounts.google.com/o/oauth2/auth?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(
+const AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(
   REDIRECT_URL
-)}&scope=${encodeURIComponent(SCOPES.join(" "))}`;
+)}&scope=${encodeURIComponent(SCOPES.join(" "))}&state=${state}`;
 
 const tokenRefresh = () => {
   return new Promise((resolve, reject) => {
@@ -17,10 +20,11 @@ const tokenRefresh = () => {
         localStorage.removeItem("accessToken");
         reject(new Error("error"))
       } else {
-        const url = new URL(responseUrl);
-        // searchParams を使いたいので適当なURLにくっつける
-        const urlsearch = new URL("http://127.0.0.1?" + url.hash.slice(1));
-        const accessToken = urlsearch.searchParams.get("access_token");
+        const params = new URLSearchParams(new URL(responseUrl).hash.slice(1));
+        if (params.get("state") !== state) {
+          reject(new Error("error"))
+        }
+        const accessToken = params.get("access_token");
         localStorage["accessToken"] = accessToken;
         resolve(accessToken);
       }
@@ -29,7 +33,7 @@ const tokenRefresh = () => {
 }
 
 export const checkToken = (accessToken) => {
-  return fetch(`https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=${accessToken}`)
+  return fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${accessToken}`)
     .then(response => {
       if (!response.ok) {
         throw new Error("invalid token");
