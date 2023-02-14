@@ -15,6 +15,7 @@ chrome.runtime.onMessage.addListener(
         try {
           selectedText = document.activeElement.contentWindow.getSelection().toString();
         } catch (ignore) {
+          //console.log(ignore);
         }
       } else {
         selectedText = document.getSelection().toString();
