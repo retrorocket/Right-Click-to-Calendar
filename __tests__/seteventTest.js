@@ -11,6 +11,7 @@ document.body.innerHTML =
   + '<textarea class="form-control" rows="3" id="detail"></textarea>'
   + '<textarea class="form-control" rows="3" id="main-text"></textarea>'
   + '<select class="form-control" id="selected-calendar"></select>'
+  + '<a href="#!" role="button" class="btn btn-secondary btn-sm" id="reload-cal">再取得</a>'
   + '<input class="form-check-input" type="checkbox" id="to-timezone">'
   + '<select class="form-control" id="timezone-list"></select>'
   + '<button type="button" class="btn btn-primary" id="sub">Submit</button>'
