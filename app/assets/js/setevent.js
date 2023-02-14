@@ -98,10 +98,12 @@ const addEventRequest = (input, accessToken) => {
 
 const addEvent = (input) => {
   if (localStorage["useChromium"]) {
-    checkToken(localStorage["accessToken"])
-      .then(() => {
-        addEventRequest(input, localStorage["accessToken"])
-      })
+    chrome.storage.local.get("accessToken", result => {
+      checkToken(result.accessToken)
+        .then(() => {
+          addEventRequest(input, result.accessToken)
+        })
+    });
   } else {
     chrome.identity.getAuthToken({
       'interactive': true
@@ -313,10 +315,12 @@ chrome.tabs.sendMessage(tabId, {
   // カレンダーIDのセット
 
   if (localStorage["useChromium"]) {
-    checkToken(localStorage["accessToken"])
-      .then(() => {
-        fetchCalendarId(localStorage["accessToken"])
-      })
+    chrome.storage.local.get("accessToken", result => {
+      checkToken(result.accessToken)
+        .then(() => {
+          fetchCalendarId(result.accessToken)
+        })
+    });
   } else {
     chrome.identity.getAuthToken({
       'interactive': true
@@ -325,5 +329,22 @@ chrome.tabs.sendMessage(tabId, {
         fetchCalendarId(accessToken)
       }
     );
+  }
+});
+
+// Chromiumでカレンダーがロードできなかった時に再ロードする
+document.getElementById("reload-cal").style.display = "none";
+if (localStorage["useChromium"]) {
+  document.getElementById("reload-cal").style.display = "inline";
+}
+
+document.getElementById("reload-cal").addEventListener("click", () => {
+  if (localStorage["useChromium"] && document.getElementById("selected-calendar").length < 1) {
+    chrome.storage.local.get("accessToken", result => {
+      checkToken(result.accessToken)
+        .then(() => {
+          fetchCalendarId(result.accessToken)
+        })
+    });
   }
 });

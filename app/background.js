@@ -18,8 +18,8 @@ const getClickHandler = (info, tab) => {
     chrome.storage.local.set({ "selectionText": info.selectionText }, () => {
       chrome.windows.create({
         "url": "setevent.html?id=" + tab.id,
-        "width": 530,
-        "height": 700,
+        "width": 560,
+        "height": 730,
         "type": "popup"
       });
     });

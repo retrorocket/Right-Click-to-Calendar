@@ -76,19 +76,21 @@ const loadCalendarIdRequest = (accessToken) => {
 };
 
 /**
- * カレンダー一覧の読み込みとChromiumの場合はrefreshTokenを取得する
+ * カレンダー一覧の読み込み
+ * Chromiumの場合はここでaccessTokenを取得する
  */
 const loadCalendarId = () => {
   if (localStorage["useChromium"]) {
-    localStorage.removeItem("refreshToken");
-    checkToken(localStorage["accessToken"])
-      .then(() => loadCalendarIdRequest(localStorage["accessToken"]))
-      .catch(() => {
-        localStorage.removeItem("calenId");
-        chrome.storage.local.remove("calenId");
-        document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
-        alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
-      });
+    chrome.storage.local.get("accessToken", result => {
+      checkToken(result.accessToken)
+        .then(() => loadCalendarIdRequest(result.accessToken))
+        .catch(() => {
+          localStorage.removeItem("calenId");
+          chrome.storage.local.remove("calenId");
+          document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
+          alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
+        });
+    });
   } else {
     chrome.identity.getAuthToken({
       'interactive': true
@@ -127,11 +129,14 @@ const checkRegExps = () => {
 };
 
 // ページ読み込み時の初期設定
-document.getElementById("check").textContent = "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
-document.getElementById("selected-calendar").innerHTML = "";
-document.getElementById("setter").style.display = "none";
-// カレンダーの読み込み
-loadCalendarId();
+const formatCalenderId = () => {
+  document.getElementById("check").textContent = "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
+  document.getElementById("selected-calendar").innerHTML = "";
+  document.getElementById("setter").style.display = "none";
+  // カレンダーの読み込み
+  loadCalendarId();
+}
+formatCalenderId();
 
 // デフォルトで登録するカレンダーの設定
 document.getElementById("sub").addEventListener('click', () => {
@@ -192,6 +197,7 @@ document.getElementById("chromium-switch").addEventListener('click', event => {
     localStorage.removeItem("useChromium");
     document.getElementById("chromium-notice").style.display = "none";
   }
+  formatCalenderId();
 });
 
 
