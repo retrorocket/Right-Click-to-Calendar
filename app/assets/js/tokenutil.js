@@ -38,5 +38,6 @@ export const checkToken = (accessToken) => {
     })
     .catch(() => {
       tokenRefresh();
+      throw new Error("need token refresh");
     });
 }

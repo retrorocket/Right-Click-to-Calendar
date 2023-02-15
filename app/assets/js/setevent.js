@@ -312,14 +312,15 @@ chrome.tabs.sendMessage(tabId, {
   message: "eventpageLoaded",
 }, response => {
   convertSelectedTextToForm(response.message);
-  // カレンダーIDのセット
 
+  // カレンダーIDのセット
   if (localStorage["useChromium"]) {
     chrome.storage.local.get("accessToken", result => {
       checkToken(result.accessToken)
         .then(() => {
           fetchCalendarId(result.accessToken)
         })
+        .catch()
     });
   } else {
     chrome.identity.getAuthToken({
