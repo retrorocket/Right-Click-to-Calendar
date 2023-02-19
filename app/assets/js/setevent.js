@@ -178,8 +178,10 @@ const fetchCalendarId = (accessToken) => {
         child.textContent = targetCalendar.summary;
         child.value = targetCalendar.id;
         document.getElementById("selected-calendar").appendChild(child);
+        if (targetCalendar.id === localStorage["calenId"]) {
+          document.getElementById("selected-calendar").value = localStorage["calenId"];
+        }
       }
-      document.getElementById("selected-calendar").value = localStorage["calenId"];
     })
     .catch(error => {
       if (error.message === "401") {
