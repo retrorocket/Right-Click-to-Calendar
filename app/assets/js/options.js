@@ -88,7 +88,6 @@ const loadCalendarId = () => {
           localStorage.removeItem("calenId");
           chrome.storage.local.remove("calenId");
           document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
-          alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
         });
     });
   } else {

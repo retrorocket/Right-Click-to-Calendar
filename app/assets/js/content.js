@@ -33,26 +33,3 @@ chrome.runtime.onMessage.addListener(
     return true;
   }
 );
-
-/**
- * launchWebAuthFlowなしでOAuth 2.0 フローを実行してトークンを取得する
- */
-const getTokenForChromium = () => {
-  const responseUrl = document.location.href;
-  // DNSエラーの出ないダミーページをコールバックしてトークンを取得する
-  if (responseUrl.startsWith("https://rcapi.retrorocket.biz/oauth2")) {
-    const params = new URLSearchParams(new URL(responseUrl).hash.slice(1));
-    chrome.storage.local.get("state", result => {
-      chrome.storage.local.remove("state");
-      if (params.get("state") === result.state && params.get("access_token")) {
-        chrome.storage.local.set({ "accessToken": params.get("access_token") }, () => {
-          alert("アクセストークンを取得しました。このウィンドウを手動で閉じてください。\n\nオプションページからトークンを取得した場合：\nウィンドウを閉じたあと、オプションページをリロードしてください。\n\nイベント設定ウィンドウに登録対象のカレンダーが表示されていない場合：\nウィンドウを閉じたあと、イベント設定ウィンドウ内の「再取得」ボタンをクリックしてください。クリック後予定が登録できるようになります。");
-        });
-      } else {
-        alert("アクセストークンを取得できませんでした。このウィンドウを閉じてオプションページから再度登録を行ってください。");
-      }
-    });
-  }
-};
-
-getTokenForChromium();
