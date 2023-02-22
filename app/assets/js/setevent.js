@@ -336,18 +336,12 @@ chrome.tabs.sendMessage(tabId, {
 });
 
 // Chromiumでカレンダーがロードできなかった時に再ロードする
-document.getElementById("reload-cal").style.display = "none";
-if (localStorage["useChromium"]) {
-  document.getElementById("reload-cal").style.display = "inline";
-}
-
-document.getElementById("reload-cal").addEventListener("click", () => {
-  if (localStorage["useChromium"] && document.getElementById("selected-calendar").length < 1) {
-    chrome.storage.local.get("accessToken", result => {
-      checkToken(result.accessToken)
-        .then(() => {
-          fetchCalendarId(result.accessToken)
-        })
-    });
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace == "local" && localStorage["useChromium"] && changes.accessToken) {
+    const newToken = changes.accessToken.newValue;
+    checkToken(newToken)
+      .then(() => {
+        fetchCalendarId(newToken)
+      })
   }
 });
