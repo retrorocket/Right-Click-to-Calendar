@@ -21,7 +21,6 @@ export const getToken = () => {
     .then(data => {
       if (data.access_token) {
         chrome.storage.local.set({ "accessToken": data.access_token }, () => {
-          alert("アクセストークンを取得しました。ウィンドウを閉じます。\n\nオプションページからトークンを取得した場合：\nウィンドウを閉じたあと、オプションページをリロードしてください。\n\nイベント設定ウィンドウに登録対象のカレンダーが表示されていない場合：\nウィンドウを閉じたあと、イベント設定ウィンドウ内の「再取得」ボタンをクリックしてください。クリック後予定が登録できるようになります。");
           window.close();
         });
       } else {

@@ -199,6 +199,12 @@ document.getElementById("chromium-switch").addEventListener('click', event => {
   formatCalenderId();
 });
 
+// Chromiumでカレンダーがロードできなかった時に再ロードする
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+  if (namespace == "local" && localStorage["useChromium"] && changes.accessToken) {
+    formatCalenderId();
+  }
+});
 
 // 正規表現の設定
 document.getElementById("reg-set").addEventListener('click', () => {
