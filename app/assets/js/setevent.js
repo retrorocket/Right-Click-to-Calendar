@@ -336,7 +336,7 @@ chrome.tabs.sendMessage(tabId, {
 });
 
 // Chromiumでカレンダーがロードできなかった時に再ロードする
-chrome.storage.onChanged.addListener(function (changes, namespace) {
+chrome.storage.onChanged.addListener((changes, namespace) => {
   if (namespace == "local" && localStorage["useChromium"] && changes.accessToken) {
     const newToken = changes.accessToken.newValue;
     checkToken(newToken)
