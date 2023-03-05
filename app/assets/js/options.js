@@ -16,6 +16,10 @@ const setRegExps = () => {
   }
 };
 
+/**
+ * Google Calendar APIでCalendarIdを取得する
+ * @param {*} accessToken 
+ */
 const loadCalendarIdRequest = (accessToken) => {
   fetch("https://www.googleapis.com/calendar/v3/users/me/calendarList?minAccessRole=writer", {
     headers: {
@@ -31,15 +35,9 @@ const loadCalendarIdRequest = (accessToken) => {
     })
     .then(data => {
       const list = data.items;
+      // 初回オプションページ起動時はデフォルトのCalendarIDをセットする
       if (!localStorage["calenId"]) {
         localStorage["calenId"] = list[0].id;
-        chrome.storage.local.set({ "calenId": list[0].id });
-      } else {
-        chrome.storage.local.get("calenId", result => {
-          if (!result.calenId) {
-            chrome.storage.local.set({ "calenId": localStorage["calenId"] });
-          }
-        });
       }
       for (let i = 0; i < list.length; i++) {
         const child = document.createElement('option');
@@ -64,13 +62,11 @@ const loadCalendarIdRequest = (accessToken) => {
             alert("無効なアクセストークンを削除しました。このページをリロードして再度Google Calendarへのアクセスを承認してください。");
             document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
             localStorage.removeItem("calenId");
-            chrome.storage.local.remove("calenId");
           });
       } else {
         alert("カレンダーリストの取得に失敗しました。このページをリロードしてください。");
         document.getElementById("check").textContent = "カレンダーリストの取得に失敗しました。このページをリロードしてください。";
         localStorage.removeItem("calenId");
-        chrome.storage.local.remove("calenId");
       }
     });
 };
@@ -86,7 +82,6 @@ const loadCalendarId = () => {
         .then(() => loadCalendarIdRequest(result.accessToken))
         .catch(() => {
           localStorage.removeItem("calenId");
-          chrome.storage.local.remove("calenId");
           document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
         });
     });
@@ -96,7 +91,6 @@ const loadCalendarId = () => {
     }, accessToken => {
       if (chrome.runtime.lastError) {
         localStorage.removeItem("calenId");
-        chrome.storage.local.remove("calenId");
         document.getElementById("check").textContent = "このページをリロードして再度Google Calendarへのアクセスを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
         alert("トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。");
       } else {
@@ -147,26 +141,16 @@ document.getElementById("selected-calendar").addEventListener("change", () => {
 });
 
 // 正規表現設定用のフォームの表示
-document.getElementById("exp-field").style.display = "none";
-document.getElementById("exp-test-field").style.display = "none";
 if (localStorage["expSwitch"]) {
   document.getElementById("exp-switch").checked = true;
-  document.getElementById("exp-field").style.display = "block";
-  document.getElementById("exp-test-field").style.display = "block";
   setRegExps();
 }
-
-// 正規表現設定用のフォームの表示
 document.getElementById("exp-switch").addEventListener('click', event => {
   if (event.target.checked) {
     localStorage["expSwitch"] = true;
-    document.getElementById("exp-field").style.display = "block";
-    document.getElementById("exp-test-field").style.display = "block";
     setRegExps();
   } else {
     localStorage.removeItem("expSwitch");
-    document.getElementById("exp-field").style.display = "none";
-    document.getElementById("exp-test-field").style.display = "none";
   }
 });
 
@@ -183,25 +167,21 @@ document.getElementById("detail-switch").addEventListener('click', event => {
 });
 
 // Chromiumを使用する
-document.getElementById("chromium-notice").style.display = "none";
 if (localStorage["useChromium"]) {
   document.getElementById("chromium-switch").checked = true;
-  document.getElementById("chromium-notice").style.display = "block";
 }
 document.getElementById("chromium-switch").addEventListener('click', event => {
   if (event.target.checked) {
     localStorage["useChromium"] = true;
-    document.getElementById("chromium-notice").style.display = "block";
   } else {
     localStorage.removeItem("useChromium");
-    document.getElementById("chromium-notice").style.display = "none";
   }
   formatCalenderId();
 });
 
 // Chromiumでカレンダーがロードできなかった時に再ロードする
 chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace == "local" && localStorage["useChromium"] && changes.accessToken) {
+  if (localStorage["useChromium"] && changes.accessToken) {
     formatCalenderId();
   }
 });

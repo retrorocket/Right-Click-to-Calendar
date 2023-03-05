@@ -4,24 +4,13 @@
  * コンテキストメニュー押下時のアクション
  */
 const getClickHandler = (info, tab) => {
-
-  chrome.storage.local.get("calenId", result => {
-
-    if (!result.calenId) {
-      chrome.tabs.create({
-        "url": "options.html?alert=true"
-      });
-      return;
-    }
-
-    // イベント登録ページの生成
-    chrome.storage.local.set({ "selectionText": info.selectionText }, () => {
-      chrome.windows.create({
-        "url": "setevent.html?id=" + tab.id,
-        "width": 560,
-        "height": 730,
-        "type": "popup"
-      });
+  // イベント登録ページの生成
+  chrome.storage.session.set({ "selectionText": info.selectionText }, () => {
+    chrome.windows.create({
+      "url": "setevent.html?id=" + tab.id,
+      "width": 560,
+      "height": 730,
+      "type": "popup"
     });
   });
 };
