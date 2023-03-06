@@ -121,7 +121,9 @@ const checkRegExps = () => {
   }
 };
 
-// ページ読み込み時の初期設定
+/**
+ * カレンダー選択欄の初期化とカレンダーの取得を行う
+ */
 const formatCalenderId = () => {
   document.getElementById("check").textContent = "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
   document.getElementById("selected-calendar").innerHTML = "";
@@ -129,6 +131,8 @@ const formatCalenderId = () => {
   // カレンダーの読み込み
   loadCalendarId();
 }
+
+// ページ読み込み時にカレンダーを取得する
 formatCalenderId();
 
 // デフォルトで登録するカレンダーの設定
