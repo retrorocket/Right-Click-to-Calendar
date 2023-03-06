@@ -184,6 +184,11 @@ const fetchCalendarId = (accessToken) => {
       }
     })
     .catch(error => {
+      if (!accessToken) {
+        chrome.tabs.create({
+          url: "options.html"
+        });
+      }
       if (error.message === "401") {
         chrome.identity.removeCachedAuthToken({
           'token': accessToken
