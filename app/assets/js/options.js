@@ -184,7 +184,7 @@ document.getElementById("chromium-switch").addEventListener('click', event => {
 });
 
 // Chromiumでカレンダーがロードできなかった時に再ロードする
-chrome.storage.onChanged.addListener((changes, namespace) => {
+chrome.storage.onChanged.addListener((changes) => {
   if (localStorage["useChromium"] && changes.accessToken) {
     formatCalenderId();
   }
