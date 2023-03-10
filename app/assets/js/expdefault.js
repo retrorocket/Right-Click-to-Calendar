@@ -113,6 +113,26 @@ export const expDefault = (stext) => {
     emin = smin;
   }
 
+  // 英語月を数字に変換する
+  const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+  const monthsPattern = "(?<mon>Jan(?:uary){0,1}|Feb(?:ruary){0,1}|Mar(?:ch){0,1}|Apr(?:il){0,1}|May|Jun(?:e){0,1}|Jul(?:y){0,1}|Aug(?:ust){0,1}|Sep(?:tember){0,1}|Oct(?:ober){0,1}|Nov(?:ember){0,1}|Dec(?:ember){0,1})";
+  let enMatch = [...stext.matchAll(new RegExp(String.raw`\b${monthsPattern}\.? (?<day>\d{1,2})(?:[a-z]{2}){0,1}\b(?:,? ?(?<year>\d{4}))?`, "ig"))].map(match => match.groups);
+  if (enMatch.length < 1) {
+    enMatch = [...stext.matchAll(new RegExp(String.raw`\b(?<day>\d{1,2})(?:[a-z]{2}){0,1} ${monthsPattern}\.?(?:,? ?(?<year>\d{4}))?`, "ig"))].map(match => match.groups);
+  }
+  if (enMatch.length > 0) {
+    const em0 = enMatch[0];
+    smon = em0.mon ? months.indexOf(em0.mon.substring(0, 3).toLowerCase()) + 1 : smon;
+    sday = em0.day ? em0.day : sday;
+    syear = em0.year ? em0.year : syear;
+    if (enMatch.length > 1) {
+      const em1 = enMatch[1];
+      emon = em1.mon ? months.indexOf(em1.mon.substring(0, 3).toLowerCase()) + 1 : emon;
+      eday = em1.day ? em1.day : eday;
+      eyear = em1.year ? em1.year : eyear;
+    }
+  }
+
   // タイトル
   const t = stext.match(/(\n|\s)(\D{1,2}\S+)(\n|$)/);
   if (t && matched) {
