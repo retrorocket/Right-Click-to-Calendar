@@ -184,6 +184,11 @@ const fetchCalendarId = (accessToken) => {
       }
     })
     .catch(error => {
+      if (!accessToken) {
+        chrome.tabs.create({
+          url: "options.html"
+        });
+      }
       if (error.message === "401") {
         chrome.identity.removeCachedAuthToken({
           'token': accessToken
@@ -336,8 +341,8 @@ chrome.tabs.sendMessage(tabId, {
 });
 
 // Chromiumでカレンダーがロードできなかった時に再ロードする
-chrome.storage.onChanged.addListener((changes, namespace) => {
-  if (namespace == "local" && localStorage["useChromium"] && changes.accessToken) {
+chrome.storage.onChanged.addListener((changes) => {
+  if (localStorage["useChromium"] && changes.accessToken) {
     const newToken = changes.accessToken.newValue;
     checkToken(newToken)
       .then(() => {
