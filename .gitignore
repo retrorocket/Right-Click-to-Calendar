@@ -5,10 +5,10 @@ coverage/
 reports/
 yarn-error.log
 yarn-debug.log
+.vscode
 .yarn/*
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases
-!.yarn/sdks
 !.yarn/versions

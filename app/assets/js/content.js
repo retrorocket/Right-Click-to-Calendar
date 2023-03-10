@@ -20,14 +20,14 @@ chrome.runtime.onMessage.addListener(
       } else {
         selectedText = document.getSelection().toString();
       }
-      chrome.storage.local.get("selectionText", result => {
+      chrome.storage.session.get("selectionText", result => {
         selectedText = selectedText || result.selectionText;
         // 全角英数を半角英数に変換
         selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, s => {
           return String.fromCharCode(s.charCodeAt(0) - 65248);
         });
         sendResponse({ message: selectedText });
-        chrome.storage.local.remove("selectionText");
+        chrome.storage.session.remove("selectionText");
       });
     }
     return true;

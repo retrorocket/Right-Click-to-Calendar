@@ -24,6 +24,13 @@
       padding-top: 15px;
       padding-bottom: 20px;
     }
+
+    .pt-3:has(#chromium-switch:not(:checked)) #chromium-notice,
+    .pt-3:has(#exp-switch:not(:checked)) #exp-field,
+    .pt-3:has(#exp-switch:not(:checked)) #exp-test-field {
+      display: none;
+    }
+
   </style>
 </head>
 
@@ -55,13 +62,15 @@
         </label>
         <p>正規表現編集がオンの場合は、設定した正規表現が優先されます。</p>
         <label>
-          <input type="checkbox" id="chromium-switch"> <span style="font-weight:bold">Chromium派生ブラウザを使用する （ベータ）</span>
+          <input type="checkbox" id="chromium-switch"> <span style="font-weight:bold">Chromium派生ブラウザを使用する
+            （ベータ版機能）</span>
         </label>
-        <p>チェックを入れるとOAuth同意画面が表示されます。権限を承認した後、このページをリロードしてください。</p>
+        <p>チェックを入れるとOAuth同意画面が表示されます。手順に従って承認してください。</p>
         <div id="chromium-notice">
           <h6>承認手順・注意点</h6>
           <ul>
-            <li>OAuth同意画面で「カレンダーの参照、ダウンロード」「すべてのカレンダーの予定の表示と編集」にチェックを入れて権限を承認してください。</li>
+            <li>OAuth同意画面で<span
+                style="font-weight:bold">「カレンダーの参照、ダウンロード」「すべてのカレンダーの予定の表示と編集」にチェックを入れて</span>権限を承認してください。</li>
             <li>予定の登録でエラーが発生する場合、権限承認後にGoogleのアクティビティ確認を実行してください。</li>
             <li>本機能により生じた損害等について、一切の責任を負いかねます。</li>
             <li>本機能に関してのお問い合わせは<a
@@ -76,27 +85,28 @@
     <div class="pt-3">
       <h3>OAuthによるアプリケーションの承認状況</h3>
       <p id="check" style="font-weight:bold"></p>
-      <p>Google Calendarへのアクセス権を取り消したい場合は、<a href="https://myaccount.google.com/">Googleのアカウント設定ページ</a>から設定してください。</p>
+      <p>Google Calendarとの連携を解除する場合は、<a href="https://myaccount.google.com/">Googleのアカウント設定ページ</a>からアクセス権を削除してください。
+      </p>
       <hr>
     </div>
 
     <div class="pt-3">
-      <h3>正規表現編集（ベータ）</h3>
+      <h3>正規表現編集（ベータ版機能）</h3>
       <div id="exp-check" class="form-group">
         <label>
           <input type="checkbox" id="exp-switch"> <span style="font-weight:bold">選択したテキストに対する正規表現を自分で設定する</span>
         </label>
-        <p>自分で正規表現を設定することで、予定登録画面に反映させる内容を任意のものに変更できます。<br>
+        <p>自分で正規表現を設定することで、予定登録画面に反映させる日時・内容を任意のものに変更できます。<br>
           正規表現が使用できる方のみチェックを入れてください。</p>
       </div>
       <div id="exp-field">
         <h4>編集方法</h4>
         <ul>
-          <li>後方参照を使用した正規表現を記述し、対応するグループのインデックスを各項目に半角数字で設定してください。</li>
-          <li>インデックスが未設定の項目に対しては、以下の値が予定登録画面に反映されます：</li>
+          <li>グループを使用した正規表現を記述し、対応するグループのインデックスを各項目に半角数字で設定してください。</li>
+          <li>対応するインデックスが存在しない項目は空欄にしてください。<br>インデックスが空欄の項目に対しては、以下の値が予定登録画面に反映されます：</li>
           <dd>
-          <dt>開始 or 終了年，月，日，時，分</dt>
-          <dl>コンテキストメニューをクリックしたタイミングの年，月，日，時，分</dl>
+          <dt>開始・終了 年 月 日 時 分</dt>
+          <dl>現在の 年 月 日 時 分</dl>
           <dt>タイトル</dt>
           <dl>選択されたテキスト</dl>
           <dt>詳細</dt>
