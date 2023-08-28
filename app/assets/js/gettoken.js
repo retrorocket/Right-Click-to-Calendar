@@ -1,36 +1,36 @@
 export const getToken = () => {
-
-  const senddata =
-  {
-    "app": "femihkgadmhfmdlkjjfjcgleppfggadk"
+  const senddata = {
+    app: "femihkgadmhfmdlkjjfjcgleppfggadk",
   };
 
   return fetch("https://client.retrorocket.biz/token", {
     method: "post",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
-    body: JSON.stringify(senddata)
+    body: JSON.stringify(senddata),
   })
-    .then(response => {
+    .then((response) => {
       if (!response.ok) {
         throw new Error("failed to get request token");
       }
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       if (data.access_token) {
-        chrome.storage.local.set({ "accessToken": data.access_token }, () => {
-          window.close();
-        });
+        chrome.storage.local.set({ accessToken: data.access_token });
       } else {
         throw new Error("failed to get request token");
       }
     })
     .catch(() => {
-      alert("アクセストークンを取得できませんでした。このウィンドウを閉じてオプションページから再度登録を行ってください。");
-      window.close();
+      alert(
+        "アクセストークンを取得できませんでした。このウィンドウを閉じてオプションページから再度登録を行ってください。"
+      );
+    })
+    .finally(() => {
+      chrome.windows.remove(parseInt(localStorage["token_windowid"]));
     });
-}
+};
 
 getToken();
