@@ -7,17 +7,17 @@ jobs:
     steps:
       - checkout # ソースコードを作業ディレクトリにチェックアウト
       - restore_cache:
-          name: Yarn パッケージのキャッシュの復元
+          name: npm パッケージのキャッシュの復元
           keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
+            - npm-packages-{{ checksum "package-lock.json" }}
       - run:
           name: 依存関係のインストール
-          command: yarn install --immutable
+          command: npm install
       - save_cache:
-          name: Yarn パッケージのキャッシュの保存
-          key: yarn-packages-{{ checksum "yarn.lock" }}
+          name: npm パッケージのキャッシュの保存
+          key: npm-packages-{{ checksum "package-lock.json" }}
           paths:
-            - ~/.yarn/cache
+            - ~/node_modules
       - persist_to_workspace:
           root: .
           paths:
@@ -32,7 +32,7 @@ jobs:
           at: .
       - run:
           name: Jestによるテストの実行
-          command: yarn jest -i --ci --runInBand
+          command: npm test -- -i --ci --runInBand
       - store_artifacts:
           path: coverage
       - store_artifacts:
@@ -49,7 +49,7 @@ jobs:
           at: .
       - run:
           name: ESLintの実行
-          command: yarn eslint . --format junit --output-file reports/eslint/results.xml
+          command: npm run lint . -- --format junit --output-file reports/eslint/results.xml
       - store_artifacts:
           path: reports
       - store_test_results:
