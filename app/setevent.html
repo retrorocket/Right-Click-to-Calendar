@@ -1,116 +1,165 @@
 <!DOCTYPE html>
 <html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>イベント設定</title>
+    <!-- Bootstrap core CSS -->
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
 
-  <title>イベント設定</title>
-  <!-- Bootstrap core CSS -->
-  <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <script src="./assets/js/vendor/luxon.min.js" defer></script>
 
-  <script src="./assets/js/vendor/luxon.min.js" defer></script>
+    <script type="module" src="./assets/js/setevent.js"></script>
+  </head>
 
-  <script type="module" src="./assets/js/setevent.js"></script>
-</head>
-
-<body>
-
-  <div class="card bg-light">
-    <form>
-      <fieldset>
-
-        <div class="card-header">
-          <legend>イベント設定 <a class="btn btn-secondary btn-sm" id="create-cal" href="#">カレンダーを表示</a></legend>
-        </div>
-
-        <div class="card-body">
-
-          <div class="form-group">
-            <label for="tit" class="control-label">🖊️ タイトル</label>
-            <input type="text" class="form-control" id="tit" placeholder="イベントのタイトル">
+  <body>
+    <div class="card bg-light">
+      <form>
+        <fieldset>
+          <div class="card-header">
+            <legend>
+              イベント設定
+              <a class="btn btn-secondary btn-sm" id="create-cal" href="#"
+                >カレンダーを表示</a
+              >
+            </legend>
           </div>
 
-          <div class="form-group">
-            <div class="form-row mb-2">
-              <label for="from-date" class="col-2 col-form-label">🕛 開始</label>
-              <div class="col-5">
-                <input type="date" class="form-control" id="from-date" max="2999-12-31" required>
-              </div>
-              <div class="col-5">
-                <input type="time" class="form-control" id="from-time">
-              </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="tit" class="control-label">🖊️ タイトル</label>
+              <input
+                type="text"
+                class="form-control"
+                id="tit"
+                placeholder="イベントのタイトル"
+              />
             </div>
 
-            <div class="form-row mb-2">
-              <label for="to-date" class="col-2 col-form-label">🕕 終了</label>
-              <div class="col-5">
-                <input type="date" class="form-control" id="to-date" max="2999-12-31" required>
-              </div>
-              <div class="col-5">
-                <input type="time" class="form-control" id="to-time">
-              </div>
-            </div>
-
-            <div class="form-row align-items-center">
-              <div class="col-3">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" id="allday">
-                  <label class="form-check-label" for="allday">
-                    🌃 終日設定
-                  </label>
+            <div class="form-group">
+              <div class="form-row mb-2">
+                <label for="from-date" class="col-2 col-form-label"
+                  >🕛 開始</label
+                >
+                <div class="col-5">
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="from-date"
+                    max="2999-12-31"
+                    required
+                  />
+                </div>
+                <div class="col-5">
+                  <input type="time" class="form-control" id="from-time" />
                 </div>
               </div>
-              <div class="col-2">
-                <div class="form-check text-right">
-                  <input class="form-check-input" type="checkbox" id="to-timezone">
-                  <label for="to-timezone" class="form-check-label">🌍 TZ</label>
+
+              <div class="form-row mb-2">
+                <label for="to-date" class="col-2 col-form-label"
+                  >🕕 終了</label
+                >
+                <div class="col-5">
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="to-date"
+                    max="2999-12-31"
+                    required
+                  />
+                </div>
+                <div class="col-5">
+                  <input type="time" class="form-control" id="to-time" />
                 </div>
               </div>
-              <div class="col-7">
-                <select class="form-control" id="timezone-list"></select>
+
+              <div class="form-row align-items-center">
+                <div class="col-3">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="allday"
+                    />
+                    <label class="form-check-label" for="allday">
+                      🌃 終日設定
+                    </label>
+                  </div>
+                </div>
+                <div class="col-2">
+                  <div class="form-check text-right">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="to-timezone"
+                    />
+                    <label for="to-timezone" class="form-check-label"
+                      >🌍 TZ</label
+                    >
+                  </div>
+                </div>
+                <div class="col-7">
+                  <select class="form-control" id="timezone-list"></select>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label for="location" class="control-label">📍 場所</label>
-            <input type="text" class="form-control" id="location" placeholder="イベントの開催場所">
-          </div>
+            <div class="form-group">
+              <label for="location" class="control-label">📍 場所</label>
+              <input
+                type="text"
+                class="form-control"
+                id="location"
+                placeholder="イベントの開催場所"
+              />
+            </div>
 
-          <div class="form-group">
-            <label for="detail" class="control-label">📝 予定の詳細</label>
-            <textarea class="form-control" rows="3" id="detail"></textarea>
-          </div>
+            <div class="form-group">
+              <label for="detail" class="control-label">📝 予定の詳細</label>
+              <textarea class="form-control" rows="3" id="detail"></textarea>
+            </div>
 
-          <div class="form-group">
-            <label for="selected-calendar" class="control-label">📅 投稿するカレンダー</label>
-            <select class="form-control" id="selected-calendar"></select>
-          </div>
+            <div class="form-group">
+              <label for="selected-calendar" class="control-label"
+                >📅 投稿するカレンダー</label
+              >
+              <select class="form-control" id="selected-calendar"></select>
+            </div>
 
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="hangoutsMeet">
-              <label class="form-check-label" for="hangoutsMeet">
-                📹 Google MeetのURLを発行する
-              </label>
+            <div class="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="hangoutsMeet"
+                />
+                <label class="form-check-label" for="hangoutsMeet">
+                  📹 Google MeetのURLを発行する
+                </label>
+              </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="sub">
+              Submit
+            </button>
+
+            <hr />
+
+            <div class="form-group">
+              <label for="main-text" class="control-label"
+                >選択したテキスト</label
+              >
+              <textarea class="form-control" rows="3" id="main-text"></textarea>
             </div>
           </div>
-
-          <button type="button" class="btn btn-primary" id="sub">Submit</button>
-
-          <hr>
-
-          <div class="form-group">
-            <label for="main-text" class="control-label">選択したテキスト</label>
-            <textarea class="form-control" rows="3" id="main-text"></textarea>
-          </div>
-        </div>
-        <!-- card body -->
-      </fieldset>
-    </form>
-  </div>
-  <!-- card -->
-</body>
-
+          <!-- card body -->
+        </fieldset>
+      </form>
+    </div>
+    <!-- card -->
+  </body>
 </html>

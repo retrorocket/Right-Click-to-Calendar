@@ -29,9 +29,12 @@ export const expDate = (selectedText) => {
   const d = new Date();
 
   // start
-  const syear = parseInt(checkDates("start_year", max, match_arr), 10) || d.getFullYear();
-  const smon = parseInt(checkDates("start_mon", max, match_arr), 10) || d.getMonth() + 1;
-  const sday = parseInt(checkDates("start_day", max, match_arr), 10) || d.getDate();
+  const syear =
+    parseInt(checkDates("start_year", max, match_arr), 10) || d.getFullYear();
+  const smon =
+    parseInt(checkDates("start_mon", max, match_arr), 10) || d.getMonth() + 1;
+  const sday =
+    parseInt(checkDates("start_day", max, match_arr), 10) || d.getDate();
 
   const start_hour = parseInt(checkDates("start_hour", max, match_arr), 10);
   const shour = start_hour >= 0 ? start_hour : d.getHours();
@@ -40,9 +43,12 @@ export const expDate = (selectedText) => {
   const smin = start_min >= 0 ? start_min : d.getMinutes();
 
   // end
-  const eyear = parseInt(checkDates("end_year", max, match_arr), 10) || d.getFullYear();
-  const emon = parseInt(checkDates("end_mon", max, match_arr), 10) || d.getMonth() + 1;
-  const eday = parseInt(checkDates("end_day", max, match_arr), 10) || d.getDate();
+  const eyear =
+    parseInt(checkDates("end_year", max, match_arr), 10) || d.getFullYear();
+  const emon =
+    parseInt(checkDates("end_mon", max, match_arr), 10) || d.getMonth() + 1;
+  const eday =
+    parseInt(checkDates("end_day", max, match_arr), 10) || d.getDate();
 
   const end_hour = parseInt(checkDates("end_hour", max, match_arr), 10);
   const ehour = end_hour >= 0 ? end_hour : d.getHours();
@@ -60,25 +66,25 @@ export const expDate = (selectedText) => {
   const location = checkDates("location", max, match_arr) || "";
 
   const args = {
-    "start": {
-      "year": syear,
-      "month": smon,
-      "day": sday,
-      "hour": shour,
-      "min": smin
+    start: {
+      year: syear,
+      month: smon,
+      day: sday,
+      hour: shour,
+      min: smin,
     },
-    "end": {
-      "year": eyear,
-      "month": emon,
-      "day": eday,
-      "hour": ehour,
-      "min": emin
+    end: {
+      year: eyear,
+      month: emon,
+      day: eday,
+      hour: ehour,
+      min: emin,
     },
-    "title": title,
-    "detail": detail,
-    "selected_text": base_str,
-    "location": location
+    title: title,
+    detail: detail,
+    selected_text: base_str,
+    location: location,
   };
 
   return args;
-}
+};
