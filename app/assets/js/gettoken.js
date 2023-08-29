@@ -29,7 +29,9 @@ export const getToken = () => {
       );
     })
     .finally(() => {
-      chrome.windows.remove(parseInt(localStorage["token_windowid"]));
+      chrome.windows.getCurrent((window) => {
+        chrome.windows.remove(window.id);
+      });
     });
 };
 

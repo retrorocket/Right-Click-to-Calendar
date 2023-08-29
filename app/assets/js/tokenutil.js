@@ -5,17 +5,12 @@ const CLIENT_ID =
 const AUTH_URL = "https://client.retrorocket.biz/try";
 
 const tokenRefresh = () => {
-  chrome.windows.create(
-    {
-      url: AUTH_URL,
-      width: 530,
-      height: 700,
-      type: "popup",
-    },
-    (window) => {
-      localStorage["token_windowid"] = window.id;
-    }
-  );
+  chrome.windows.create({
+    url: AUTH_URL,
+    width: 530,
+    height: 700,
+    type: "popup",
+  });
 };
 
 export const checkToken = (accessToken) => {
