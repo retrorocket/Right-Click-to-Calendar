@@ -10,7 +10,7 @@ Chromium, Edge からでも使用可能です。（ベータ機能）
 
 この拡張ではユーザーが選択したテキストを読み取る目的で、Web ページ上で[Content scripts](https://developer.chrome.com/docs/extensions/mv3/content_scripts/)を実行します。
 
-必要な権限は次のとおりです：
+この拡張で必要な権限は次のとおりです：
 
 - [contextMenus](https://developer.chrome.com/docs/extensions/reference/contextMenus/)
   - 右クリックメニューからカレンダーに登録を行うために使用しています
