@@ -18,20 +18,23 @@
 
   <body>
     <div class="card bg-light">
-      <form>
-        <fieldset>
-          <div class="card-header">
-            <legend>
-              イベント設定
-              <a class="btn btn-secondary btn-sm" id="create-cal" href="#"
-                >カレンダーを表示</a
-              >
-            </legend>
+      <div class="card-header">
+        <div class="row align-items-center">
+          <div class="col-6">
+            <span class="align-middle">イベント設定</span>
           </div>
-
-          <div class="card-body">
-            <div class="form-group">
-              <label for="tit" class="control-label">🖊️ タイトル</label>
+          <div class="col-6 text-end">
+            <a class="btn btn-secondary btn-sm" id="create-cal" href="#"
+              >カレンダーを表示</a
+            >
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <form>
+          <fieldset>
+            <div class="mb-3">
+              <label for="tit" class="form-label">🖊️ タイトル</label>
               <input
                 type="text"
                 class="form-control"
@@ -40,76 +43,68 @@
               />
             </div>
 
-            <div class="form-group">
-              <div class="form-row mb-2">
-                <label for="from-date" class="col-2 col-form-label"
-                  >🕛 開始</label
-                >
-                <div class="col-5">
-                  <input
-                    type="date"
-                    class="form-control"
-                    id="from-date"
-                    max="2999-12-31"
-                    required
-                  />
-                </div>
-                <div class="col-5">
-                  <input type="time" class="form-control" id="from-time" />
-                </div>
+            <div class="row g-2 mb-2">
+              <label for="from-date" class="col-2 col-form-label"
+                >🕛 開始</label
+              >
+              <div class="col-5">
+                <input
+                  type="date"
+                  class="form-control"
+                  id="from-date"
+                  max="2999-12-31"
+                  required
+                />
               </div>
-
-              <div class="form-row mb-2">
-                <label for="to-date" class="col-2 col-form-label"
-                  >🕕 終了</label
-                >
-                <div class="col-5">
-                  <input
-                    type="date"
-                    class="form-control"
-                    id="to-date"
-                    max="2999-12-31"
-                    required
-                  />
-                </div>
-                <div class="col-5">
-                  <input type="time" class="form-control" id="to-time" />
-                </div>
-              </div>
-
-              <div class="form-row align-items-center">
-                <div class="col-3">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="allday"
-                    />
-                    <label class="form-check-label" for="allday">
-                      🌃 終日設定
-                    </label>
-                  </div>
-                </div>
-                <div class="col-2">
-                  <div class="form-check text-right">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="to-timezone"
-                    />
-                    <label for="to-timezone" class="form-check-label"
-                      >🌍 TZ</label
-                    >
-                  </div>
-                </div>
-                <div class="col-7">
-                  <select class="form-control" id="timezone-list"></select>
-                </div>
+              <div class="col-5">
+                <input type="time" class="form-control" id="from-time" />
               </div>
             </div>
 
-            <div class="form-group">
-              <label for="location" class="control-label">📍 場所</label>
+            <div class="row g-1 mb-2">
+              <label for="to-date" class="col-2 col-form-label">🕕 終了</label>
+              <div class="col-5">
+                <input
+                  type="date"
+                  class="form-control"
+                  id="to-date"
+                  max="2999-12-31"
+                  required
+                />
+              </div>
+              <div class="col-5">
+                <input type="time" class="form-control" id="to-time" />
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3 align-items-center">
+              <div class="col-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="allday" />
+                  <label class="form-check-label" for="allday">
+                    🌃 終日設定
+                  </label>
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="form-check float-end">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="to-timezone"
+                  />
+                  <label for="to-timezone" class="form-check-label"
+                    >🌍 TZ</label
+                  >
+                </div>
+              </div>
+              <div class="col-5">
+                <select class="form-control" id="timezone-list"></select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="location" class="form-label">📍 場所</label>
               <input
                 type="text"
                 class="form-control"
@@ -118,19 +113,19 @@
               />
             </div>
 
-            <div class="form-group">
-              <label for="detail" class="control-label">📝 予定の詳細</label>
+            <div class="mb-3">
+              <label for="detail" class="form-label">📝 予定の詳細</label>
               <textarea class="form-control" rows="3" id="detail"></textarea>
             </div>
 
-            <div class="form-group">
-              <label for="selected-calendar" class="control-label"
+            <div class="mb-3">
+              <label for="selected-calendar" class="form-label"
                 >📅 投稿するカレンダー</label
               >
-              <select class="form-control" id="selected-calendar"></select>
+              <select class="form-select" id="selected-calendar"></select>
             </div>
 
-            <div class="form-group">
+            <div class="mb-3">
               <div class="form-check">
                 <input
                   class="form-check-input"
@@ -149,16 +144,14 @@
 
             <hr />
 
-            <div class="form-group">
-              <label for="main-text" class="control-label"
-                >選択したテキスト</label
-              >
+            <div>
+              <label for="main-text" class="form-label">選択したテキスト</label>
               <textarea class="form-control" rows="3" id="main-text"></textarea>
             </div>
-          </div>
-          <!-- card body -->
-        </fieldset>
-      </form>
+          </fieldset>
+        </form>
+      </div>
+      <!-- card body -->
     </div>
     <!-- card -->
   </body>

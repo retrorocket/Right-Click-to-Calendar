@@ -236,6 +236,7 @@ document.getElementById("reg-set").addEventListener("click", () => {
 // 正規表現のチェック
 document.getElementById("check-regexp").addEventListener("click", () => {
   document.getElementById("regexp-group").innerHTML = "";
+  document.getElementById("regexp-heading").classList.add("show-block");
   localStorage["check_str"] = document.getElementById("check_str").value;
   checkRegExps();
 });

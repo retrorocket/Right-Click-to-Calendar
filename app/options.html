@@ -1,212 +1,378 @@
 <!DOCTYPE html>
 <html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <title>Right Click to Calendar設定</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!-- Bootstrap core CSS -->
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
 
-<head>
-  <meta charset="utf-8">
-  <title>Right Click to Calendar設定</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Bootstrap core CSS -->
-  <link href="./assets/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .include-checker:has(#chromium-switch:not(:checked)) #chromium-notice,
+      .include-checker:has(#exp-switch:not(:checked)) #exp-fields,
+      .hide-block {
+        display: none;
+        animation: fadeOut 0.2s ease 0s 1 forwards;
+      }
 
-  <script type="module" src="./assets/js/options.js"></script>
-  <style>
-    h1 {
-      font-size: 2.3rem;
-      padding-bottom: 8px;
-    }
+      .include-checker:has(#chromium-switch:checked) #chromium-notice,
+      .include-checker:has(#exp-switch:checked) #exp-fields,
+      .show-block {
+        display: block;
+        animation: fadeIn 0.2s ease 0s 1 forwards;
+      }
 
-    h3 {
-      font-size: 1.6rem;
-      padding-bottom: 8px;
-    }
+      @keyframes fadeIn {
+        0% {
+          display: none;
+          opacity: 0;
+        }
 
-    .container {
-      padding-top: 15px;
-      padding-bottom: 20px;
-    }
+        100% {
+          display: block;
+          opacity: 1;
+        }
+      }
 
-    .pt-3:has(#chromium-switch:not(:checked)) #chromium-notice,
-    .pt-3:has(#exp-switch:not(:checked)) #exp-field,
-    .pt-3:has(#exp-switch:not(:checked)) #exp-test-field {
-      display: none;
-    }
+      @keyframes fadeOut {
+        0% {
+          display: block;
+          opacity: 1;
+        }
 
-  </style>
-</head>
+        100% {
+          display: none;
+          opacity: 0;
+        }
+      }
+    </style>
+    <script type="module" src="./assets/js/options.js"></script>
+  </head>
 
-<body>
-  <div class="container">
-    <h1 class="pt-3">Right Click to Calendar設定</h1>
-    <div class="alert alert-dismissible alert-light">
-      <a href="https://retrorocket.biz/kampa" class="alert-link">カンパのお願い。</a>
-    </div>
-    <div id="setter" class="pt-3">
-      <h3>デフォルトで登録したいカレンダーの設定</h3>
-      <form role="form" class="form-inline">
-        <div class="form-group mr-3">
-          <select id="selected-calendar" class="form-control">
-          </select>
-        </div>
-        <button type="button" class="btn btn-primary" id="sub">デフォルトのカレンダーに設定</button>
-      </form>
-
-      <p id="comp" class="pt-1"></p>
-      <hr>
-    </div>
-
-    <div class="pt-3">
-      <h3>詳細設定</h3>
-      <div class="form-group">
-        <label>
-          <input type="checkbox" id="detail-switch"> <span style="font-weight:bold">選択したテキストを「予定の詳細」にセットする</span>
-        </label>
-        <p>正規表現編集がオンの場合は、設定した正規表現が優先されます。</p>
-        <label>
-          <input type="checkbox" id="chromium-switch"> <span style="font-weight:bold">Chromium派生ブラウザを使用する
-            （ベータ版機能）</span>
-        </label>
-        <p>チェックを入れるとOAuth同意画面が表示されます。手順に従って承認してください。</p>
-        <div id="chromium-notice">
-          <h6>承認手順・注意点</h6>
-          <ul>
-            <li>OAuth同意画面で<span
-                style="font-weight:bold">「カレンダーの参照、ダウンロード」「すべてのカレンダーの予定の表示と編集」にチェックを入れて</span>権限を承認してください。</li>
-            <li>予定の登録でエラーが発生する場合、権限承認後にGoogleのアクティビティ確認を実行してください。</li>
-            <li>本機能により生じた損害等について、一切の責任を負いかねます。</li>
-            <li>本機能に関してのお問い合わせは<a
-                href="https://github.com/retrorocket/Right-Click-to-Calendar">GitHub</a>のissueからお願いします。
-            </li>
-          </ul>
-        </div>
+  <body>
+    <div class="container">
+      <h1 class="pt-3 fs-2">Right Click to Calendar設定</h1>
+      <div class="my-3 alert alert-dismissible alert-light">
+        <a href="https://retrorocket.biz/kampa" class="alert-link"
+          >カンパのお願い。</a
+        >
       </div>
-      <hr>
-    </div>
 
-    <div class="pt-3">
-      <h3>OAuthによるアプリケーションの承認状況</h3>
-      <p id="check" style="font-weight:bold"></p>
-      <p>Google Calendarとの連携を解除する場合は、<a href="https://myaccount.google.com/">Googleのアカウント設定ページ</a>からアクセス権を削除してください。
-      </p>
-      <hr>
-    </div>
+      <!-- デフォルトで使用するカレンダーの設定 -->
+      <div id="setter" class="py-3">
+        <h3 class="fs-4 mb-3 pb-2 border-bottom">
+          デフォルトで使用するカレンダーの設定
+        </h3>
 
-    <div class="pt-3">
-      <h3>正規表現編集（ベータ版機能）</h3>
-      <div id="exp-check" class="form-group">
-        <label>
-          <input type="checkbox" id="exp-switch"> <span style="font-weight:bold">選択したテキストに対する正規表現を自分で設定する</span>
-        </label>
-        <p>自分で正規表現を設定することで、予定登録画面に反映させる日時・内容を任意のものに変更できます。<br>
-          正規表現が使用できる方のみチェックを入れてください。</p>
-      </div>
-      <div id="exp-field">
-        <h4>編集方法</h4>
-        <ul>
-          <li>グループを使用した正規表現を記述し、対応するグループのインデックスを各項目に半角数字で設定してください。</li>
-          <li>対応するインデックスが存在しない項目は空欄にしてください。<br>インデックスが空欄の項目に対しては、以下の値が予定登録画面に反映されます：</li>
-          <dd>
-          <dt>開始・終了 年 月 日 時 分</dt>
-          <dl>現在の 年 月 日 時 分</dl>
-          <dt>タイトル</dt>
-          <dl>選択されたテキスト</dl>
-          <dt>詳細</dt>
-          <dl>空文字</dl>
-          <dt>場所</dt>
-          <dl>空文字</dl>
-          </dd>
-          <li>選択されたテキストの全角英数字は、全て半角英数字に変換されます。正規表現は変換後の文字列に対し適用されます。</li>
-          <li>誤った正規表現、インデックスに半角数字以外を指定した場合の動作は保証しません。</li>
-          <li>正規表現はJavaScriptで動作するものを入力してください。</li>
-        </ul>
-
-        <div class="form-group">
-          <label for="exp_str">正規表現</label>
-          <input type="text" class="form-control" id="exp_str" placeholder="(\d+):(\d+):(\d+| |\n)(\S+)">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-2">
-            <label for="start_year">開始年</label>
-            <input type="number" class="form-control" id="start_year" min="0">
+        <div class="row justify-content-start align-middle">
+          <div class="col-3">
+            <select id="selected-calendar" class="form-select"></select>
           </div>
-          <div class="form-group col-2">
-            <label for="start_mon">開始月</label>
-            <input type="number" class="form-control" id="start_mon" min="0">
+          <div class="col">
+            <button type="button" class="btn btn-primary" id="sub">
+              デフォルトのカレンダーに設定
+            </button>
+            <span id="comp" class="mx-2 form-text"></span>
           </div>
-          <div class="form-group col-2">
-            <label for="start_day">開始日</label>
-            <input type="number" class="form-control" id="start_day" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="start_hour">開始時間（時）</label>
-            <input type="number" class="form-control" id="start_hour" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="start_min">開始時間（分）</label>
-            <input type="number" class="form-control" id="start_min" min="0">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-2">
-            <label for="end_year">終了年</label>
-            <input type="number" class="form-control" id="end_year" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="end_mon">終了月</label>
-            <input type="number" class="form-control" id="end_mon" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="end_day">終了日</label>
-            <input type="number" class="form-control" id="end_day" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="end_hour">終了時間（時）</label>
-            <input type="number" class="form-control" id="end_hour" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="end_min">終了時間（分）</label>
-            <input type="number" class="form-control" id="end_min" min="0">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group col-2">
-            <label for="title">タイトル</label>
-            <input type="number" class="form-control" id="title" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="detail">詳細</label>
-            <input type="number" class="form-control" id="detail" min="0">
-          </div>
-          <div class="form-group col-2">
-            <label for="location">場所</label>
-            <input type="number" class="form-control" id="location" min="0">
-          </div>
-        </div>
-
-        <button type="button" id="reg-set" class="btn btn-primary">設定</button>
-        <p id="edited" class="py-1"></p>
-
-      </div> <!-- exp-field-->
-
-      <div id="exp-test-field" class="card my-3">
-        <div class="card-body">
-          <h3 class="card-title">正規表現チェック</h3>
-          <p class="card-text">「正規表現編集」に入力されている正規表現を使用して、検証用の文字列をチェックします。</p>
-          <div class="form-group">
-            <label for="check_str">検証用の文字列</label>
-            <textarea class="form-control" id="check_str">2019年4月12日 映画公開日 場所:東宝系映画館</textarea>
-          </div>
-          <button type="button" id="check-regexp" class="btn btn-primary">チェック</button>
-          <p class="pt-1"><b>チェック結果が以下に表示されます</b></p>
-          <ul id="regexp-group"></ul>
         </div>
       </div>
 
+      <!-- 詳細設定 -->
+      <div class="py-3 include-checker">
+        <h3 class="fs-4 mb-3 pb-2 border-bottom">詳細設定</h3>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="detail-switch" />
+          <label class="form-check-label" for="detail-switch"
+            >選択したテキストを「予定の詳細」にセットする</label
+          >
+          <div class="form-text">
+            正規表現編集がオンの場合は、設定した正規表現が優先されます。
+          </div>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="chromium-switch"
+          />
+          <label class="form-check-label" for="chromium-switch"
+            >Chromium派生ブラウザを使用する （ベータ版機能）</label
+          >
+          <div class="form-text">
+            チェックを入れるとOAuth同意画面が表示されます。手順に従って承認してください。
+          </div>
+        </div>
+
+        <div class="card mt-3" id="chromium-notice">
+          <div class="card-header">承認手順・注意点</div>
+          <div class="card-body">
+            <ul>
+              <li>
+                OAuth同意画面で<strong>「カレンダーの参照、ダウンロード」「すべてのカレンダーの予定の表示と編集」にチェックを入れて</strong>権限を承認してください。
+              </li>
+              <li>
+                予定の登録でエラーが発生する場合、権限承認後にGoogleのアクティビティ確認を実行してください。
+              </li>
+              <li>
+                本機能により生じた損害等について、一切の責任を負いかねます。
+              </li>
+              <li>
+                本機能に関してのお問い合わせは<a
+                  href="https://github.com/retrorocket/Right-Click-to-Calendar"
+                  >GitHub</a
+                >のissueからお願いします。
+              </li>
+            </ul>
+          </div>
+          <!-- card body -->
+        </div>
+        <!-- card -->
+      </div>
+
+      <!-- OAuthによるアプリケーションの承認状況 -->
+      <div class="py-3">
+        <h3 class="fs-4 mb-3 pb-2 border-bottom">
+          OAuthによるアプリケーションの承認状況
+        </h3>
+        <p id="check" class="fw-bold"></p>
+        <p>
+          Google Calendarとの連携を解除する場合は、<a
+            href="https://myaccount.google.com/"
+            >Googleのアカウント設定ページ</a
+          >からアクセス権を削除してください。
+        </p>
+      </div>
+
+      <!-- 正規表現編集 -->
+      <div class="py-3 include-checker">
+        <h3 class="fs-4 mb-3 pb-2 border-bottom">
+          正規表現編集（ベータ版機能）
+        </h3>
+
+        <div class="form-check mb-3" id="exp-check">
+          <input class="form-check-input" type="checkbox" id="exp-switch" />
+          <label class="form-check-label" for="exp-switch"
+            >選択したテキストに対する正規表現を自分で設定する</label
+          >
+          <div class="form-text">
+            自分で正規表現を設定することで、予定登録画面に反映させる日時・内容を任意のものに変更できます。<br />
+            正規表現が使用できる方のみチェックを入れてください。
+          </div>
+        </div>
+
+        <div id="exp-fields">
+          <div class="card mb-3" id="exp-field-explanation">
+            <div class="card-header">編集方法</div>
+            <div class="card-body">
+              <ul>
+                <li>
+                  グループを使用した正規表現を記述し、各項目に対応するグループのインデックスを半角数字で設定してください。
+                </li>
+                <li>
+                  選択されたテキストの全角英数字は、全て半角英数字に変換されます。正規表現は変換後の文字列に対して適用されます。
+                </li>
+                <li>
+                  誤った正規表現や、インデックスに半角数字以外を指定した場合の動作は保証しません。
+                </li>
+                <li>正規表現はJavaScriptで動作するものを入力してください。</li>
+                <li>
+                  対応するインデックスが存在しない項目は空欄にしてください。<br />インデックスが空欄の項目は、デフォルト値が予定登録画面に反映されます。
+
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">インデックスが空欄の項目</th>
+                        <th scope="col">
+                          予定登録画面に反映されるデフォルト値
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>開始・終了 年 月 日 時</td>
+                        <td>現在の 年 月 日 時 分</td>
+                      </tr>
+                      <tr>
+                        <td>タイトル</td>
+                        <td>選択されたテキスト</td>
+                      </tr>
+                      <tr>
+                        <td>詳細</td>
+                        <td>空文字</td>
+                      </tr>
+                      <tr>
+                        <td>場所</td>
+                        <td>空文字</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </li>
+              </ul>
+            </div>
+            <!-- card body-->
+          </div>
+          <!-- card exp-field-explanation -->
+
+          <div id="exp-field">
+            <div class="mb-3">
+              <label class="form-label fw-bold" for="exp_str">正規表現</label>
+              <input
+                type="text"
+                class="form-control"
+                id="exp_str"
+                placeholder="(\d+):(\d+):(\d+| |\n)(\S+)"
+              />
+            </div>
+
+            <div class="row row-cols-5 gy-2 mb-3">
+              <div class="col">
+                <label class="form-label" for="start_year">開始年</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="start_year"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="start_mon">開始月</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="start_mon"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="start_day">開始日</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="start_day"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="start_hour"
+                  >開始時間（時）</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="start_hour"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="start_min">開始時間（分）</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="start_min"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="end_year">終了年</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="end_year"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="end_mon">終了月</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="end_mon"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="end_day">終了日</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="end_day"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="end_hour">終了時間（時）</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="end_hour"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="end_min">終了時間（分）</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="end_min"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="title">タイトル</label>
+                <input type="number" class="form-control" id="title" min="0" />
+              </div>
+              <div class="col">
+                <label class="form-label" for="detail">詳細</label>
+                <input type="number" class="form-control" id="detail" min="0" />
+              </div>
+              <div class="col">
+                <label class="form-label" for="location">場所</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="location"
+                  min="0"
+                />
+              </div>
+            </div>
+
+            <div class="mb-3 align-middle">
+              <button type="button" id="reg-set" class="btn btn-primary">
+                設定
+              </button>
+              <span id="edited" class="mx-2 form-text"></span>
+            </div>
+          </div>
+          <!-- exp-field-->
+
+          <div id="exp-field-test" class="py-3">
+            <h3 class="fs-4 mb-3 pb-2 border-bottom">正規表現チェック</h3>
+            <p>
+              「正規表現編集」に入力されている正規表現を使用して、検証用の文字列をチェックします。
+            </p>
+            <div class="mb-3">
+              <label class="form-label" for="check_str">検証用の文字列</label>
+              <textarea class="form-control" id="check_str">
+2019年4月12日 映画公開日 場所:東宝系映画館</textarea
+              >
+            </div>
+            <button type="button" id="check-regexp" class="btn btn-primary">
+              チェック
+            </button>
+            <div id="regexp-heading" class="hide-block">
+              <h4 class="fs-5 my-3">チェック結果</h4>
+              <ul class="bg-light py-2" id="regexp-group"></ul>
+            </div>
+          </div>
+          <!-- exp-field-test -->
+        </div>
+        <!-- exp-fields -->
+      </div>
+      <!-- 正規表現編集 -->
     </div>
-  </div> <!-- container -->
-
-</body>
-
+    <!-- container -->
+  </body>
 </html>
