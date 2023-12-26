@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
@@ -130,6 +130,29 @@
           <!-- card body -->
         </div>
         <!-- card -->
+      </div>
+
+      <!-- どうしてもアプリケーション連携ができないとき -->
+      <div class="py-3">
+        <h3 class="fs-4 mb-3 pb-2 border-bottom">
+          どうしてもGoogle Calendarと連携できないとき
+        </h3>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="action-template"
+          />
+          <label class="form-check-label" for="action-template"
+            >Google Calendar登録用のURLを生成する （ベータ版機能）</label
+          >
+          <div class="form-text">
+            Google Calendarに登録するためのURL
+            (<code>https://www.google.com/calendar/event</code>)
+            を生成してイベントを編集・登録します。<br />Chrome,
+            ChromiumともにOAuth同意画面でどうしてもエラーが出る場合にのみ使用してください。
+          </div>
+        </div>
       </div>
 
       <!-- OAuthによるアプリケーションの承認状況 -->

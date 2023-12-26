@@ -331,6 +331,39 @@ document.getElementById("create-cal").addEventListener("click", () => {
   });
 });
 
+// アクションテンプレート用のページでへリダイレクトする
+export const redirectGoogleCalendar = () => {
+  const fromDateVal = document.getElementById("from-date").value;
+  const fromTimeVal = document.getElementById("from-time").value;
+  const toDateVal = document.getElementById("to-date").value;
+  const toTimeVal = document.getElementById("to-time").value;
+
+  const fromDate = DateTime.fromISO(fromDateVal + "T" + fromTimeVal).toFormat(
+    "yyyyMMdd'T'HHmmss"
+  );
+  const toDate = DateTime.fromISO(toDateVal + "T" + toTimeVal).toFormat(
+    "yyyyMMdd'T'HHmmss"
+  );
+
+  const input = {
+    action: "TEMPLATE",
+    text: document.getElementById("tit").value,
+    details: document.getElementById("detail").value,
+    location: document.getElementById("location").value,
+    dates: `${fromDate}/${toDate}`,
+  };
+
+  const params = new URLSearchParams(input);
+  const url = new URL(`https://www.google.com/calendar/event?${params}`);
+  window.location.href = url.href;
+};
+
+// アクションテンプレートを使用する場合はcardを表示しない
+if (localStorage["useActionTemplate"]) {
+  document.getElementsByClassName("card")[0].style.display = "none";
+  document.getElementById("use-action-template").removeAttribute("style");
+}
+
 // content scriptと通信して選択されたテキストを取得する
 const tabId = parseInt(location.search.split("=")[1], 10);
 chrome.tabs.sendMessage(
@@ -340,6 +373,11 @@ chrome.tabs.sendMessage(
   },
   (response) => {
     convertSelectedTextToForm(response.message);
+
+    if (localStorage["useActionTemplate"]) {
+      redirectGoogleCalendar();
+      return;
+    }
 
     // カレンダーIDのセット
     if (localStorage["useChromium"]) {
