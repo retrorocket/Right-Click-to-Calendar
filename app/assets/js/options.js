@@ -94,6 +94,7 @@ const loadCalendarIdRequest = (accessToken) => {
  * Chromiumの場合はここでaccessTokenを取得する
  */
 const loadCalendarId = () => {
+  if (localStorage["useActionTemplate"]) return;
   if (localStorage["useChromium"]) {
     chrome.storage.local.get("accessToken", (result) => {
       checkToken(result.accessToken)
@@ -150,10 +151,11 @@ const checkRegExps = () => {
  * カレンダー選択欄の初期化とカレンダーの取得を行う
  */
 const formatCalenderId = () => {
-  document.getElementById("check").textContent =
-    "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
   document.getElementById("selected-calendar").innerHTML = "";
   document.getElementById("setter").style.display = "none";
+  if (localStorage["useActionTemplate"]) return;
+  document.getElementById("check").textContent =
+    "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
   // カレンダーの読み込み
   loadCalendarId();
 };
@@ -217,6 +219,23 @@ chrome.storage.onChanged.addListener((changes) => {
     formatCalenderId();
   }
 });
+
+// action templateを使う
+if (localStorage["useActionTemplate"]) {
+  document.getElementById("action-template").checked = true;
+  document.getElementById("chromium-switch").disabled = "disabled";
+}
+document
+  .getElementById("action-template")
+  .addEventListener("click", (event) => {
+    if (event.target.checked) {
+      localStorage["useActionTemplate"] = true;
+      document.getElementById("chromium-switch").disabled = "disabled";
+    } else {
+      localStorage.removeItem("useActionTemplate");
+      document.getElementById("chromium-switch").removeAttribute("disabled");
+    }
+  });
 
 // 正規表現の設定
 document.getElementById("reg-set").addEventListener("click", () => {
