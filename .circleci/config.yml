@@ -65,7 +65,7 @@ jobs:
       # 設定した秘密鍵のFingerPrintを追記する
       - add_ssh_keys:
           fingerprints:
-            - "3f:94:61:f8:54:c6:58:c5:08:5b:e7:67:fb:16:7b:f0"
+            - "c1:ad:bc:ef:41:5e:95:c9:fb:6a:00:fb:58:26:23:ac"
       - run: sudo apt update
       - run: sudo apt install -y rsync
       - run: ssh-keyscan -p ${PORT} ${HOST_NAME} >> ~/.ssh/known_hosts
