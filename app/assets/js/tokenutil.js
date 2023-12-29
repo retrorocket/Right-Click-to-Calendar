@@ -2,15 +2,29 @@
 
 const CLIENT_ID =
   "94384066361-kgpm35l8cdcn4kqrd09tob7sssulnj1c.apps.googleusercontent.com";
-const AUTH_URL = "https://client.retrorocket.biz/try";
-
+const AUTH_URL = "https://client2.retrorocket.biz/try";
+const ERROR_MESSAGE =
+  "アクセストークンを取得できませんでした。承認用のウインドウを閉じてオプションページから再度登録を行ってください。";
 const tokenRefresh = () => {
-  chrome.windows.create({
-    url: AUTH_URL,
-    width: 530,
-    height: 700,
-    type: "popup",
-  });
+  chrome.identity.launchWebAuthFlow(
+    {
+      url: AUTH_URL,
+      interactive: true,
+    },
+    (responseUrl) => {
+      if (chrome.runtime.lastError) {
+        alert(ERROR_MESSAGE);
+        return;
+      }
+      const hash = new URL(responseUrl).hash;
+      const state = new URLSearchParams(hash);
+      if (state.has("#token")) {
+        chrome.storage.local.set({ accessToken: state.get("#token") });
+      } else {
+        alert(ERROR_MESSAGE);
+      }
+    }
+  );
 };
 
 export const checkToken = (accessToken) => {

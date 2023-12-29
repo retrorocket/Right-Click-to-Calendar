@@ -13,7 +13,7 @@
   "description": "選択したテキストをGoogleカレンダーに投稿できる拡張です。",
   "options_page": "options.html",
   "permissions": ["contextMenus", "identity", "storage"],
-  "version": "3.60",
+  "version": "3.61",
   "manifest_version": 3,
   "oauth2": {
     "client_id": "94384066361-079ot4sjd46238ijfdm8do77786to6po.apps.googleusercontent.com",
@@ -26,12 +26,6 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "js": ["assets/js/content.js"]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["gettoken.html"],
-      "matches": ["https://client.retrorocket.biz/*"]
     }
   ]
 }
