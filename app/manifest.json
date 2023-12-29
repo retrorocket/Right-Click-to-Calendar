@@ -27,11 +27,5 @@
       "matches": ["http://*/*", "https://*/*"],
       "js": ["assets/js/content.js"]
     }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["gettoken.html"],
-      "matches": ["https://client.retrorocket.biz/*"]
-    }
   ]
 }
