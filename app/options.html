@@ -81,7 +81,7 @@
       </div>
 
       <!-- 詳細設定 -->
-      <div class="py-3 include-checker">
+      <div class="py-3">
         <h3 class="fs-4 mb-3 pb-2 border-bottom">詳細設定</h3>
         <div class="form-check mb-2">
           <input class="form-check-input" type="checkbox" id="detail-switch" />
@@ -89,9 +89,27 @@
             >選択したテキストを「予定の詳細」にセットする</label
           >
           <div class="form-text">
-            正規表現編集がオンの場合は、設定した正規表現が優先されます。
+            コンテキストメニューを呼び出すときに選択したテキストを「予定の詳細」にセットします。正規表現編集がオンの場合は、設定した正規表現が優先されます。
           </div>
         </div>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="taburl-switch" />
+          <label class="form-check-label" for="taburl-switch"
+            >予定の書いてあるURLを「予定の詳細」にセットする</label
+          >
+          <div class="form-text">
+            コンテキストメニューを呼び出したタブのURLを「予定の詳細」にセットします。正規表現編集がオンの場合は、設定した正規表現が優先されます。<br />
+            <code>選択したテキストを「予定の詳細」にセットする</code
+            >がオンの場合は、<code>"URL"[改行]"選択したテキスト"</code>の形式でセットします。
+          </div>
+        </div>
+      </div>
+
+      <!-- Chromium -->
+      <div class="py-3 include-checker">
+        <h3 class="fs-4 mb-3 pb-2 border-bottom">
+          Chromium派生ブラウザを使用したいとき
+        </h3>
         <div class="form-check">
           <input
             class="form-check-input"
@@ -102,6 +120,8 @@
             >Chromium派生ブラウザを使用する （ベータ版機能）</label
           >
           <div class="form-text">
+            Microsoft
+            Edge等のChromium派生ブラウザを使用するときにチェックを入れてください。<br />
             チェックを入れるとOAuth同意画面が表示されます。手順に従って承認してください。
           </div>
         </div>
@@ -150,7 +170,7 @@
             Google Calendarに登録するためのURL
             (<code>https://www.google.com/calendar/event</code>)
             を生成してイベントを編集・登録します。<br />Chrome,
-            ChromiumともにOAuth同意画面でどうしてもエラーが出る場合にのみ使用してください。
+            ChromiumともにOAuth同意画面でどうしてもエラーが出る場合にのみチェックを入れてください。
           </div>
         </div>
       </div>
@@ -158,7 +178,7 @@
       <!-- OAuthによるアプリケーションの承認状況 -->
       <div class="py-3">
         <h3 class="fs-4 mb-3 pb-2 border-bottom">
-          OAuthによるアプリケーションの承認状況
+          Google Calendarとの連携状況
         </h3>
         <p id="check" class="fw-bold"></p>
         <p>
@@ -171,9 +191,7 @@
 
       <!-- 正規表現編集 -->
       <div class="py-3 include-checker">
-        <h3 class="fs-4 mb-3 pb-2 border-bottom">
-          正規表現編集（ベータ版機能）
-        </h3>
+        <h3 class="fs-4 mb-3 pb-2 border-bottom">正規表現編集</h3>
 
         <div class="form-check mb-3" id="exp-check">
           <input class="form-check-input" type="checkbox" id="exp-switch" />

@@ -56,7 +56,7 @@ const loadCalendarIdRequest = (accessToken) => {
         localStorage["calenId"];
       document.getElementById("setter").style.display = "block";
       document.getElementById("check").textContent =
-        "Google Calendarへのアクセスを承認済みです。";
+        "Google Calendarへのアクセスを承認済みです。正常に連携できています。";
       if (location.search.split("=")[1]) {
         alert(
           "アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。"
@@ -74,7 +74,7 @@ const loadCalendarIdRequest = (accessToken) => {
               "無効なアクセストークンを削除しました。このページをリロードして再度Google Calendarへのアクセスを承認してください。"
             );
             document.getElementById("check").textContent =
-              "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
+              "Google Calendarと連携できていません。このページをリロードして再度Google Calendarへのアクセスを承認してください。";
             localStorage.removeItem("calenId");
           }
         );
@@ -102,7 +102,7 @@ const loadCalendarId = () => {
         .catch(() => {
           localStorage.removeItem("calenId");
           document.getElementById("check").textContent =
-            "このページをリロードして再度Google Calendarへのアクセスを承認してください。";
+            "Google Calendarと連携できていません。このページをリロードして再度Google Calendarへのアクセスを承認してください。";
         });
     });
   } else {
@@ -114,7 +114,7 @@ const loadCalendarId = () => {
         if (chrome.runtime.lastError) {
           localStorage.removeItem("calenId");
           document.getElementById("check").textContent =
-            "このページをリロードして再度Google Calendarへのアクセスを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
+            "Google Calendarと連携できていません。このページをリロードして再度Google Calendarへのアクセスを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
           alert(
             "トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。"
           );
@@ -160,6 +160,10 @@ const formatCalenderId = () => {
   loadCalendarId();
 };
 
+////////////////////////////////////////
+//// ページロード後に読み込まれる処理
+///////////////////////////////////////
+
 // ページ読み込み時にカレンダーを取得する
 formatCalenderId();
 
@@ -198,6 +202,18 @@ document.getElementById("detail-switch").addEventListener("click", (event) => {
   }
 });
 
+// コンテキストメニューを呼び出したタブのURLを詳細に設定する
+if (localStorage["taburlSwitch"]) {
+  document.getElementById("taburl-switch").checked = true;
+}
+document.getElementById("taburl-switch").addEventListener("click", (event) => {
+  if (event.target.checked) {
+    localStorage["taburlSwitch"] = true;
+  } else {
+    localStorage.removeItem("taburlSwitch");
+  }
+});
+
 // Chromiumを使用する
 if (localStorage["useChromium"]) {
   document.getElementById("chromium-switch").checked = true;
@@ -223,17 +239,16 @@ chrome.storage.onChanged.addListener((changes) => {
 // action templateを使う
 if (localStorage["useActionTemplate"]) {
   document.getElementById("action-template").checked = true;
-  document.getElementById("chromium-switch").disabled = "disabled";
+  document.getElementById("chromium-switch").disabled = true;
 }
 document
   .getElementById("action-template")
   .addEventListener("click", (event) => {
+    document.getElementById("chromium-switch").disabled = event.target.checked;
     if (event.target.checked) {
       localStorage["useActionTemplate"] = true;
-      document.getElementById("chromium-switch").disabled = "disabled";
     } else {
       localStorage.removeItem("useActionTemplate");
-      document.getElementById("chromium-switch").removeAttribute("disabled");
     }
   });
 

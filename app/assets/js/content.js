@@ -21,14 +21,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     } else {
       selectedText = document.getSelection().toString();
     }
-    chrome.storage.session.get("selectionText", (result) => {
+    chrome.storage.local.get(["selectionText", "selectionTabUrl"], (result) => {
       selectedText = selectedText || result.selectionText;
       // 全角英数を半角英数に変換
       selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => {
         return String.fromCharCode(s.charCodeAt(0) - 65248);
       });
-      sendResponse({ message: selectedText });
-      chrome.storage.session.remove("selectionText");
+      sendResponse({ message: selectedText, url: result.selectionTabUrl });
+      chrome.storage.local.remove(["selectionText", "selectionTabUrl"]);
     });
   }
   return true;
