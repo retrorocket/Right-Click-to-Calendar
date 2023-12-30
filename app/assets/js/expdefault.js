@@ -3,7 +3,7 @@
  * オプションで正規表現編集が指定されていない場合
  * もしくは、正規表現にマッチしなかった場合に使用される
  */
-export const expDefault = (stext) => {
+export const expDefault = (stext, surl) => {
   // 年月日の初期設定
   const d = new Date();
 
@@ -27,7 +27,10 @@ export const expDefault = (stext) => {
   let stf = false;
   let etf = false;
 
-  const detail = localStorage.getItem("detailSwitch") ? stext : "";
+  let detail = localStorage.getItem("detailSwitch") ? stext : "";
+  detail = localStorage.getItem("taburlSwitch")
+    ? surl + (detail === "" ? "" : "\n") + detail
+    : detail;
 
   // 開始年日付
   const mm = stext.match(/(\d{2,4})(\/|年|\.|-)(\d{1,2})(\/|月|\.|-)(\d{1,2})/);

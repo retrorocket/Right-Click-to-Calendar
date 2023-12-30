@@ -226,7 +226,7 @@ const fetchCalendarId = (accessToken) => {
 /**
  * 選択されたテキストに正規表現を適用してフォームにセットする
  */
-export const convertSelectedTextToForm = (stext) => {
+export const convertSelectedTextToForm = (stext, surl) => {
   // テキストに正規表現を適用
   let args = null;
   if (localStorage["expSwitch"]) {
@@ -234,7 +234,7 @@ export const convertSelectedTextToForm = (stext) => {
   }
   // 正規表現に合致しなかった、もしくは正規表現が設定されていない場合
   if (!args) {
-    args = expDefault(stext);
+    args = expDefault(stext, surl);
   }
 
   // argsの中身はNumberとは限らないが、融通がきくのでluxonに処理させる
@@ -332,7 +332,7 @@ document.getElementById("create-cal").addEventListener("click", () => {
 });
 
 // アクションテンプレート用のページでへリダイレクトする
-export const redirectGoogleCalendar = () => {
+const redirectGoogleCalendar = () => {
   const fromDateVal = document.getElementById("from-date").value;
   const fromTimeVal = document.getElementById("from-time").value;
   const toDateVal = document.getElementById("to-date").value;
@@ -372,7 +372,7 @@ chrome.tabs.sendMessage(
     message: "eventpageLoaded",
   },
   (response) => {
-    convertSelectedTextToForm(response.message);
+    convertSelectedTextToForm(response.message, response.url);
 
     if (localStorage["useActionTemplate"]) {
       redirectGoogleCalendar();

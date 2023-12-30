@@ -5,14 +5,17 @@
  */
 const getClickHandler = (info, tab) => {
   // イベント登録ページの生成
-  chrome.storage.session.set({ selectionText: info.selectionText }, () => {
-    chrome.windows.create({
-      url: "setevent.html?id=" + tab.id,
-      width: 560,
-      height: 730,
-      type: "popup",
-    });
-  });
+  chrome.storage.local.set(
+    { selectionText: info.selectionText, selectionTabUrl: tab.url },
+    () => {
+      chrome.windows.create({
+        url: "setevent.html?id=" + tab.id,
+        width: 560,
+        height: 730,
+        type: "popup",
+      });
+    }
+  );
 };
 
 /**
