@@ -27,7 +27,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       selectedText = selectedText.replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => {
         return String.fromCharCode(s.charCodeAt(0) - 65248);
       });
-      sendResponse({ message: selectedText, url: result.selectionTabUrl });
+      const selectedUrl = result.selectionTabUrl ?? "";
+      sendResponse({ message: selectedText, url: selectedUrl });
       chrome.storage.local.remove(["selectionText", "selectionTabUrl"]);
     });
   }
