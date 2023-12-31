@@ -14,7 +14,7 @@ const checkDates = (key, max, match_arr) => {
 /**
  * オプションで正規表現編集が指定されている場合に使用されるメソッド
  */
-export const expDate = (selectedText) => {
+export const expDate = (selectedText, selectedUrl) => {
   const base_str = selectedText; // 検索対象となる文字列
   const exp_str = localStorage["exp_str"];
   const regexp = new RegExp(exp_str);
@@ -60,7 +60,11 @@ export const expDate = (selectedText) => {
   const title = checkDates("title", max, match_arr) || base_str;
 
   // detail
-  const detail = checkDates("detail", max, match_arr) || "";
+  let tempdetail = localStorage.getItem("detailSwitch") ? selectedText : "";
+  tempdetail = localStorage.getItem("taburlSwitch")
+    ? selectedUrl + (tempdetail === "" ? "" : "\n") + tempdetail
+    : tempdetail;
+  const detail = checkDates("detail", max, match_arr) || tempdetail;
 
   // location
   const location = checkDates("location", max, match_arr) || "";

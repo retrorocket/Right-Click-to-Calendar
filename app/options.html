@@ -182,7 +182,7 @@
         </h3>
         <p id="check" class="fw-bold"></p>
         <p>
-          Google Calendarとの連携を解除する場合は、<a
+          このアプリケーションからGoogle Calendarへの承認を取り消す場合は、<a
             href="https://myaccount.google.com/"
             >Googleのアカウント設定ページ</a
           >からアクセス権を削除してください。
@@ -238,11 +238,29 @@
                       </tr>
                       <tr>
                         <td>タイトル</td>
-                        <td>選択されたテキスト</td>
+                        <td>選択したテキスト</td>
                       </tr>
                       <tr>
                         <td>詳細</td>
-                        <td>空文字</td>
+                        <td>
+                          詳細設定によってデフォルト値が変わります
+                          <ul>
+                            <li>
+                              <code
+                                >選択したテキストを「予定の詳細」にセットする</code
+                              >がオンのとき: 選択したテキスト
+                            </li>
+                            <li>
+                              <code
+                                >予定の書いてあるURLを「予定の詳細」にセットする</code
+                              >がオンのとき: URL
+                            </li>
+                            <li>
+                              どちらもオンのとき: URL[改行]選択したテキスト
+                            </li>
+                            <li>どちらもオフのとき: 空文字</li>
+                          </ul>
+                        </td>
                       </tr>
                       <tr>
                         <td>場所</td>

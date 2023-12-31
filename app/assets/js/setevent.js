@@ -230,7 +230,7 @@ export const convertSelectedTextToForm = (stext, surl) => {
   // テキストに正規表現を適用
   let args = null;
   if (localStorage["expSwitch"]) {
-    args = expDate(stext);
+    args = expDate(stext, surl);
   }
   // 正規表現に合致しなかった、もしくは正規表現が設定されていない場合
   if (!args) {
