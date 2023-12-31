@@ -2,7 +2,7 @@
 
 右クリックから Google カレンダーに予定を投稿できる Chrome 拡張です。  
 正規表現を使用して、日付とタイトルを自動で抜き出します。  
-ストアの URL: https://chrome.google.com/webstore/detail/right-click-to-calendar/femihkgadmhfmdlkjjfjcgleppfggadk?hl=ja
+ストアの URL: <https://chrome.google.com/webstore/detail/right-click-to-calendar/femihkgadmhfmdlkjjfjcgleppfggadk?hl=ja>
 
 ## 動作確認環境
 
@@ -17,5 +17,6 @@
 
 ## 問題がある場合
 
-issue、もしくはストアの問い合わせページからコメントを受け付けています。
-Chromium 用の機能に対するお問い合わせについては、スクリーンショット・エラーログなしでのサポートが難しいため issue のみで受け付けています。
+- issue、もしくはストアの問い合わせページからコメントを受け付けています。
+- Chromium 用の機能に対するお問い合わせについては、スクリーンショット・エラーログなしでのサポートが難しいため issue のみで受け付けています。
+- 調査の結果「お前の環境だけで起こっている」が疑われる場合、報告者の環境の正常性が証明されるまで返答を中断します。
