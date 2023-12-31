@@ -56,7 +56,7 @@ const loadCalendarIdRequest = (accessToken) => {
         localStorage["calenId"];
       document.getElementById("setter").style.display = "block";
       document.getElementById("check").textContent =
-        "Google Calendarへのアクセスを承認済みです。正常に連携できています。";
+        "Google Calendarへのアクセスを承認済みです。正常に連携しています。";
       if (location.search.split("=")[1]) {
         alert(
           "アクセストークンを再取得しました。再度コンテキストメニューからカレンダーに予定を登録してください。"
@@ -74,7 +74,7 @@ const loadCalendarIdRequest = (accessToken) => {
               "無効なアクセストークンを削除しました。このページをリロードして再度Google Calendarへのアクセスを承認してください。"
             );
             document.getElementById("check").textContent =
-              "Google Calendarと連携できていません。このページをリロードして再度Google Calendarへのアクセスを承認してください。";
+              "Google Calendarと連携していません。このページをリロードして再度Google Calendarへのアクセスを承認してください。";
             localStorage.removeItem("calenId");
           }
         );
@@ -102,7 +102,7 @@ const loadCalendarId = () => {
         .catch(() => {
           localStorage.removeItem("calenId");
           document.getElementById("check").textContent =
-            "Google Calendarと連携できていません。このページをリロードして再度Google Calendarへのアクセスを承認してください。";
+            "Google Calendarと連携していません。このページをリロードして再度Google Calendarへのアクセスを承認してください。";
         });
     });
   } else {
@@ -114,7 +114,7 @@ const loadCalendarId = () => {
         if (chrome.runtime.lastError) {
           localStorage.removeItem("calenId");
           document.getElementById("check").textContent =
-            "Google Calendarと連携できていません。このページをリロードして再度Google Calendarへのアクセスを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
+            "Google Calendarと連携していません。このページをリロードして再度Google Calendarへのアクセスを承認してください。Google Chrome以外を使用している場合は、詳細設定を行ってください。";
           alert(
             "トークンが存在しないため予定を登録できません。このページをリロードして再度Google Calendarへのアクセスを承認してください。\nGoogle Chrome以外を使用している場合は、このページから詳細設定を行ってください。"
           );
@@ -153,9 +153,13 @@ const checkRegExps = () => {
 const formatCalenderId = () => {
   document.getElementById("selected-calendar").innerHTML = "";
   document.getElementById("setter").style.display = "none";
-  if (localStorage["useActionTemplate"]) return;
+  if (localStorage["useActionTemplate"]) {
+    document.getElementById("check").textContent =
+      "Google Calendarと連携していません。";
+    return;
+  }
   document.getElementById("check").textContent =
-    "Google Calendarへのアクセスが承認されていません。自動で承認用のページが表示されます。";
+    "Google Calendarと連携していません。自動で承認用のページが表示されます。";
   // カレンダーの読み込み
   loadCalendarId();
 };
