@@ -260,24 +260,37 @@ export const convertSelectedTextToForm = (stext, surl) => {
     minute: args.end.min,
   });
 
+  const now = DateTime.now();
+
+  // start //
   if (fromDate.isValid) {
     if (args.start.tf) {
       fromDate = fromDate.plus({ days: 1 });
     }
     document.getElementById("from-date").value =
       fromDate.toFormat("yyyy-MM-dd");
+  } else {
+    document.getElementById("from-date").value = now.toFormat("yyyy-MM-dd");
   }
   if (fromTime.isValid) {
     document.getElementById("from-time").value = fromTime.toFormat("HH:mm");
+  } else {
+    document.getElementById("from-time").value = now.toFormat("HH:mm");
   }
+
+  // end //
   if (toDate.isValid) {
     if (args.end.tf) {
       toDate = toDate.plus({ days: 1 });
     }
     document.getElementById("to-date").value = toDate.toFormat("yyyy-MM-dd");
+  } else {
+    document.getElementById("to-date").value = now.toFormat("yyyy-MM-dd");
   }
   if (toTime.isValid) {
     document.getElementById("to-time").value = toTime.toFormat("HH:mm");
+  } else {
+    document.getElementById("to-time").value = now.toFormat("HH:mm");
   }
 
   document.getElementById("tit").value = args.title;
