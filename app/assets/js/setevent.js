@@ -1,7 +1,7 @@
 import { expDefault } from "./expdefault.js";
 import { expDate } from "./expdate.js";
 import { checkToken } from "./tokenutil.js";
-import timezones from "./vendor/timezones.json" assert { type: "json" };
+import timezones from "./vendor/timezones.json" with { type: "json" };
 
 const DateTime = luxon.DateTime;
 
