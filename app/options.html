@@ -13,6 +13,8 @@
     <style>
       .include-checker:has(#chromium-switch:not(:checked)) #chromium-notice,
       .include-checker:has(#exp-switch:not(:checked)) #exp-fields,
+      .include-checker:has(#default-time-switch:not(:checked))
+        #default-time-fields,
       .hide-block {
         display: none;
         animation: fadeOut 0.2s ease 0s 1 forwards;
@@ -20,6 +22,7 @@
 
       .include-checker:has(#chromium-switch:checked) #chromium-notice,
       .include-checker:has(#exp-switch:checked) #exp-fields,
+      .include-checker:has(#default-time-switch:checked) #default-time-fields,
       .show-block {
         display: block;
         animation: fadeIn 0.2s ease 0s 1 forwards;
@@ -83,7 +86,7 @@
       <!-- 詳細設定 -->
       <div class="py-3">
         <h3 class="fs-4 mb-3 pb-2 border-bottom">詳細設定</h3>
-        <div class="form-check mb-2">
+        <div class="form-check mb-3">
           <input class="form-check-input" type="checkbox" id="detail-switch" />
           <label class="form-check-label" for="detail-switch"
             >選択したテキストを「予定の詳細」にセットする</label
@@ -92,7 +95,7 @@
             コンテキストメニューを呼び出すときに選択したテキストを「予定の詳細」にセットします。正規表現編集がオンの場合は、設定した正規表現が優先されます。
           </div>
         </div>
-        <div class="form-check mb-2">
+        <div class="form-check mb-3">
           <input class="form-check-input" type="checkbox" id="taburl-switch" />
           <label class="form-check-label" for="taburl-switch"
             >予定の書いてあるURLを「予定の詳細」にセットする</label
@@ -101,6 +104,141 @@
             コンテキストメニューを呼び出したタブのURLを「予定の詳細」にセットします。正規表現編集がオンの場合は、設定した正規表現が優先されます。<br />
             <code>選択したテキストを「予定の詳細」にセットする</code
             >がオンの場合は、<code>"URL"[改行]"選択したテキスト"</code>の形式でセットします。
+          </div>
+        </div>
+        <div class="form-check mb-3 include-checker">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="default-time-switch"
+          />
+          <label class="form-check-label" for="default-time-switch"
+            >「開始・終了 年 月 日 時」のデフォルト値を変更する</label
+          >
+          <div class="form-text">
+            テキストから日時が判定できなかった場合にセットされる「開始・終了 年
+            月 日 時」のデフォルト値を、「現在の 年 月 日 時
+            分」から「任意の値」に変更します。<br />
+            存在しない日時が設定された場合は、現在日時に上書きされます。<br />
+            一部を「現在の 年 月 日 時
+            分」から取得したいときは、その部分を空欄にしてください。<br />
+          </div>
+          <div id="default-time-fields">
+            <div class="row row-cols-5 gy-2 my-3">
+              <div class="col">
+                <label class="form-label" for="default_start_year"
+                  >開始年</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_start_year"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_start_mon">開始月</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_start_mon"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_start_day">開始日</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_start_day"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_start_hour"
+                  >開始時間（時）</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_start_hour"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_start_min"
+                  >開始時間（分）</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_start_min"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_end_year">終了年</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_end_year"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_end_mon">終了月</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_end_mon"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_end_day">終了日</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_end_day"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_end_hour"
+                  >終了時間（時）</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_end_hour"
+                  min="0"
+                />
+              </div>
+              <div class="col">
+                <label class="form-label" for="default_end_min"
+                  >終了時間（分）</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="default_end_min"
+                  min="0"
+                />
+              </div>
+              <div class="my-3 align-middle">
+                <button
+                  type="button"
+                  id="default-time-set"
+                  class="btn btn-primary"
+                >
+                  設定
+                </button>
+                <span
+                  id="default-time-set-edited"
+                  class="mx-2 form-text"
+                ></span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -234,7 +372,7 @@
                     <tbody>
                       <tr>
                         <td>開始・終了 年 月 日 時</td>
-                        <td>現在の 年 月 日 時 分</td>
+                        <td>現在の 年 月 日 時 分 or 詳細設定で設定した値</td>
                       </tr>
                       <tr>
                         <td>タイトル</td>

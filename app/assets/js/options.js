@@ -218,6 +218,36 @@ document.getElementById("taburl-switch").addEventListener("click", (event) => {
   }
 });
 
+// デフォルトの日時設定を変更
+if (localStorage["defaultTimeSwitch"]) {
+  document.getElementById("default-time-switch").checked = true;
+}
+document
+  .getElementById("default-time-switch")
+  .addEventListener("click", (event) => {
+    if (event.target.checked) {
+      localStorage["defaultTimeSwitch"] = true;
+    } else {
+      localStorage.removeItem("defaultTimeSwitch");
+    }
+  });
+
+// デフォルトの日時の設定
+document.getElementById("default-time-set").addEventListener("click", () => {
+  document
+    .getElementById("default-time-fields")
+    .querySelectorAll("input")
+    .forEach((elem) => {
+      const id_name = elem.getAttribute("id");
+      if (id_name === "default-time-set") {
+        return true; // continue;
+      }
+      localStorage[id_name] = document.getElementById(id_name).value;
+    });
+  document.getElementById("default-time-set-edited").textContent =
+    "設定しました。";
+});
+
 // Chromiumを使用する
 if (localStorage["useChromium"]) {
   document.getElementById("chromium-switch").checked = true;

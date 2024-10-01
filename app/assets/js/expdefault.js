@@ -7,19 +7,54 @@ export const expDefault = (stext, surl) => {
   // 年月日の初期設定
   const d = new Date();
 
-  let smon = d.getMonth() + 1;
-  let sday = d.getDate();
-  let syear = d.getFullYear();
+  let defaultStartYear,
+    defaultEndYear = d.getFullYear();
+  let defaultStartMonth,
+    defaultEndMonth = d.getMonth() + 1;
+  let defaultStartDay,
+    defaultEndDay = d.getDate();
+  let defaultStartHour,
+    defaultEndHour = d.getHours();
+  let defaultStartMin,
+    defaultEndMin = d.getMinutes();
 
-  let emon = d.getMonth() + 1;
-  let eday = d.getDate();
-  let eyear = d.getFullYear();
+  if (localStorage.getItem("defaultTimeSwitch")) {
+    defaultStartYear =
+      parseInt(localStorage["default_start_year"], 10) || defaultStartYear;
+    defaultStartMonth =
+      parseInt(localStorage["default_start_mon"], 10) || defaultStartMonth;
+    defaultStartDay =
+      parseInt(localStorage["default_start_day"], 10) || defaultStartDay;
+    defaultStartHour =
+      parseInt(localStorage["default_start_hour"], 10) || defaultStartHour;
+    defaultStartMin =
+      parseInt(localStorage["default_start_min"], 10) || defaultStartMin;
 
-  let shour = d.getHours();
-  let smin = d.getMinutes();
+    defaultEndYear =
+      parseInt(localStorage["default_end_year"], 10) || defaultEndYear;
+    defaultEndMonth =
+      parseInt(localStorage["default_end_mon"], 10) || defaultEndMonth;
+    defaultEndDay =
+      parseInt(localStorage["default_end_day"], 10) || defaultEndDay;
+    defaultEndHour =
+      parseInt(localStorage["default_end_hour"], 10) || defaultEndHour;
+    defaultEndMin =
+      parseInt(localStorage["default_end_min"], 10) || defaultEndMin;
+  }
 
-  let ehour = d.getHours();
-  let emin = d.getMinutes();
+  let syear = defaultStartYear;
+  let smon = defaultStartMonth;
+  let sday = defaultStartDay;
+
+  let shour = defaultStartHour;
+  let smin = defaultStartMin;
+
+  let eyear = defaultEndYear;
+  let emon = defaultEndMonth;
+  let eday = defaultEndDay;
+
+  let ehour = defaultEndHour;
+  let emin = defaultEndMin;
 
   let title = stext;
 

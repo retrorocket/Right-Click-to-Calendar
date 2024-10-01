@@ -27,34 +27,68 @@ export const expDate = (selectedText, selectedUrl) => {
 
   // 年月日・曜日・時分秒の取得
   const d = new Date();
+  let defaultStartYear,
+    defaultEndYear = d.getFullYear();
+  let defaultStartMonth,
+    defaultEndMonth = d.getMonth() + 1;
+  let defaultStartDay,
+    defaultEndDay = d.getDate();
+  let defaultStartHour,
+    defaultEndHour = d.getHours();
+  let defaultStartMin,
+    defaultEndMin = d.getMinutes();
+
+  if (localStorage.getItem("defaultTimeSwitch")) {
+    defaultStartYear =
+      parseInt(localStorage["default_start_year"], 10) || defaultStartYear;
+    defaultStartMonth =
+      parseInt(localStorage["default_start_mon"], 10) || defaultStartMonth;
+    defaultStartDay =
+      parseInt(localStorage["default_start_day"], 10) || defaultStartDay;
+    defaultStartHour =
+      parseInt(localStorage["default_start_hour"], 10) || defaultStartHour;
+    defaultStartMin =
+      parseInt(localStorage["default_start_min"], 10) || defaultStartMin;
+
+    defaultEndYear =
+      parseInt(localStorage["default_end_year"], 10) || defaultEndYear;
+    defaultEndMonth =
+      parseInt(localStorage["default_end_mon"], 10) || defaultEndMonth;
+    defaultEndDay =
+      parseInt(localStorage["default_end_day"], 10) || defaultEndDay;
+    defaultEndHour =
+      parseInt(localStorage["default_end_hour"], 10) || defaultEndHour;
+    defaultEndMin =
+      parseInt(localStorage["default_end_min"], 10) || defaultEndMin;
+  }
 
   // start
   const syear =
-    parseInt(checkDates("start_year", max, match_arr), 10) || d.getFullYear();
+    parseInt(checkDates("start_year", max, match_arr), 10) || defaultStartYear;
   const smon =
-    parseInt(checkDates("start_mon", max, match_arr), 10) || d.getMonth() + 1;
+    parseInt(checkDates("start_mon", max, match_arr), 10) || defaultStartMonth;
   const sday =
-    parseInt(checkDates("start_day", max, match_arr), 10) || d.getDate();
+    parseInt(checkDates("start_day", max, match_arr), 10) || defaultStartDay;
 
   const start_hour = parseInt(checkDates("start_hour", max, match_arr), 10);
-  const shour = start_hour >= 0 ? start_hour : d.getHours();
+  const shour = start_hour >= 0 ? start_hour : defaultStartHour;
 
   const start_min = parseInt(checkDates("start_min", max, match_arr), 10);
-  const smin = start_min >= 0 ? start_min : d.getMinutes();
+  const smin = start_min >= 0 ? start_min : defaultStartMin;
 
   // end
   const eyear =
-    parseInt(checkDates("end_year", max, match_arr), 10) || d.getFullYear();
+    parseInt(checkDates("end_year", max, match_arr), 10) || defaultEndYear;
   const emon =
-    parseInt(checkDates("end_mon", max, match_arr), 10) || d.getMonth() + 1;
+    parseInt(checkDates("end_mon", max, match_arr), 10) || defaultEndMonth;
   const eday =
-    parseInt(checkDates("end_day", max, match_arr), 10) || d.getDate();
+    parseInt(checkDates("end_day", max, match_arr), 10) || defaultEndDay;
 
   const end_hour = parseInt(checkDates("end_hour", max, match_arr), 10);
-  const ehour = end_hour >= 0 ? end_hour : d.getHours();
+  const ehour = end_hour >= 0 ? end_hour : defaultEndHour;
 
   const end_min = parseInt(checkDates("end_min", max, match_arr), 10);
-  const emin = end_min >= 0 ? end_min : d.getMinutes();
+  const emin = end_min >= 0 ? end_min : defaultEndMin;
 
   // title
   const title = checkDates("title", max, match_arr) || base_str;
