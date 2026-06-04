@@ -13,7 +13,7 @@ jobs:
       - run:
           name: Install Dependencies
           command: |
-            npm install --global corepack@latest
+            sudo npm install --global corepack@latest
             corepack enable
             corepack prepare pnpm@latest-11 --activate
             pnpm i --frozen-lockfile
