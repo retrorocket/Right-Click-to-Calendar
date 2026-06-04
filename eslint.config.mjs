@@ -15,9 +15,9 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-// FIXME eslint v9が期待通りの挙動にならないので一時的にすべて無効にする
+// FIXME eslint v9に対応できなかったので一時的にすべて無効にする
 export default defineConfig([
-  globalIgnores(["app/assets/js/*", "jest*", "coverage"]),
+  globalIgnores(["app/assets/js/*", "coverage/*"]),
   {
     extends: compat.extends("eslint:recommended"),
 
