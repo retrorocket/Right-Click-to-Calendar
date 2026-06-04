@@ -10,6 +10,7 @@ jobs:
           name: Restore pnpm Package Cache
           keys:
             - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
+      - run:
           name: Install Dependencies
           command: |
             pnpm install
