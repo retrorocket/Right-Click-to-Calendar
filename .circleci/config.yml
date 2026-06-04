@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/workspace # ステップが実行されるディレクトリ
     docker: # Dockerでステップを実行
-      - image: cimg/node:18.13.0
+      - image: cimg/node:26.3.0
     steps:
       - checkout # ソースコードを作業ディレクトリにチェックアウト
       - restore_cache:
@@ -25,7 +25,7 @@ jobs:
 
   test:
     docker: # Dockerでステップを実行
-      - image: cimg/node:18.13.0
+      - image: cimg/node:26.3.0
     steps:
       # 共有したworkspaceをアタッチする
       - attach_workspace:
@@ -42,7 +42,7 @@ jobs:
 
   lint:
     docker: # Dockerでステップを実行
-      - image: cimg/node:18.13.0
+      - image: cimg/node:26.3.0
     steps:
       # 共有したworkspaceをアタッチする
       - attach_workspace:
@@ -57,7 +57,7 @@ jobs:
 
   create_zip:
     docker: # Dockerでステップを実行
-      - image: cimg/node:18.13.0
+      - image: cimg/node:26.3.0
     steps:
       # 共有したworkspaceをアタッチする
       - attach_workspace:

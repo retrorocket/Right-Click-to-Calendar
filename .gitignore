@@ -12,3 +12,6 @@ yarn-debug.log
 !.yarn/plugins
 !.yarn/releases
 !.yarn/versions
+yarn.lock
+package-lock.json
+pnpm-lock.yaml

@@ -1,3 +1,5 @@
+const {defineConfig} = require('jest');
+
 module.exports = {
   // Add this line to your Jest config
   setupFilesAfterEnv: ['./jest.setup.js'],
