@@ -5,19 +5,27 @@ jobs:
     docker: # Dockerでステップを実行
       - image: cimg/node:26.3.0
     steps:
-      - checkout # ソースコードを作業ディレクトリにチェックアウト
+      - checkout
       - restore_cache:
-          name: npm パッケージのキャッシュの復元
+          name: Restore pnpm Package Cache
           keys:
-            - npm-packages-{{ checksum "package-lock.json" }}
+            - pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
       - run:
-          name: 依存関係のインストール
-          command: npm install
+          name: Install pnpm package manager
+          command: |
+            npm install --global corepack@latest
+            corepack enable
+            corepack prepare pnpm@latest-11 --activate
+            pnpm config set store-dir .pnpm-store
+      - run:
+          name: Install Dependencies
+          command: |
+            pnpm install
       - save_cache:
-          name: npm パッケージのキャッシュの保存
-          key: npm-packages-{{ checksum "package-lock.json" }}
+          name: Save pnpm Package Cache
+          key: pnpm-packages-{{ checksum "pnpm-lock.yaml" }}
           paths:
-            - ~/node_modules
+            - .pnpm-store
       - persist_to_workspace:
           root: .
           paths:
@@ -32,7 +40,7 @@ jobs:
           at: .
       - run:
           name: Jestによるテストの実行
-          command: npm test -- -i --ci --runInBand
+          command: pnpm test -i --ci --runInBand
       - store_artifacts:
           path: coverage
       - store_artifacts:
@@ -49,7 +57,7 @@ jobs:
           at: .
       - run:
           name: ESLintの実行
-          command: npm run lint . -- --format junit --output-file reports/eslint/results.xml
+          command: pnpm run lint . --format junit --output-file reports/eslint/results.xml
       - store_artifacts:
           path: reports
       - store_test_results:
