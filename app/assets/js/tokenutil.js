@@ -19,7 +19,9 @@ const tokenRefresh = () => {
       const hash = new URL(responseUrl).hash;
       const state = new URLSearchParams(hash);
       if (state.has("#token")) {
-        chrome.storage.local.set({ accessToken: state.get("#token") });
+        // セキュリティ対策: アクセストークンはディスクに永続化される
+        // storage.local ではなく、メモリ内のみに保持される storage.session に保存する
+        chrome.storage.session.set({ accessToken: state.get("#token") });
       } else {
         alert(ERROR_MESSAGE);
       }
