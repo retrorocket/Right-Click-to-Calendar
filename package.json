@@ -6,13 +6,10 @@
   "devDependencies": {
     "@babel/core": "^8.0.5",
     "@babel/eslint-parser": "^8.0.5",
-    "@babel/plugin-syntax-import-assertions": "^7.29.7",
     "@babel/plugin-transform-modules-commonjs": "^8.0.1",
     "@babel/preset-env": "^8.0.5",
-    "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^10.0.1",
     "@mobile-next/jest-chrome": "^1.1.0",
-    "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^30.5.1",
     "eslint": "^10.10.0",
     "eslint-formatter-junit": "^9.0.1",

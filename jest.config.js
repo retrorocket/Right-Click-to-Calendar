@@ -1,6 +1,9 @@
+/** @type {import("jest").Config} */
 module.exports = {
-  // Add this line to your Jest config
   setupFilesAfterEnv: ["./jest.setup.js"],
+  transform: {
+    "^.+\\.[jt]sx?$": "babel-jest",
+  },
   collectCoverage: true,
   collectCoverageFrom: ["app/assets/js/*.{js,ts}"],
   coverageDirectory: "coverage",
