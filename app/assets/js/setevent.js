@@ -106,7 +106,7 @@ const addEventRequest = (input, accessToken) => {
 
 const addEvent = (input) => {
   if (localStorage["useChromium"]) {
-    chrome.storage.local.get("accessToken", (result) => {
+    chrome.storage.session.get("accessToken", (result) => {
       checkToken(result.accessToken).then(() => {
         addEventRequest(input, result.accessToken);
       });
@@ -394,7 +394,7 @@ chrome.tabs.sendMessage(
 
     // カレンダーIDのセット
     if (localStorage["useChromium"]) {
-      chrome.storage.local.get("accessToken", (result) => {
+      chrome.storage.session.get("accessToken", (result) => {
         checkToken(result.accessToken)
           .then(() => {
             fetchCalendarId(result.accessToken);
