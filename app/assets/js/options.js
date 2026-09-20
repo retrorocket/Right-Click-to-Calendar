@@ -96,7 +96,7 @@ const loadCalendarIdRequest = (accessToken) => {
 const loadCalendarId = () => {
   if (localStorage["useActionTemplate"]) return;
   if (localStorage["useChromium"]) {
-    chrome.storage.local.get("accessToken", (result) => {
+    chrome.storage.session.get("accessToken", (result) => {
       checkToken(result.accessToken)
         .then(() => loadCalendarIdRequest(result.accessToken))
         .catch(() => {

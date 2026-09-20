@@ -19,7 +19,7 @@ const tokenRefresh = () => {
       const hash = new URL(responseUrl).hash;
       const state = new URLSearchParams(hash);
       if (state.has("#token")) {
-        chrome.storage.local.set({ accessToken: state.get("#token") });
+        chrome.storage.session.set({ accessToken: state.get("#token") });
       } else {
         alert(ERROR_MESSAGE);
       }
